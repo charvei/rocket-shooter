@@ -14,8 +14,11 @@ var WorldManager = /** @class */ (function () {
         this.getCharacterManager = function () {
             return _this.characterManager;
         };
-        this.updateWorld = function () {
-            _this.getCharacterManager().updateCharacters();
+        this.updateWorld = function (delta) {
+            _this.getCharacterManager().updateCharacters(delta);
+            // If we have multiple types of characters then we can create different managers for them and put them under characterManager
+            // e.g. PlayerCharacter, Enemies, 
+            // Potentially (and very possibly the correct choice) create a higher level class called entities, then fit Characters under that even, then we can put in 'Boundaries', 'missiles', etc under entities in the world too.  
         };
         this.characterManager = new characterManager_js_1["default"]();
         this.colours = new colours_js_1["default"](context);

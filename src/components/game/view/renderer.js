@@ -4,6 +4,7 @@ exports.__esModule = true;
 var Renderer = /** @class */ (function () {
     function Renderer(context, canvasProps, gameGrid, colours) {
         var _this = this;
+        // Maybe when this gets more complicated this can be made more intelligent?
         this.drawWorld = function (characterList) {
             //background
             _this.context.fillStyle = "#000000";

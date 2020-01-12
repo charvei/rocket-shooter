@@ -20,15 +20,8 @@ var loadStuff = function () {
     loadController();
 };
 var doStuff = function () {
-    //renderingManager.getRenderer().drawPixels() //maybe this can be made to be a bit more intelligent? give it params and stuff? idk
     renderingManager.getRenderer().drawWorld(worldManager.getCharacterManager().getCharacterStoreAsArray());
-    controllerManager.getLoop().start(0);
-};
-var loopCode = function () {
-    //update
-    worldManager.updateWorld();
-    //draw
-    renderingManager.getRenderer().drawWorld(worldManager.getCharacterManager().getCharacterStoreAsArray());
+    controllerManager.getLoop().start(0); // could potentially load the code inline here
 };
 var loadCanvas = function () {
     var tempCanvas = document.getElementById('game-canvas');
@@ -46,16 +39,9 @@ var loadWorld = function () {
 };
 var loadRendering = function () {
     renderingManager = new RenderingManager_js_1["default"](context, canvas.props);
-    /*
-    Imagine here:
-    worldManager.getCharacterManager().getCharacterGrid/render instructions
-    renderer.addToRenderSet(worldManager.getBackgroundManager().getBackgroundEffects())
-        ..more of adding to render set calls..
-    renderer.renderRenderSet() // combines them all and renders efficiently
-    */
 };
 var loadController = function () {
-    controllerManager = new ControllerManager_js_1["default"](loopCode);
+    controllerManager = new ControllerManager_js_1["default"](worldManager, renderingManager);
 };
 var getContext = function (canvas) {
     if (canvas.getContext) {

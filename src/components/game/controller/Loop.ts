@@ -1,15 +1,24 @@
 /**
  * Store controller managers
  */
-type LoopCode = () => void
+
+type updateFunc = (delta: number) => void
+type drawFunc = () => void
 
 class Loop {
     // characterManager: CharacterManager
     lastRender: number
-    loopCode: LoopCode
+    
+    update: updateFunc
+    draw: drawFunc
 
-    constructor(loopCode: LoopCode) {
-        this.loopCode = loopCode
+    delta: number = 0
+    lastFrameTimeMs: number = 0
+    timestep: number = 1000 / 59     // timeSimulatedPerFrame
+
+    constructor(update: (delta: number) => void, draw: () => void) {
+        this.update = update
+        this.draw = draw
     }
 
     run = () => {
@@ -20,19 +29,33 @@ class Loop {
 
     }
 
-    start = (timestamp: number /** not sure if this is the correct type// loopCode: LoopCode */) => {
-        let progress: number = timestamp - this.lastRender
+    start = (timestamp: number) => {
 
-        this.loopCode()
-        console.log(timestamp)
+        // Track accumulated time that hasn't been spent yet
+        this.delta += timestamp - this.lastFrameTimeMs
+        this.lastFrameTimeMs = timestamp
 
-        this.lastRender = timestamp
+        while (this.delta >= this.timestep) {
+            this.update(this.timestep)
+            this.delta -= this.timestep
+        }
+        console.log(this.delta)
+
+        this.draw()
+
         window.requestAnimationFrame(this.start)
     }
 
 }
 
 export default Loop
+
+/*
+work left on loop:
+    -Panic / loop of death handling
+    -FPS monitoring
+
+*/
 
 /* when loop is done:
     - work on user input / movement

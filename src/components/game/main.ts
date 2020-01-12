@@ -33,15 +33,6 @@ const doStuff = () => {
     controllerManager.getLoop().start(0)    // could potentially load the code inline here
 }
 
-const loopCode = () => {
-    //update
-    worldManager.updateWorld()
-
-    //draw
-    renderingManager.getRenderer().drawWorld(
-        worldManager.getCharacterManager().getCharacterStoreAsArray()
-    )
-}
 
 const loadCanvas = () => {
     let tempCanvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('game-canvas')
@@ -64,7 +55,7 @@ const loadRendering = () => {
 }
 
 const loadController = () => {
-    controllerManager = new ControllerManager(loopCode)
+    controllerManager = new ControllerManager(worldManager, renderingManager)
 }
 
 const getContext = (canvas: HTMLCanvasElement): CanvasRenderingContext2D => {

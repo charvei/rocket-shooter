@@ -5,15 +5,23 @@ var Loop_js_1 = require("./Loop.js");
  * Store controller managers
  */
 var ControllerManager = /** @class */ (function () {
-    function ControllerManager(loopCode) {
+    function ControllerManager(worldManager, renderingManager) {
         var _this = this;
         this.getLoop = function () {
             return _this.loop;
         };
+        this.update = function (delta) {
+            _this.worldManager.updateWorld(delta);
+        };
+        this.draw = function () {
+            _this.renderingManager.getRenderer().drawWorld(_this.worldManager.getCharacterManager().getCharacterStoreAsArray());
+        };
         this.startLooping = function () {
             window.requestAnimationFrame(_this.getLoop().start);
         };
-        this.loop = new Loop_js_1["default"](loopCode);
+        this.worldManager = worldManager;
+        this.renderingManager = renderingManager;
+        this.loop = new Loop_js_1["default"](this.update, this.draw);
     }
     return ControllerManager;
 }());
