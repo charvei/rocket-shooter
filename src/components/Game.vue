@@ -1,8 +1,8 @@
 <template>
     <div class="game-screen">
         <h1>Game</h1>
-        <canvas id="game-canvas" width="800" height="480" tabindex='1'>
-        </canvas>
+        <canvas id="game-canvas" width="800" height="480" tabindex='1'/>
+        <div id="fps-display"></div>
     </div>
 </template>
 
@@ -14,12 +14,9 @@
         mounted() {
             main()
         }
-    }
-
-    //typescript accessing the canvas goes here
-    
+    }    
 </script>
 
 <style scoped>
-
+    
 </style>

@@ -1,6 +1,7 @@
 "use strict";
 exports.__esModule = true;
 var Loop_js_1 = require("./Loop.js");
+var InputHandler_js_1 = require("./InputHandler.js");
 /**
  * Store controller managers
  */
@@ -21,6 +22,7 @@ var ControllerManager = /** @class */ (function () {
         };
         this.worldManager = worldManager;
         this.renderingManager = renderingManager;
+        this.inputHandler = new InputHandler_js_1["default"]();
         this.loop = new Loop_js_1["default"](this.update, this.draw);
     }
     return ControllerManager;
