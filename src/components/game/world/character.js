@@ -1,5 +1,10 @@
 "use strict";
 exports.__esModule = true;
+var PhysicsComponent_js_1 = require("./components/PhysicsComponent.js");
+var InputComponent_js_1 = require("./components/InputComponent.js");
+/**
+ * Character or unit that exists in the game. This should probably go through some inheritance type things at some point
+ */
 var Character = /** @class */ (function () {
     function Character(name, code, height, width, position) {
         var _this = this;
@@ -48,6 +53,10 @@ var Character = /** @class */ (function () {
         this.height = height;
         this.width = width;
         this.position = position;
+        this.physics = new PhysicsComponent_js_1["default"]();
+        this.velocityX = 0;
+        this.velocityY = 0;
+        this.input = new InputComponent_js_1["default"](this);
     }
     return Character;
 }());

@@ -15,10 +15,13 @@ class Commands {
                 character.incrementYPos(-.5 * delta)
             } if (direction == "Down") {
                 character.incrementYPos(.5 * delta)
+            
             } if (direction == "Left") {
-                character.incrementXPos(-.5 * delta)
+                character.input.moveLeft()
+                console.log(character.velocityX)
             } if (direction == "Right") {
-                character.incrementXPos(.5 * delta)
+                character.input.moveRight()
+                console.log(character.velocityX)
             }
         }
     }

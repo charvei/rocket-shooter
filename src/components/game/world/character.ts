@@ -1,9 +1,25 @@
+import PhysicsComponent from './components/PhysicsComponent.js'
+import InputComponent from './components/InputComponent.js'
+
+/**
+ * Character or unit that exists in the game. This should probably go through some inheritance type things at some point
+ */
 class Character {
+    // components
+    physics: PhysicsComponent
+    input: InputComponent    
+    
+    velocityX: number
+    velocityY: number
+
     name: string
     code: string
+
     //pixel dimensions
     height: number
     width: number
+    
+    //position in world
     position: {
         x: number,
         y: number
@@ -15,6 +31,12 @@ class Character {
         this.height = height
         this.width = width
         this.position = position
+
+        this.physics = new PhysicsComponent()
+        this.velocityX = 0
+        this.velocityY = 0
+
+        this.input = new InputComponent(this)
     }
 
     getColor = () => {
