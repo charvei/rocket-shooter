@@ -14,19 +14,19 @@ let canvas: {
     }
 }
 
-const main = () => {    
+const main = (): void => {
     loadStuff()
     doStuff()
 }
 
-const loadStuff = () => {
+const loadStuff = (): void => {
     loadCanvas()
     loadWorld()
     loadRendering()
     loadController()
 }
 
-const doStuff = () => {
+const doStuff = (): void => {
     renderingManager.getRenderer().drawWorld(
         worldManager.getCharacterManager().getCharacterStoreAsArray()
     )
@@ -34,7 +34,7 @@ const doStuff = () => {
 }
 
 
-const loadCanvas = () => {
+const loadCanvas = (): void => {
     let tempCanvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('game-canvas')
     canvas = { 
         element: tempCanvas,
@@ -46,15 +46,15 @@ const loadCanvas = () => {
     context = getContext(canvas.element)
 }
 
-const loadWorld = () => {
+const loadWorld = (): void => {
     worldManager = new WorldManager(context)
 }
 
-const loadRendering = () => {
+const loadRendering = (): void => {
     renderingManager = new RenderingManager(context, canvas.props)
 }
 
-const loadController = () => {
+const loadController = (): void => {
     controllerManager = new ControllerManager(worldManager, renderingManager)
 }
 

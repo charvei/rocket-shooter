@@ -61,9 +61,9 @@ class CharacterManager {
     //TEMPORARY: FOR TESTING LOOP.
     //THIS MIGHT FIT UNDER A BROADER UPDATE OR TICK() FUNCTION FOR A CHARACTER. I.E. WHERE IT CHECKS IF ITS IN SOMETHINGS WAY, IF IT NEEDS TO MOVE POS ETC?
     updateCharacters = (delta: number) => {
-        this.getCharacterStoreAsArray().forEach((character: Character) => {
-            character.incrementXPos(.08 * delta)
-        })
+        // this.getCharacterStoreAsArray().forEach((character: Character) => {
+        //     character.incrementXPos(.1 * delta)
+        // })
     }
 
 

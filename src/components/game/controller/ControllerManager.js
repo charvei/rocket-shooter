@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 var Loop_js_1 = require("./Loop.js");
-var InputHandler_js_1 = require("./InputHandler.js");
+var InputHandler_js_1 = require("./input/InputHandler.js");
 /**
  * Store controller managers
  */
@@ -12,6 +12,7 @@ var ControllerManager = /** @class */ (function () {
             return _this.loop;
         };
         this.update = function (delta) {
+            _this.inputHandler.handleInput(delta);
             _this.worldManager.updateWorld(delta);
         };
         this.draw = function () {
@@ -22,7 +23,7 @@ var ControllerManager = /** @class */ (function () {
         };
         this.worldManager = worldManager;
         this.renderingManager = renderingManager;
-        this.inputHandler = new InputHandler_js_1["default"]();
+        this.inputHandler = new InputHandler_js_1["default"](this.worldManager.getCharacterManager());
         this.loop = new Loop_js_1["default"](this.update, this.draw);
     }
     return ControllerManager;
