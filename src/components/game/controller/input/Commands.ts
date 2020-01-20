@@ -1,4 +1,4 @@
-import Character from "../../world/character"
+import Character from "../../world/Character"
 
 class Commands {
     
@@ -18,11 +18,15 @@ class Commands {
             
             } if (direction == "Left") {
                 character.input.moveLeft()
-                console.log(character.velocityX)
             } if (direction == "Right") {
                 character.input.moveRight()
-                console.log(character.velocityX)
             }
+        }
+    }
+
+    static makeJumpCommand = (character: Character): (delta: number) => void => {
+        return (delta: number) => {
+            character.input.jump()
         }
     }
 }

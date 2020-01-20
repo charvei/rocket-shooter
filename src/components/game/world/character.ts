@@ -32,15 +32,15 @@ class Character {
         this.width = width
         this.position = position
 
-        this.physics = new PhysicsComponent()
+        this.physics = new PhysicsComponent(this)
         this.velocityX = 0
         this.velocityY = 0
 
         this.input = new InputComponent(this)
     }
 
-    getColor = () => {
-        return this
+    update = (): void => {
+        this.physics.update()
     }
 
     getName = () => {
@@ -67,16 +67,7 @@ class Character {
         this.position = position
     }
 
-    incrementXPos = (increment: number) => {
-        let newPosition = {
-            position: {
-                x: this.getPosition().x + increment,
-                y: this.getPosition().y
-            }
-        }
-        this.setPosition(newPosition)
-    }
-
+    /*REMOVE THIS WHEN GRAVITY / JUMPING IS FULLY IMPLEMENTED*/
     incrementYPos = (increment: number) => {
         let newPosition = {
             position: {

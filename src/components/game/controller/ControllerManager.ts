@@ -24,13 +24,15 @@ class ControllerManager {
     }
 
     update = (delta: number): void => {
+        this.worldManager.detectCollision()
         this.inputHandler.handleInput(delta)
         this.worldManager.updateWorld(delta)
     }
 
     draw = (): void => {
         this.renderingManager.getRenderer().drawWorld(
-            this.worldManager.getCharacterManager().getCharacterStoreAsArray()
+            this.worldManager.getCharacterManager().getCharacterStoreAsArray(),
+            this.worldManager.getGameObjectManager().getObjectStoreAsArray()
         )
     }
 

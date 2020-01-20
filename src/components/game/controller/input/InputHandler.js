@@ -24,7 +24,7 @@ var InputHandler = /** @class */ (function () {
          */
         this.handleInput = function (delta) {
             if (_this.isPressed('w')) {
-                _this.moveUp(delta);
+                _this.jump(delta);
             }
             if (_this.isPressed('a')) {
                 _this.moveLeft(delta);
@@ -47,7 +47,7 @@ var InputHandler = /** @class */ (function () {
         this.characterManagerRef = characterManager;
         this.moveRight = Commands_1["default"].makeMoveUnitCommand(this.characterManagerRef.getCharacterByName("Adam"), "Right");
         this.moveLeft = Commands_1["default"].makeMoveUnitCommand(this.characterManagerRef.getCharacterByName("Adam"), "Left");
-        this.moveUp = Commands_1["default"].makeMoveUnitCommand(this.characterManagerRef.getCharacterByName("Adam"), "Up");
+        this.jump = Commands_1["default"].makeJumpCommand(this.characterManagerRef.getCharacterByName("Adam"));
         this.moveDown = Commands_1["default"].makeMoveUnitCommand(this.characterManagerRef.getCharacterByName("Adam"), "Down");
     }
     return InputHandler;

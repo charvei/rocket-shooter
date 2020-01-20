@@ -8,8 +8,8 @@ var InputComponent_js_1 = require("./components/InputComponent.js");
 var Character = /** @class */ (function () {
     function Character(name, code, height, width, position) {
         var _this = this;
-        this.getColor = function () {
-            return _this;
+        this.update = function () {
+            _this.physics.update();
         };
         this.getName = function () {
             return _this.name;
@@ -30,15 +30,7 @@ var Character = /** @class */ (function () {
             var position = _a.position;
             _this.position = position;
         };
-        this.incrementXPos = function (increment) {
-            var newPosition = {
-                position: {
-                    x: _this.getPosition().x + increment,
-                    y: _this.getPosition().y
-                }
-            };
-            _this.setPosition(newPosition);
-        };
+        /*REMOVE THIS WHEN GRAVITY / JUMPING IS FULLY IMPLEMENTED*/
         this.incrementYPos = function (increment) {
             var newPosition = {
                 position: {
@@ -53,7 +45,7 @@ var Character = /** @class */ (function () {
         this.height = height;
         this.width = width;
         this.position = position;
-        this.physics = new PhysicsComponent_js_1["default"]();
+        this.physics = new PhysicsComponent_js_1["default"](this);
         this.velocityX = 0;
         this.velocityY = 0;
         this.input = new InputComponent_js_1["default"](this);

@@ -20,7 +20,6 @@ var loadStuff = function () {
     loadController();
 };
 var doStuff = function () {
-    renderingManager.getRenderer().drawWorld(worldManager.getCharacterManager().getCharacterStoreAsArray());
     controllerManager.getLoop().start(0); // could potentially load the code inline here
 };
 var loadCanvas = function () {

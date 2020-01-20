@@ -18,12 +18,15 @@ var Commands = /** @class */ (function () {
             }
             if (direction == "Left") {
                 character.input.moveLeft();
-                console.log(character.velocityX);
             }
             if (direction == "Right") {
                 character.input.moveRight();
-                console.log(character.velocityX);
             }
+        };
+    };
+    Commands.makeJumpCommand = function (character) {
+        return function (delta) {
+            character.input.jump();
         };
     };
     return Commands;

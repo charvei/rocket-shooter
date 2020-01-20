@@ -10,7 +10,7 @@ class InputHandler {
     
     characterManagerRef: CharacterManager
     
-    moveUp: (delta: number) => void
+    jump: (delta: number) => void
     moveDown: (delta: number) => void
     moveLeft: (delta: number) => void
     moveRight: (delta: number) => void
@@ -21,8 +21,9 @@ class InputHandler {
 
         this.characterManagerRef = characterManager
         this.moveRight = Commands.makeMoveUnitCommand(this.characterManagerRef.getCharacterByName("Adam"), "Right")
-        this.moveLeft =  Commands.makeMoveUnitCommand(this.characterManagerRef.getCharacterByName("Adam"), "Left")
-        this.moveUp = Commands.makeMoveUnitCommand(this.characterManagerRef.getCharacterByName("Adam"), "Up")
+        this.moveLeft = Commands.makeMoveUnitCommand(this.characterManagerRef.getCharacterByName("Adam"), "Left")
+        
+        this.jump = Commands.makeJumpCommand(this.characterManagerRef.getCharacterByName("Adam"))
         this.moveDown =  Commands.makeMoveUnitCommand(this.characterManagerRef.getCharacterByName("Adam"), "Down")
     }
 
@@ -44,7 +45,7 @@ class InputHandler {
      */
     handleInput = (delta: number): void => {
         if (this.isPressed('w')) {
-            this.moveUp(delta)
+            this.jump(delta)
         } if (this.isPressed('a')) {
             this.moveLeft(delta)
         } if (this.isPressed('s')) {

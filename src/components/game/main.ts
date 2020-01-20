@@ -27,12 +27,8 @@ const loadStuff = (): void => {
 }
 
 const doStuff = (): void => {
-    renderingManager.getRenderer().drawWorld(
-        worldManager.getCharacterManager().getCharacterStoreAsArray()
-    )
     controllerManager.getLoop().start(0)    // could potentially load the code inline here
 }
-
 
 const loadCanvas = (): void => {
     let tempCanvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('game-canvas')

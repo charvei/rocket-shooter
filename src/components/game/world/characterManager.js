@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-var character_1 = require("./character");
+var Character_1 = require("./Character");
 /**
  * Store characters and manage access and manipulation to character resources
  */
@@ -21,7 +21,7 @@ var CharacterManager = /** @class */ (function () {
             // do error handling here
         };
         this.addCharacterToStore = function (characterName, height, width, position) {
-            _this.characterStore.set(characterName, new character_1["default"](characterName, "x", height, width, position));
+            _this.characterStore.set(characterName, new Character_1["default"](characterName, "x", height, width, position));
         };
         this.removeCharacterFromStore = function (characterName) {
             _this.characterStore["delete"](characterName);
@@ -39,14 +39,14 @@ var CharacterManager = /** @class */ (function () {
         //TEMPORARY: FOR TESTING LOOP.
         //THIS MIGHT FIT UNDER A BROADER UPDATE OR TICK() FUNCTION FOR A CHARACTER. I.E. WHERE IT CHECKS IF ITS IN SOMETHINGS WAY, IF IT NEEDS TO MOVE POS ETC?
         this.updateCharacters = function (delta) {
-            // this.getCharacterStoreAsArray().forEach((character: Character) => {
-            //     character.incrementXPos(.1 * delta)
-            // })
+            _this.getCharacterStoreAsArray().forEach(function (character) {
+                character.update();
+            });
         };
         this.characterStore = new Map();
         //TESTING RENDERING:
         var characterPosition = {
-            x: 10,
+            x: 320,
             y: 10
         };
         this.addCharacterToStore("Adam", 10, 10, characterPosition);
