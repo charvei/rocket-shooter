@@ -2,26 +2,26 @@ import CharacterManager from './CharacterManager.js'
 import Colours from './colours.js'
 import GameObjectManager from './GameObjectManager.js'
 
-type XCollisionLocation = {
-    didCollide: boolean,
-    leftCollision: boolean,
-    rightCollision: boolean
-}
+// type XCollisionLocation = {
+//     didCollide: boolean,
+//     leftCollision: boolean,
+//     rightCollision: boolean
+// }
 
-type YCollisionLocation = {
-    didCollide: boolean,
-    topCollision: boolean,
-    bottomCollision: boolean,
-}
+// type YCollisionLocation = {
+//     didCollide: boolean,
+//     topCollision: boolean,
+//     bottomCollision: boolean,
+// }
 
 type CollisionLocation = {
-    xCollision: XCollisionLocation,
-    yCollision: YCollisionLocation
+    xCollision: number,
+    yCollision: number
 }
 
 type CollisionResult = {
-    didCollide: boolean,
-    collisionLocation: CollisionLocation
+    axis: string,
+    distance: number
 }
 
 /**
@@ -59,23 +59,12 @@ class WorldManager {
         // Potentially (and very possibly the correct choice) create a higher level class called entities, then fit Characters under that even, then we can put in 'Boundaries', 'missiles', etc under entities in the world too.  
     }
 
-    detectCollision = (): boolean => {
+    detectCollision = (): CollisionResult => {
         // Probably want to use inheritance a little to allow for a single loop through array of the base class of GameObjects and Entities
         // But for now, will just hack it together because I want to code collision.
-        let collisionResult: CollisionResult = {
-            didCollide: false,
-            collisionLocation: {
-                yCollision: {
-                    didCollide: false,
-                    topCollision: false,
-                    bottomCollision: false,
-                },
-                xCollision: {
-                    didCollide: false,
-                    leftCollision: false,
-                    rightCollision: false
-                }
-            }
+        let collisionResult = {
+            axis: "null",
+            distance: 0
         }
 
         this.characterManager.getCharacterStoreAsArray().forEach((character) => {
@@ -95,16 +84,27 @@ class WorldManager {
                 character.physics.xCollisionFlag = this.detectXCollision(characterLeft, characterRight, objectLeft, objectRight)
                 character.physics.yCollisionFlag = this.detectYCollision(characterTop, characterBottom, objectTop, objectBottom)
 
-                if (character.physics.xCollisionFlag.didCollide && character.physics.yCollisionFlag.didCollide) {
+                if (Math.abs(character.physics.xCollisionFlag) > 0 && Math.abs(character.physics.yCollisionFlag) > 0) {
                     // collision occurred
-                    collisionResult.didCollide = true
-                    if (character.physics.previousXCollisionFlag.didCollide && !character.physics.previousYCollisionFlag.didCollide) {
+
+                    
+                    if (Math.abs(character.physics.previousXCollisionFlag) > 0 && !(Math.abs(character.physics.previousYCollisionFlag) > 0)) {
                         // hit occured on character's y axis
                         character.input.clearVelocityY()
+                        collisionResult = {
+                            axis: "y",
+                            distance: character.physics.yCollisionFlag
+                        }
+                        
                     }
-                    if (!character.physics.previousXCollisionFlag.didCollide && character.physics.previousYCollisionFlag.didCollide) {
+                    if (!(Math.abs(character.physics.previousXCollisionFlag) > 0) && character.physics.previousYCollisionFlag > 0) {
                         // hit occured on character's x axis
                         character.input.clearVelocityX()
+                        //collisionAmount = character.physics.yCollisionFlag
+                        collisionResult = {
+                            axis: "x",
+                            distance: character.physics.xCollisionFlag
+                        }
                     }
                 } else {
                     // no collision
@@ -112,55 +112,35 @@ class WorldManager {
 
                 character.physics.previousXCollisionFlag = character.physics.xCollisionFlag
                 character.physics.previousYCollisionFlag = character.physics.yCollisionFlag
+
             })
         })
 
-        return true
+        return collisionResult
     }
 
-    private detectYCollision = (characterTop, characterBottom, objectTop, objectBottom): YCollisionLocation => {
-        let result = {
-            didCollide: false,
-            topCollision: false,
-            bottomCollision: false,
-        }
+    private detectYCollision = (characterTop, characterBottom, objectTop, objectBottom): number => {
         if (characterBottom > objectTop && characterBottom < objectBottom) {
             // character lands on top of object
-            result.didCollide = true
-            result.topCollision = true
-
-            // return characterBottom - objectTop
-            //characterBottom is greater than object top, but by how much?
-
+            return characterBottom - objectTop
         }
         if (objectBottom > characterTop && objectBottom < characterBottom) {
             // character hits head on bottom of object
-            result.didCollide = true
-            result.bottomCollision = true
-            // return characterBottom - objectTop
+            return characterTop - objectBottom
         }
-        return result
+        return 0
     }
 
-    private detectXCollision = (characterLeft, characterRight, objectLeft, objectRight): XCollisionLocation => {
-        let result = {
-            didCollide: false,
-            leftCollision: false,
-            rightCollision: false,
-        }
+    private detectXCollision = (characterLeft, characterRight, objectLeft, objectRight): number => {
         if (characterRight > objectLeft && characterRight < objectRight) {
             // character's right side hits object left side
-            result.didCollide = true
-            result.rightCollision = true
-
+            return characterRight - objectLeft
         }
         if (objectRight > characterLeft && objectRight < characterRight) {
             // character's left side hits object's right side
-            result.didCollide = true
-            result.leftCollision = true
-
+            return characterLeft - objectRight
         }
-        return result
+        return 0
     }
 
     /**

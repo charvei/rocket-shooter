@@ -12,8 +12,8 @@ var ControllerManager = /** @class */ (function () {
             return _this.loop;
         };
         this.update = function (delta) {
-            _this.inputHandler.handleInput(delta);
             _this.worldManager.updateWorld(delta);
+            _this.inputHandler.handleInput(delta);
         };
         this.draw = function () {
             _this.renderingManager.getRenderer().drawWorld(_this.worldManager.getCharacterManager().getCharacterStoreAsArray(), _this.worldManager.getGameObjectManager().getObjectStoreAsArray());
