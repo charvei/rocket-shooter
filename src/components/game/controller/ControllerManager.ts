@@ -24,7 +24,6 @@ class ControllerManager {
     }
 
     update = (delta: number): void => {
-        this.worldManager.detectCollision()
         this.inputHandler.handleInput(delta)
         this.worldManager.updateWorld(delta)
     }

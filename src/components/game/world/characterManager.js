@@ -38,9 +38,9 @@ var CharacterManager = /** @class */ (function () {
         };
         //TEMPORARY: FOR TESTING LOOP.
         //THIS MIGHT FIT UNDER A BROADER UPDATE OR TICK() FUNCTION FOR A CHARACTER. I.E. WHERE IT CHECKS IF ITS IN SOMETHINGS WAY, IF IT NEEDS TO MOVE POS ETC?
-        this.updateCharacters = function (delta) {
+        this.updateCharacters = function (delta, worldManager) {
             _this.getCharacterStoreAsArray().forEach(function (character) {
-                character.update();
+                character.update(worldManager);
             });
         };
         this.characterStore = new Map();

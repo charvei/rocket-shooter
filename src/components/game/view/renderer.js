@@ -33,7 +33,7 @@ var Renderer = /** @class */ (function () {
         // So at some point may want to consider having multiple canvas or something right? buffer screens and stuff
         this.drawCharacters = function (characterList) {
             characterList.forEach(function (character) {
-                _this.context.fillStyle = "#ff00ff";
+                _this.context.fillStyle = "#0000ff";
                 _this.context.fillRect(character.getPosition().x, character.getPosition().y, character.getWidth(), character.getHeight());
             });
         };

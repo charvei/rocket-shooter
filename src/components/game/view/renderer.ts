@@ -53,7 +53,7 @@ class Renderer {
     // So at some point may want to consider having multiple canvas or something right? buffer screens and stuff
     drawCharacters = (characterList: Character[]) => {
         characterList.forEach(character => {
-            this.context.fillStyle = "#ff00ff"
+            this.context.fillStyle = "#0000ff"
             this.context.fillRect(character.getPosition().x, character.getPosition().y, character.getWidth(), character.getHeight())
         })
     }

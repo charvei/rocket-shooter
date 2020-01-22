@@ -8,8 +8,8 @@ var InputComponent_js_1 = require("./components/InputComponent.js");
 var Character = /** @class */ (function () {
     function Character(name, code, height, width, position) {
         var _this = this;
-        this.update = function () {
-            _this.physics.update();
+        this.update = function (worldManager) {
+            _this.physics.update(worldManager);
         };
         this.getName = function () {
             return _this.name;

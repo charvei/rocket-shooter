@@ -19,7 +19,7 @@ var WorldManager = /** @class */ (function () {
             return _this.gameObjectManager;
         };
         this.updateWorld = function (delta) {
-            _this.getCharacterManager().updateCharacters(delta);
+            _this.getCharacterManager().updateCharacters(delta, _this);
             // If we have multiple types of characters then we can create different managers for them and put them under characterManager
             // e.g. PlayerCharacter, Enemies, 
             // Potentially (and very possibly the correct choice) create a higher level class called entities, then fit Characters under that even, then we can put in 'Boundaries', 'missiles', etc under entities in the world too.  
@@ -27,6 +27,21 @@ var WorldManager = /** @class */ (function () {
         this.detectCollision = function () {
             // Probably want to use inheritance a little to allow for a single loop through array of the base class of GameObjects and Entities
             // But for now, will just hack it together because I want to code collision.
+            var collisionResult = {
+                didCollide: false,
+                collisionLocation: {
+                    yCollision: {
+                        didCollide: false,
+                        topCollision: false,
+                        bottomCollision: false
+                    },
+                    xCollision: {
+                        didCollide: false,
+                        leftCollision: false,
+                        rightCollision: false
+                    }
+                }
+            };
             _this.characterManager.getCharacterStoreAsArray().forEach(function (character) {
                 // Get each side of character
                 var characterLeft = character.getPosition().x;
@@ -39,45 +54,67 @@ var WorldManager = /** @class */ (function () {
                     var objectRight = objectLeft + object.getWidth();
                     var objectTop = object.getPosition().y;
                     var objectBottom = objectTop + object.getHeight();
-                    var yCollisionFlag = _this.detectYCollision(characterTop, characterBottom, objectTop, objectBottom);
-                    var xCollisionFlag = _this.detectXCollision(characterLeft, characterRight, objectLeft, objectRight);
-                    if (yCollisionFlag && xCollisionFlag) {
-                        //collision occurred
-                        console.log("COLLISION");
+                    character.physics.xCollisionFlag = _this.detectXCollision(characterLeft, characterRight, objectLeft, objectRight);
+                    character.physics.yCollisionFlag = _this.detectYCollision(characterTop, characterBottom, objectTop, objectBottom);
+                    if (character.physics.xCollisionFlag.didCollide && character.physics.yCollisionFlag.didCollide) {
+                        // collision occurred
+                        collisionResult.didCollide = true;
+                        if (character.physics.previousXCollisionFlag.didCollide && !character.physics.previousYCollisionFlag.didCollide) {
+                            // hit occured on character's y axis
+                            character.input.clearVelocityY();
+                        }
+                        if (!character.physics.previousXCollisionFlag.didCollide && character.physics.previousYCollisionFlag.didCollide) {
+                            // hit occured on character's x axis
+                            character.input.clearVelocityX();
+                        }
                     }
                     else {
-                        console.log("weeee");
+                        // no collision
                     }
+                    character.physics.previousXCollisionFlag = character.physics.xCollisionFlag;
+                    character.physics.previousYCollisionFlag = character.physics.yCollisionFlag;
                 });
             });
             return true;
         };
         this.detectYCollision = function (characterTop, characterBottom, objectTop, objectBottom) {
-            // character lands on top of object
+            var result = {
+                didCollide: false,
+                topCollision: false,
+                bottomCollision: false
+            };
             if (characterBottom > objectTop && characterBottom < objectBottom) {
-                //console.log("character lands on top of object")
-                //character.input.clearVelocityY()
-                return true;
+                // character lands on top of object
+                result.didCollide = true;
+                result.topCollision = true;
+                // return characterBottom - objectTop
+                //characterBottom is greater than object top, but by how much?
             }
-            // character hits head on bottom of object
             if (objectBottom > characterTop && objectBottom < characterBottom) {
-                //console.log("character hits head on bottom of object")
-                return true;
+                // character hits head on bottom of object
+                result.didCollide = true;
+                result.bottomCollision = true;
+                // return characterBottom - objectTop
             }
-            return false;
+            return result;
         };
         this.detectXCollision = function (characterLeft, characterRight, objectLeft, objectRight) {
-            // character's right side hits object left side
+            var result = {
+                didCollide: false,
+                leftCollision: false,
+                rightCollision: false
+            };
             if (characterRight > objectLeft && characterRight < objectRight) {
-                //console.log("character runs into left side of object")
-                return true;
+                // character's right side hits object left side
+                result.didCollide = true;
+                result.rightCollision = true;
             }
-            // character's left side hits object's right side
             if (objectRight > characterLeft && objectRight < characterRight) {
-                //console.log("character runs into right side of object")
-                return true;
+                // character's left side hits object's right side
+                result.didCollide = true;
+                result.leftCollision = true;
             }
-            return false;
+            return result;
         };
         /**
          * Stuff to do when collision is detected

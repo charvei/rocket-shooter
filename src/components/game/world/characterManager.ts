@@ -1,4 +1,5 @@
 import Character from "./Character"
+import WorldManager from "./WorldManager"
 
 /**
  * Store characters and manage access and manipulation to character resources
@@ -60,9 +61,9 @@ class CharacterManager {
 
     //TEMPORARY: FOR TESTING LOOP.
     //THIS MIGHT FIT UNDER A BROADER UPDATE OR TICK() FUNCTION FOR A CHARACTER. I.E. WHERE IT CHECKS IF ITS IN SOMETHINGS WAY, IF IT NEEDS TO MOVE POS ETC?
-    updateCharacters = (delta: number) => {
+    updateCharacters = (delta: number, worldManager: WorldManager) => {
         this.getCharacterStoreAsArray().forEach((character: Character) => {
-            character.update()
+            character.update(worldManager)
         })
     }
 

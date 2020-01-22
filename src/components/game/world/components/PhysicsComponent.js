@@ -27,16 +27,25 @@ var PhysicsComponent = /** @class */ (function () {
             };
             _this.componentOwner.setPosition(newPosition);
         };
-        this.update = function () {
+        this.update = function (worldManager) {
+            _this.applyFriction();
+            _this.applyGravity();
+            worldManager.detectCollision();
+            /**
+             * once final velocity is calculated (friction / gravity applies)
+             * calculate the future amount of x/y movement from velocity and
+             * limit it according to how far away a colliding object is
+             */
             if (Math.abs(_this.componentOwner.velocityX) > 0) {
                 _this.incrementXPos(_this.componentOwner.velocityX);
             }
             if (Math.abs(_this.componentOwner.velocityY) > 0) {
                 _this.incrementYPos(_this.componentOwner.velocityY);
             }
-            _this.applyFriction();
-            _this.applyGravity();
-            // CALL WORLD'S COLLISION CHECK HERE.
+            _this.setPrevPosition();
+        };
+        this.setPrevPosition = function () {
+            _this.componentOwner.prevPosition = _this.componentOwner.position;
         };
         this.applyFriction = function () {
             _this.componentOwner.velocityX = _this.componentOwner.velocityX * 0.9;
@@ -46,6 +55,10 @@ var PhysicsComponent = /** @class */ (function () {
             _this.componentOwner.velocityY = _this.componentOwner.velocityY * 0.9; // Using friction instead of gravity to test collision
         };
         this.componentOwner = componentOwner;
+        // this.xCollisionFlag = false
+        // this.yCollisionFlag = false
+        // this.previousXCollisionFlag = false
+        // this.previousYCollisionFlag = false
     }
     return PhysicsComponent;
 }());

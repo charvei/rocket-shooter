@@ -12,7 +12,6 @@ var ControllerManager = /** @class */ (function () {
             return _this.loop;
         };
         this.update = function (delta) {
-            _this.worldManager.detectCollision();
             _this.inputHandler.handleInput(delta);
             _this.worldManager.updateWorld(delta);
         };

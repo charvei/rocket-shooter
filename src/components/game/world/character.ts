@@ -1,5 +1,6 @@
 import PhysicsComponent from './components/PhysicsComponent.js'
 import InputComponent from './components/InputComponent.js'
+import WorldManager from './WorldManager.js'
 
 /**
  * Character or unit that exists in the game. This should probably go through some inheritance type things at some point
@@ -24,6 +25,12 @@ class Character {
         x: number,
         y: number
     }
+
+    // position of sides of box
+    prevPosition: {
+        x: number,
+        y: number
+    }
     
     constructor(name: string, code: string, height: number, width: number, position: {x: number, y: number}) {
         this.name = name
@@ -39,8 +46,8 @@ class Character {
         this.input = new InputComponent(this)
     }
 
-    update = (): void => {
-        this.physics.update()
+    update = (worldManager: WorldManager): void => {
+        this.physics.update(worldManager)
     }
 
     getName = () => {
