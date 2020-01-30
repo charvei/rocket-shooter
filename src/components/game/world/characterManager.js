@@ -49,7 +49,7 @@ var CharacterManager = /** @class */ (function () {
             x: 320,
             y: 10
         };
-        this.addCharacterToStore("Adam", 10, 10, characterPosition);
+        this.addCharacterToStore("Adam", 20, 20, characterPosition);
     }
     return CharacterManager;
 }());

@@ -14,19 +14,20 @@ var Commands = /** @class */ (function () {
                 character.incrementYPos(-.5 * delta);
             }
             if (direction == "Down") {
-                character.incrementYPos(.5 * delta);
+                //character.incrementYPos(.5 * delta)
+                character.input.down(delta);
             }
             if (direction == "Left") {
-                character.input.moveLeft();
+                character.input.moveLeft(delta);
             }
             if (direction == "Right") {
-                character.input.moveRight();
+                character.input.moveRight(delta);
             }
         };
     };
     Commands.makeJumpCommand = function (character) {
         return function (delta) {
-            character.input.jump();
+            character.input.jump(delta);
         };
     };
     return Commands;

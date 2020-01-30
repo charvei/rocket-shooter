@@ -1,3 +1,12 @@
+import WorldManager from "../WorldManager"
+
+type BoxCoords = {
+    top: number,
+    bottom: number,
+    left: number,
+    right: number
+}
+
 /**
  * Object in the game. Base class that more specific objects will inherit from.
  */
@@ -23,7 +32,7 @@ class GameObject {
         this.position = position
     }
 
-    update = () => {
+    update = (worldManager: WorldManager) => {
         
     }
 
@@ -50,6 +59,17 @@ class GameObject {
     setPosition = ({position}: {position: { x: number, y: number }}) => {
         this.position = position
     }
+
+    getBoxCoords = (xAdjustment: number = 0, yAdjustment: number = 0): BoxCoords => {
+        return {
+            top: this.getPosition().y + yAdjustment,
+            bottom: this.getPosition().y + this.getHeight() + yAdjustment, 
+            left: this.getPosition().x + xAdjustment,
+            right: this.getPosition().x + this.getWidth() + xAdjustment
+        }
+    }
+
+    
     
 }
 

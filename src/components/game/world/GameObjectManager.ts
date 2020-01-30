@@ -1,5 +1,6 @@
 import GameObject from "./objects/GameObject"
 import Platform from "./objects/Platform"
+import WorldManager from "../world/WorldManager"
 
 /**
  * Store characters and manages access to and manipulation of character resources
@@ -12,7 +13,9 @@ class GameObjectManager {
 
 
         let testPlatform = new Platform("test", "1", 100, 100, { x: 300, y: 150  })
+        let testPlatform1 = new Platform("test1", "12", 100, 100, { x: 450, y: 350  })
         this.addGameObject(testPlatform)
+        this.addGameObject(testPlatform1)
     }
 
     addGameObject = (object: GameObject) => { 
@@ -54,9 +57,9 @@ class GameObjectManager {
 
     //TEMPORARY: FOR TESTING LOOP.
     //THIS MIGHT FIT UNDER A BROADER UPDATE OR TICK() FUNCTION FOR A CHARACTER. I.E. WHERE IT CHECKS IF ITS IN SOMETHINGS WAY, IF IT NEEDS TO MOVE POS ETC?
-    updateCharacters = (delta: number) => {
+    updateCharacters = (delta: number, worldManager: WorldManager) => {
         this.getObjectStoreAsArray().forEach((object: GameObject) => {
-            object.update()
+            object.update(worldManager)
         })
     }
 

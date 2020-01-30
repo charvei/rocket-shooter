@@ -39,14 +39,16 @@ var GameObjectManager = /** @class */ (function () {
         };
         //TEMPORARY: FOR TESTING LOOP.
         //THIS MIGHT FIT UNDER A BROADER UPDATE OR TICK() FUNCTION FOR A CHARACTER. I.E. WHERE IT CHECKS IF ITS IN SOMETHINGS WAY, IF IT NEEDS TO MOVE POS ETC?
-        this.updateCharacters = function (delta) {
+        this.updateCharacters = function (delta, worldManager) {
             _this.getObjectStoreAsArray().forEach(function (object) {
-                object.update();
+                object.update(worldManager);
             });
         };
         this.objectStore = new Map();
         var testPlatform = new Platform_1["default"]("test", "1", 100, 100, { x: 300, y: 150 });
+        var testPlatform1 = new Platform_1["default"]("test1", "12", 100, 100, { x: 450, y: 350 });
         this.addGameObject(testPlatform);
+        this.addGameObject(testPlatform1);
     }
     return GameObjectManager;
 }());

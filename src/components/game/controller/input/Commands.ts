@@ -14,19 +14,19 @@ class Commands {
             if (direction == "Up") {
                 character.incrementYPos(-.5 * delta)
             } if (direction == "Down") {
-                character.incrementYPos(.5 * delta)
-            
+                //character.incrementYPos(.5 * delta)
+                character.input.down(delta)
             } if (direction == "Left") {
-                character.input.moveLeft()
+                character.input.moveLeft(delta)
             } if (direction == "Right") {
-                character.input.moveRight()
+                character.input.moveRight(delta)
             }
         }
     }
 
     static makeJumpCommand = (character: Character): (delta: number) => void => {
         return (delta: number) => {
-            character.input.jump()
+            character.input.jump(delta)
         }
     }
 }

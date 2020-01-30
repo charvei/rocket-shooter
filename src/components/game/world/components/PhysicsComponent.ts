@@ -1,26 +1,28 @@
 import Character from '../Character'
 import WorldManager from '../WorldManager'
+import GameObject from '../objects/GameObject'
 
-type XCollisionLocation = {
-    didCollide: boolean,
-    leftCollision: boolean,
-    rightCollision: boolean
-}
+// type CollisionResult = {
+//     x: {
+//         didCollide: boolean,
+//         distance: number
+//     },
+//     y: {
+//         didCollide: boolean,
+//         distance: number
+//     } 
+// }
 
-type YCollisionLocation = {
-    didCollide: boolean,
-    topCollision: boolean,
-    bottomCollision: boolean,
-}
-
-type CollisionLocation = {
-    xCollision: XCollisionLocation,
-    yCollision: YCollisionLocation
+type CollisionVectors = {
+    top: number,
+    bottom: number,
+    left: number,
+    right: number
 }
 
 type CollisionResult = {
-    axis: string,
-    distance: number
+    didCollide: boolean,
+    vectors: CollisionVectors
 }
 
 /**
@@ -29,23 +31,18 @@ type CollisionResult = {
 class PhysicsComponent {
     //worldManager: WorldManager
     componentOwner: Character
-    xCollisionFlag: number
-    yCollisionFlag: number
-    previousXCollisionFlag: number
-    previousYCollisionFlag: number
+    xCollisionDistance: number
+    yCollisionDistance: number
+    previousXCollisionDistance: number
+    previousYCollisionDistance: number
+    landed: boolean
+    previousCollisions: CollisionResult
+
+    touchingObjects: GameObject[] = []
 
     constructor(componentOwner: Character) {
         this.componentOwner = componentOwner
-        // this.xCollisionFlag = false
-        // this.yCollisionFlag = false
-        // this.previousXCollisionFlag = false
-        // this.previousYCollisionFlag = false
-        
     }
-
-    // setPosition = ({position}: {position: { x: number, y: number }}): void => {
-    //     this.componentOwner.position = position
-    // }
 
     incrementXPos = (increment: number): void => {
         let newPosition = {
@@ -69,37 +66,93 @@ class PhysicsComponent {
     
     update = (worldManager: WorldManager): void => {
         this.applyFriction()
-        this.applyGravity()
-
-        let collision: CollisionResult = worldManager.detectCollision()
-
-        /**
-         * once final velocity is calculated (friction / gravity applies)
-         * calculate the future amount of x/y movement from velocity and 
-         * limit it according to how far away a colliding object is
-         */
         
-        // adjust velocity if we calculate that we're going to hit
-        if (collision.axis == "x") {
-            this.componentOwner.velocityX = collision.distance
-        }
-        if (collision.axis == "y") {
-            //this.componentOwner.velocityY = collision.distance
-            this.componentOwner.velocityY = 0
-            this.componentOwner.incrementYPos(-collision.distance)  
-            // TODO: implement this better (currently just a quick hack), don't forget to add x axis (figuring out how to do x which is missing the incrementypos function will give solution)
-            // TODO: figure out why box is rendering inside box still, then getting kicked out
+        if (!this.landed) {
+            this.applyGravity()
         }
 
+        let collisions: CollisionResult = worldManager.getCollisions(this.componentOwner)
+
+        this.resolveCollisions(collisions, this.previousCollisions)
+
+        this.resolveTouchingRelationships(worldManager)
+        
+        this.updateMovement()
+
+        this.previousCollisions = collisions
+
+    }
+
+    addTouchingObject = (object: GameObject) => {
+        if (!this.touchingObjects.includes(object)) {
+            this.touchingObjects.push(object)
+        }
+    }
+    
+    //TODO: clean up this, think about what will happen with multiple touching relationships (i.e. address what to return and how to deal with it appropriately)
+    private resolveTouchingRelationships = (worldManager: WorldManager): void => {
+        this.touchingObjects.forEach((object) => {
+            let objectIndex: number = this.touchingObjects.indexOf(object)
+            let collisioning: CollisionVectors = worldManager.getCollisionVectors(this.componentOwner.getBoxCoords(), object.getBoxCoords())
+            let touchRelationship: CollisionResult = worldManager.getTouchRelationship(this.componentOwner, object)
+
+            if (!touchRelationship.didCollide) {
+                this.landed = false
+                console.log("in air")
+                if (objectIndex >= 0) {
+                    this.touchingObjects.splice(objectIndex, 1)
+                }
+                return
+            }
+
+            if (collisioning.bottom == 0 && touchRelationship.vectors.bottom != 0) {
+                this.landed = true
+                console.log("landed")
+                return
+            }
+
+        })
+
+        return
+    }
+
+    private updateMovement = () => {
         if (Math.abs(this.componentOwner.velocityX) > 0) {
             this.incrementXPos(this.componentOwner.velocityX)
         }
         if (Math.abs(this.componentOwner.velocityY) > 0) {
-            console.log(this.componentOwner.velocityY)
             this.incrementYPos(this.componentOwner.velocityY)
         }
+    }
 
-        this.setPrevPosition()
+    private resolveCollisions = (collisions: CollisionResult, prevCollisions: CollisionResult): void => {
+        console.log(collisions.didCollide)
+        if (!collisions.didCollide) {
+            return
+        }
+
+        if (collisions.vectors.bottom != 0 && prevCollisions.vectors.bottom == 0) {
+            this.incrementYPos(this.componentOwner.velocityY - collisions.vectors.bottom)
+            this.componentOwner.velocityY = 0
+            this.landed = true
+        }
+        if (collisions.vectors.top != 0 && prevCollisions.vectors.top == 0) {
+            this.incrementYPos(this.componentOwner.velocityY - collisions.vectors.top)
+            this.componentOwner.velocityY = 0
+        }
+        if (collisions.vectors.left != 0 && prevCollisions.vectors.left == 0) {
+            this.incrementXPos(this.componentOwner.velocityX - collisions.vectors.left)
+            this.componentOwner.velocityX = 0
+        }
+        if (collisions.vectors.right != 0 && prevCollisions.vectors.right == 0) {
+            this.incrementXPos(this.componentOwner.velocityX - collisions.vectors.right)
+            this.componentOwner.velocityX = 0
+        }
+
+    }
+
+    private hasLanded = (collisionVectors: CollisionResult): void => {
+        //collisionVectors.
     }
 
     private setPrevPosition = (): void => {
@@ -111,8 +164,20 @@ class PhysicsComponent {
     }
 
     private applyGravity = (): void => {
-        //this.componentOwner.velocityY += 0.1
-        this.componentOwner.velocityY = this.componentOwner.velocityY * 0.9 // Using friction instead of gravity to test collision
+        this.componentOwner.velocityY += 0.1
+        //this.componentOwner.velocityY = this.componentOwner.velocityY * 0.9 // Using friction instead of gravity to test collision
+    }
+
+    private stopGravity = (): void => {
+        
+    }
+
+    private max = (first: number, second: number): number => {
+        if (Math.abs(first) > Math.abs(second)) {
+            return first
+        } else {
+            return second
+        }
     }
 
 }

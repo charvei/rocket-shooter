@@ -1,27 +1,42 @@
 import CharacterManager from './CharacterManager.js'
 import Colours from './colours.js'
 import GameObjectManager from './GameObjectManager.js'
+import Character from './Character.js'
+import GameObject from './objects/GameObject'
 
-// type XCollisionLocation = {
-//     didCollide: boolean,
-//     leftCollision: boolean,
-//     rightCollision: boolean
+// type CollisionLocation = {
+//     xCollision: number,
+//     yCollision: number
 // }
 
-// type YCollisionLocation = {
-//     didCollide: boolean,
-//     topCollision: boolean,
-//     bottomCollision: boolean,
+// type CollisionResult = {
+//     x: {
+//         didCollide: boolean,
+//         distance: number
+//     },
+//     y: {
+//         didCollide: boolean,
+//         distance: number
+//     } 
 // }
 
-type CollisionLocation = {
-    xCollision: number,
-    yCollision: number
+type BoxCoords = {
+    top: number,
+    bottom: number,
+    left: number,
+    right: number
+}
+
+type CollisionVectors = {
+    top: number,
+    bottom: number,
+    left: number,
+    right: number
 }
 
 type CollisionResult = {
-    axis: string,
-    distance: number
+    didCollide: boolean,
+    vectors: CollisionVectors
 }
 
 /**
@@ -59,89 +74,105 @@ class WorldManager {
         // Potentially (and very possibly the correct choice) create a higher level class called entities, then fit Characters under that even, then we can put in 'Boundaries', 'missiles', etc under entities in the world too.  
     }
 
-    detectCollision = (): CollisionResult => {
-        // Probably want to use inheritance a little to allow for a single loop through array of the base class of GameObjects and Entities
-        // But for now, will just hack it together because I want to code collision.
-        let collisionResult = {
-            axis: "null",
-            distance: 0
+    getTouchRelationship = (thisObject: GameObject, otherObject: GameObject): CollisionResult => {
+        let touchResult: CollisionResult = {
+            didCollide: false,
+            vectors: {
+                top: 0, 
+                bottom: 0, 
+                left: 0, 
+                right: 0
+            }
         }
 
-        this.characterManager.getCharacterStoreAsArray().forEach((character) => {
-            // Get each side of character
-            let characterLeft: number = character.getPosition().x
-            let characterRight: number = characterLeft + character.getWidth()
-            let characterTop: number = character.getPosition().y
-            let characterBottom: number = characterTop + character.getHeight()
-            
-            this.gameObjectManager.getObjectStoreAsArray().forEach((object) => {
-                // Get each side of object
-                let objectLeft: number = object.getPosition().x
-                let objectRight: number = objectLeft + object.getWidth()
-                let objectTop: number = object.getPosition().y
-                let objectBottom: number = objectTop + object.getHeight()
+        let thisBox: BoxCoords = thisObject.getBoxCoords(1, 1)
+        let otherBox: BoxCoords = otherObject.getBoxCoords()
+
+        touchResult.vectors = this.getCollisionVectors(thisBox, otherBox)
+        
+        if (this.checkCollision(thisBox, otherBox)) {
+            touchResult.didCollide = true
+        }
+
+        return touchResult
+    }
+
+
+    // not accounting for multiple collisions at once currently
+    getCollisions = (character: Character): CollisionResult => {
+        let collisionResult: CollisionResult = {
+            didCollide: false,
+            vectors: {
+                top: 0, 
+                bottom: 0, 
+                left: 0, 
+                right: 0
+            }
+        }
+
+        //TODO: fix the fact that we're only dealing with the last object in the object store
+        this.gameObjectManager.getObjectStoreAsArray().forEach((object) => {
+            let characterBox: BoxCoords = character.getBoxCoords(character.velocityX, character.velocityY)
+            let objectBox: BoxCoords = object.getBoxCoords()
+
+            collisionResult.vectors = this.getCollisionVectors(characterBox, objectBox)
+
+            if (this.checkCollision(characterBox, objectBox)) {
+                collisionResult.didCollide = true
+
+                //call function in object's physics that updates array storing all objects that that object is touching.
+                character.physics.addTouchingObject(object)
                 
-                character.physics.xCollisionFlag = this.detectXCollision(characterLeft, characterRight, objectLeft, objectRight)
-                character.physics.yCollisionFlag = this.detectYCollision(characterTop, characterBottom, objectTop, objectBottom)
+                //the array will then be iterated inside of the physics component to check if touching relationship still exists and resolve those touches (e.g. prevent velocity x from changing / velocity y from increasing if 'landed' touching relationship)
+            }
 
-                if (Math.abs(character.physics.xCollisionFlag) > 0 && Math.abs(character.physics.yCollisionFlag) > 0) {
-                    // collision occurred
-
-                    
-                    if (Math.abs(character.physics.previousXCollisionFlag) > 0 && !(Math.abs(character.physics.previousYCollisionFlag) > 0)) {
-                        // hit occured on character's y axis
-                        character.input.clearVelocityY()
-                        collisionResult = {
-                            axis: "y",
-                            distance: character.physics.yCollisionFlag
-                        }
-                        
-                    }
-                    if (!(Math.abs(character.physics.previousXCollisionFlag) > 0) && character.physics.previousYCollisionFlag > 0) {
-                        // hit occured on character's x axis
-                        character.input.clearVelocityX()
-                        //collisionAmount = character.physics.yCollisionFlag
-                        collisionResult = {
-                            axis: "x",
-                            distance: character.physics.xCollisionFlag
-                        }
-                    }
-                } else {
-                    // no collision
-                }
-
-                character.physics.previousXCollisionFlag = character.physics.xCollisionFlag
-                character.physics.previousYCollisionFlag = character.physics.yCollisionFlag
-
-            })
         })
-
         return collisionResult
     }
 
-    private detectYCollision = (characterTop, characterBottom, objectTop, objectBottom): number => {
-        if (characterBottom > objectTop && characterBottom < objectBottom) {
-            // character lands on top of object
-            return characterBottom - objectTop
+    private checkCollision = (subjectBox: BoxCoords, otherBox: BoxCoords): boolean => {
+        if (subjectBox.bottom <= otherBox.top) {
+            return false
         }
-        if (objectBottom > characterTop && objectBottom < characterBottom) {
-            // character hits head on bottom of object
-            return characterTop - objectBottom
+        if (subjectBox.top >= otherBox.bottom) {
+            return false
         }
-        return 0
+        if (subjectBox.right <= otherBox.left) {
+            return false
+        }
+        if (subjectBox.left >= otherBox.right) {
+            return false
+        }
+
+        return true
     }
 
-    private detectXCollision = (characterLeft, characterRight, objectLeft, objectRight): number => {
-        if (characterRight > objectLeft && characterRight < objectRight) {
-            // character's right side hits object left side
-            return characterRight - objectLeft
+    getCollisionVectors = (subjectBox: BoxCoords, otherBox: BoxCoords): CollisionVectors => {
+        let collisionVectors: CollisionVectors = {
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0
         }
-        if (objectRight > characterLeft && objectRight < characterRight) {
-            // character's left side hits object's right side
-            return characterLeft - objectRight
+
+        if (subjectBox.top <= otherBox.bottom && subjectBox.top >= otherBox.top) {
+            collisionVectors.top = subjectBox.top - otherBox.bottom
         }
-        return 0
+        if (subjectBox.bottom >= otherBox.top && subjectBox.bottom <= otherBox.bottom) {
+            collisionVectors.bottom = subjectBox.bottom - otherBox.top
+        }
+        if (subjectBox.left <= otherBox.right && subjectBox.left >= otherBox.left) {
+            collisionVectors.left = subjectBox.left - otherBox.right
+        }
+        if (subjectBox.right >= otherBox.left && subjectBox.right <= otherBox.right) {
+            collisionVectors.right = subjectBox.right - otherBox.left
+        }
+
+        return collisionVectors
     }
+
+    // get vicinity collision
+
 
     /**
      * Stuff to do when collision is detected

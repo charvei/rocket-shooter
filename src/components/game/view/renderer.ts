@@ -28,9 +28,11 @@ class Renderer {
         
         //objects
         this.drawObjects(objectList)
-
+        
         //characters
         this.drawCharacters(characterList)
+
+
     }
 
     testDraw = () => {

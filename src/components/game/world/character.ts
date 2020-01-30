@@ -1,11 +1,12 @@
 import PhysicsComponent from './components/PhysicsComponent.js'
 import InputComponent from './components/InputComponent.js'
 import WorldManager from './WorldManager.js'
+import GameObject from './objects/GameObject.js'
 
 /**
  * Character or unit that exists in the game. This should probably go through some inheritance type things at some point
  */
-class Character {
+class Character extends GameObject {
     // components
     physics: PhysicsComponent
     input: InputComponent    
@@ -33,11 +34,12 @@ class Character {
     }
     
     constructor(name: string, code: string, height: number, width: number, position: {x: number, y: number}) {
-        this.name = name
-        this.code = code
-        this.height = height
-        this.width = width
-        this.position = position
+        super(name, code, height, width, position)
+        // this.name = name
+        // this.code = code
+        // this.height = height
+        // this.width = width
+        // this.position = position
 
         this.physics = new PhysicsComponent(this)
         this.velocityX = 0
@@ -50,29 +52,6 @@ class Character {
         this.physics.update(worldManager)
     }
 
-    getName = () => {
-        return this.name
-    }
-    
-    getCode = () => {
-        return this.code
-    }
-
-    getHeight = () => {
-        return this.height
-    }
-
-    getWidth = () => {
-        return this.width
-    }
-
-    getPosition = () => {
-        return this.position
-    }
-
-    setPosition = ({position}: {position: { x: number, y: number }}) => {
-        this.position = position
-    }
 
     /*REMOVE THIS WHEN GRAVITY / JUMPING IS FULLY IMPLEMENTED*/
     incrementYPos = (increment: number) => {

@@ -6,7 +6,7 @@ exports.__esModule = true;
 var GameObject = /** @class */ (function () {
     function GameObject(name, code, height, width, position) {
         var _this = this;
-        this.update = function () {
+        this.update = function (worldManager) {
         };
         this.getName = function () {
             return _this.name;
@@ -26,6 +26,16 @@ var GameObject = /** @class */ (function () {
         this.setPosition = function (_a) {
             var position = _a.position;
             _this.position = position;
+        };
+        this.getBoxCoords = function (xAdjustment, yAdjustment) {
+            if (xAdjustment === void 0) { xAdjustment = 0; }
+            if (yAdjustment === void 0) { yAdjustment = 0; }
+            return {
+                top: _this.getPosition().y + yAdjustment,
+                bottom: _this.getPosition().y + _this.getHeight() + yAdjustment,
+                left: _this.getPosition().x + xAdjustment,
+                right: _this.getPosition().x + _this.getWidth() + xAdjustment
+            };
         };
         this.name = name;
         this.code = code;

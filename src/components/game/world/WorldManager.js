@@ -24,78 +24,85 @@ var WorldManager = /** @class */ (function () {
             // e.g. PlayerCharacter, Enemies, 
             // Potentially (and very possibly the correct choice) create a higher level class called entities, then fit Characters under that even, then we can put in 'Boundaries', 'missiles', etc under entities in the world too.  
         };
-        this.detectCollision = function () {
-            // Probably want to use inheritance a little to allow for a single loop through array of the base class of GameObjects and Entities
-            // But for now, will just hack it together because I want to code collision.
-            var collisionResult = {
-                axis: "null",
-                distance: 0
+        this.getTouchRelationship = function (thisObject, otherObject) {
+            var touchResult = {
+                didCollide: false,
+                vectors: {
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
+                    right: 0
+                }
             };
-            _this.characterManager.getCharacterStoreAsArray().forEach(function (character) {
-                // Get each side of character
-                var characterLeft = character.getPosition().x;
-                var characterRight = characterLeft + character.getWidth();
-                var characterTop = character.getPosition().y;
-                var characterBottom = characterTop + character.getHeight();
-                _this.gameObjectManager.getObjectStoreAsArray().forEach(function (object) {
-                    // Get each side of object
-                    var objectLeft = object.getPosition().x;
-                    var objectRight = objectLeft + object.getWidth();
-                    var objectTop = object.getPosition().y;
-                    var objectBottom = objectTop + object.getHeight();
-                    character.physics.xCollisionFlag = _this.detectXCollision(characterLeft, characterRight, objectLeft, objectRight);
-                    character.physics.yCollisionFlag = _this.detectYCollision(characterTop, characterBottom, objectTop, objectBottom);
-                    if (Math.abs(character.physics.xCollisionFlag) > 0 && Math.abs(character.physics.yCollisionFlag) > 0) {
-                        // collision occurred
-                        if (Math.abs(character.physics.previousXCollisionFlag) > 0 && !(Math.abs(character.physics.previousYCollisionFlag) > 0)) {
-                            // hit occured on character's y axis
-                            character.input.clearVelocityY();
-                            collisionResult = {
-                                axis: "y",
-                                distance: character.physics.yCollisionFlag
-                            };
-                        }
-                        if (!(Math.abs(character.physics.previousXCollisionFlag) > 0) && character.physics.previousYCollisionFlag > 0) {
-                            // hit occured on character's x axis
-                            character.input.clearVelocityX();
-                            //collisionAmount = character.physics.yCollisionFlag
-                            collisionResult = {
-                                axis: "x",
-                                distance: character.physics.xCollisionFlag
-                            };
-                        }
-                    }
-                    else {
-                        // no collision
-                    }
-                    character.physics.previousXCollisionFlag = character.physics.xCollisionFlag;
-                    character.physics.previousYCollisionFlag = character.physics.yCollisionFlag;
-                });
+            var thisBox = thisObject.getBoxCoords(1, 1);
+            var otherBox = otherObject.getBoxCoords();
+            touchResult.vectors = _this.getCollisionVectors(thisBox, otherBox);
+            if (_this.checkCollision(thisBox, otherBox)) {
+                touchResult.didCollide = true;
+            }
+            return touchResult;
+        };
+        // not accounting for multiple collisions at once currently
+        this.getCollisions = function (character) {
+            var collisionResult = {
+                didCollide: false,
+                vectors: {
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
+                    right: 0
+                }
+            };
+            _this.gameObjectManager.getObjectStoreAsArray().forEach(function (object) {
+                var characterBox = character.getBoxCoords(character.velocityX, character.velocityY);
+                var objectBox = object.getBoxCoords();
+                collisionResult.vectors = _this.getCollisionVectors(characterBox, objectBox);
+                if (_this.checkCollision(characterBox, objectBox)) {
+                    collisionResult.didCollide = true;
+                    //call function in object's physics that updates array storing all objects that that object is touching.
+                    character.physics.addTouchingObject(object);
+                    //the array will then be iterated inside of the physics component to check if touching relationship still exists and resolve those touches (e.g. prevent velocity x from changing / velocity y from increasing if 'landed' touching relationship)
+                }
             });
             return collisionResult;
         };
-        this.detectYCollision = function (characterTop, characterBottom, objectTop, objectBottom) {
-            if (characterBottom > objectTop && characterBottom < objectBottom) {
-                // character lands on top of object
-                return characterBottom - objectTop;
+        this.checkCollision = function (subjectBox, otherBox) {
+            if (subjectBox.bottom <= otherBox.top) {
+                return false;
             }
-            if (objectBottom > characterTop && objectBottom < characterBottom) {
-                // character hits head on bottom of object
-                return characterTop - objectBottom;
+            if (subjectBox.top >= otherBox.bottom) {
+                return false;
             }
-            return 0;
+            if (subjectBox.right <= otherBox.left) {
+                return false;
+            }
+            if (subjectBox.left >= otherBox.right) {
+                return false;
+            }
+            return true;
         };
-        this.detectXCollision = function (characterLeft, characterRight, objectLeft, objectRight) {
-            if (characterRight > objectLeft && characterRight < objectRight) {
-                // character's right side hits object left side
-                return characterRight - objectLeft;
+        this.getCollisionVectors = function (subjectBox, otherBox) {
+            var collisionVectors = {
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0
+            };
+            if (subjectBox.top <= otherBox.bottom && subjectBox.top >= otherBox.top) {
+                collisionVectors.top = subjectBox.top - otherBox.bottom;
             }
-            if (objectRight > characterLeft && objectRight < characterRight) {
-                // character's left side hits object's right side
-                return characterLeft - objectRight;
+            if (subjectBox.bottom >= otherBox.top && subjectBox.bottom <= otherBox.bottom) {
+                collisionVectors.bottom = subjectBox.bottom - otherBox.top;
             }
-            return 0;
+            if (subjectBox.left <= otherBox.right && subjectBox.left >= otherBox.left) {
+                collisionVectors.left = subjectBox.left - otherBox.right;
+            }
+            if (subjectBox.right >= otherBox.left && subjectBox.right <= otherBox.right) {
+                collisionVectors.right = subjectBox.right - otherBox.left;
+            }
+            return collisionVectors;
         };
+        // get vicinity collision
         /**
          * Stuff to do when collision is detected
          */
