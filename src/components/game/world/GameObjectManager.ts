@@ -11,11 +11,12 @@ class GameObjectManager {
     constructor() {
         this.objectStore = new Map<string, GameObject>()
 
-
         let testPlatform = new Platform("test", "1", 100, 100, { x: 300, y: 150  })
         let testPlatform1 = new Platform("test1", "12", 100, 100, { x: 450, y: 350  })
+        let base = new Platform("base", "base", 20, 800, { x: 0, y: 460 })
         this.addGameObject(testPlatform)
         this.addGameObject(testPlatform1)
+        this.addGameObject(base)
     }
 
     addGameObject = (object: GameObject) => { 

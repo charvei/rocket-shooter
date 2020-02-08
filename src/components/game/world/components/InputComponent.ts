@@ -1,7 +1,7 @@
 import Character from '../Character'
 
 /**
- * Input component. Stuff that inputs (player / AI) can change.
+ * Input component. Stuff that inputs (player / AI) can use.
  * 
  * Affects character's x & y velocity and probably more things later on.
  * 
@@ -9,7 +9,7 @@ import Character from '../Character'
 class InputComponent {
     // private WALK_ACCELERATION = 1
     // private RUN_ACCELERATION = 2
-    private MOVE_ACCELERATION: number = 0.04
+    private MOVE_ACCELERATION: number = 0.035
     private MAX_VELOCITY_X: number = 50
 
     private componentOwner: Character
@@ -33,7 +33,19 @@ class InputComponent {
     }
 
     jump = (delta: number): void => {
-        this.componentOwner.velocityY -= this.MOVE_ACCELERATION * delta
+        if (this.componentOwner.physics.isTouching("bottom")) {
+            this.componentOwner.velocityY -= 0.12 * delta
+        }
+        console.log("my isTouching(bot) result:" + this.componentOwner.physics.isTouching("bottom"))
+
+        //this.componentOwner.velocityY -= this.MOVE_ACCELERATION * delta
+    }
+
+    jetPack = (delta: number): void => {
+        if (!this.componentOwner.physics.isTouching("bottom")) {
+            console.log(delta)
+            this.componentOwner.velocityY -= 0.018 * delta
+        }
     }
 
     down = (delta: number): void => {

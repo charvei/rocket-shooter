@@ -60,16 +60,14 @@ class GameObject {
         this.position = position
     }
 
-    getBoxCoords = (xAdjustment: number = 0, yAdjustment: number = 0): BoxCoords => {
+    getBoxCoords = (topAdjustment: number = 0, bottomAdjustment: number = 0, leftAdjustment: number = 0, rightAdjustment: number = 0): BoxCoords => {
         return {
-            top: this.getPosition().y + yAdjustment,
-            bottom: this.getPosition().y + this.getHeight() + yAdjustment, 
-            left: this.getPosition().x + xAdjustment,
-            right: this.getPosition().x + this.getWidth() + xAdjustment
+            top: this.getPosition().y + topAdjustment,
+            bottom: this.getPosition().y + this.getHeight() + bottomAdjustment, 
+            left: this.getPosition().x + leftAdjustment,
+            right: this.getPosition().x + this.getWidth() + rightAdjustment
         }
-    }
-
-    
+    }  
     
 }
 

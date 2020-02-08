@@ -10,11 +10,10 @@ var Commands = /** @class */ (function () {
     // }
     Commands.makeMoveUnitCommand = function (character, direction) {
         return function (delta) {
-            if (direction == "Up") {
-                character.incrementYPos(-.5 * delta);
-            }
+            /*if (direction == "Up") {
+                character.incrementYPos(-.5 * delta)
+            }*/
             if (direction == "Down") {
-                //character.incrementYPos(.5 * delta)
                 character.input.down(delta);
             }
             if (direction == "Left") {
@@ -28,6 +27,11 @@ var Commands = /** @class */ (function () {
     Commands.makeJumpCommand = function (character) {
         return function (delta) {
             character.input.jump(delta);
+        };
+    };
+    Commands.makeJetPackCommand = function (character) {
+        return function (delta) {
+            character.input.jetPack(delta);
         };
     };
     return Commands;

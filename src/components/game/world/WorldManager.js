@@ -34,7 +34,7 @@ var WorldManager = /** @class */ (function () {
                     right: 0
                 }
             };
-            var thisBox = thisObject.getBoxCoords(1, 1);
+            var thisBox = thisObject.getBoxCoords(-1, 1, -1, 1);
             var otherBox = otherObject.getBoxCoords();
             touchResult.vectors = _this.getCollisionVectors(thisBox, otherBox);
             if (_this.checkCollision(thisBox, otherBox)) {
@@ -44,27 +44,29 @@ var WorldManager = /** @class */ (function () {
         };
         // not accounting for multiple collisions at once currently
         this.getCollisions = function (character) {
-            var collisionResult = {
-                didCollide: false,
-                vectors: {
-                    top: 0,
-                    bottom: 0,
-                    left: 0,
-                    right: 0
-                }
-            };
+            var collisionResults = [];
             _this.gameObjectManager.getObjectStoreAsArray().forEach(function (object) {
-                var characterBox = character.getBoxCoords(character.velocityX, character.velocityY);
+                var characterBox = character.getBoxCoords(character.velocityY, character.velocityY, character.velocityX, character.velocityX);
                 var objectBox = object.getBoxCoords();
-                collisionResult.vectors = _this.getCollisionVectors(characterBox, objectBox);
+                var collision = {
+                    didCollide: false,
+                    vectors: {
+                        top: 0,
+                        bottom: 0,
+                        left: 0,
+                        right: 0
+                    }
+                };
+                collision.vectors = _this.getCollisionVectors(characterBox, objectBox);
                 if (_this.checkCollision(characterBox, objectBox)) {
-                    collisionResult.didCollide = true;
+                    collision.didCollide = true;
                     //call function in object's physics that updates array storing all objects that that object is touching.
-                    character.physics.addTouchingObject(object);
-                    //the array will then be iterated inside of the physics component to check if touching relationship still exists and resolve those touches (e.g. prevent velocity x from changing / velocity y from increasing if 'landed' touching relationship)
+                    character.physics.addTouchingObject(object); // what if it touches but never collides... hmmm maybe separate this to a different function call from character / gameobject
+                    console.log("ADDED: " + object.name);
                 }
+                collisionResults.push(collision);
             });
-            return collisionResult;
+            return collisionResults;
         };
         this.checkCollision = function (subjectBox, otherBox) {
             if (subjectBox.bottom <= otherBox.top) {
@@ -101,12 +103,6 @@ var WorldManager = /** @class */ (function () {
                 collisionVectors.right = subjectBox.right - otherBox.left;
             }
             return collisionVectors;
-        };
-        // get vicinity collision
-        /**
-         * Stuff to do when collision is detected
-         */
-        this.resolveCollision = function () {
         };
         this.characterManager = new CharacterManager_js_1["default"]();
         this.gameObjectManager = new GameObjectManager_js_1["default"]();

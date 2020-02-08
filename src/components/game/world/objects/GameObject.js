@@ -27,14 +27,16 @@ var GameObject = /** @class */ (function () {
             var position = _a.position;
             _this.position = position;
         };
-        this.getBoxCoords = function (xAdjustment, yAdjustment) {
-            if (xAdjustment === void 0) { xAdjustment = 0; }
-            if (yAdjustment === void 0) { yAdjustment = 0; }
+        this.getBoxCoords = function (topAdjustment, bottomAdjustment, leftAdjustment, rightAdjustment) {
+            if (topAdjustment === void 0) { topAdjustment = 0; }
+            if (bottomAdjustment === void 0) { bottomAdjustment = 0; }
+            if (leftAdjustment === void 0) { leftAdjustment = 0; }
+            if (rightAdjustment === void 0) { rightAdjustment = 0; }
             return {
-                top: _this.getPosition().y + yAdjustment,
-                bottom: _this.getPosition().y + _this.getHeight() + yAdjustment,
-                left: _this.getPosition().x + xAdjustment,
-                right: _this.getPosition().x + _this.getWidth() + xAdjustment
+                top: _this.getPosition().y + topAdjustment,
+                bottom: _this.getPosition().y + _this.getHeight() + bottomAdjustment,
+                left: _this.getPosition().x + leftAdjustment,
+                right: _this.getPosition().x + _this.getWidth() + rightAdjustment
             };
         };
         this.name = name;

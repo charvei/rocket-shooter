@@ -25,7 +25,10 @@ class ControllerManager {
 
     update = (delta: number): void => {
         this.inputHandler.handleInput(delta)
+        
         this.worldManager.updateWorld(delta)
+        
+        this.inputHandler.savePreviousKeyState()
     }
 
     draw = (): void => {

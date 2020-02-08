@@ -6,7 +6,47 @@ exports.__esModule = true;
 var PhysicsComponent = /** @class */ (function () {
     function PhysicsComponent(componentOwner) {
         var _this = this;
+        this.touchingState = {
+            top: false,
+            bottom: false,
+            left: false,
+            right: false
+        };
+        this.previousCollisions = [];
         this.touchingObjects = [];
+        /**
+         * Runs once per tick
+         */
+        this.update = function (worldManager) {
+            _this.applyFriction();
+            _this.applyGravity();
+            _this.updateTouches(worldManager);
+            _this.resolveTouches();
+            var collisions = worldManager.getCollisions(_this.componentOwner);
+            collisions.forEach(function (collision, index) {
+                _this.resolveCollisions(collision, _this.previousCollisions[index]); // may create issues if these indices get out of sync
+            });
+            _this.updateTouches(worldManager);
+            _this.resolveTouches();
+            _this.updateMovement();
+            _this.previousCollisions = collisions;
+        };
+        this.getFreshTouchingState = function () {
+            return {
+                top: false,
+                bottom: false,
+                left: false,
+                right: false
+            };
+        };
+        this.updateMovement = function () {
+            if (Math.abs(_this.componentOwner.velocityX) > 0) {
+                _this.incrementXPos(_this.componentOwner.velocityX);
+            }
+            if (Math.abs(_this.componentOwner.velocityY) > 0) {
+                _this.incrementYPos(_this.componentOwner.velocityY);
+            }
+        };
         this.incrementXPos = function (increment) {
             var newPosition = {
                 position: {
@@ -25,80 +65,67 @@ var PhysicsComponent = /** @class */ (function () {
             };
             _this.componentOwner.setPosition(newPosition);
         };
-        this.update = function (worldManager) {
-            _this.applyFriction();
-            if (!_this.landed) {
-                _this.applyGravity();
-            }
-            var collisions = worldManager.getCollisions(_this.componentOwner);
-            _this.resolveCollisions(collisions, _this.previousCollisions);
-            _this.resolveTouchingRelationships(worldManager);
-            //this.resolveCollision(collisions)
-            //this.resolveCollisions(collisions)
-            //this.hasLanded(collisions)
-            _this.updateMovement();
-            _this.previousCollisions = collisions;
-            // this.setPrevPosition()
-        };
         this.addTouchingObject = function (object) {
             if (!_this.touchingObjects.includes(object)) {
                 _this.touchingObjects.push(object);
             }
         };
-        this.resolveTouchingRelationships = function (worldManager) {
-            _this.touchingObjects.forEach(function (object) {
-                var objectIndex = _this.touchingObjects.indexOf(object);
-                var collisioning = worldManager.getCollisionVectors(_this.componentOwner.getBoxCoords(), object.getBoxCoords());
-                var touchRelationship = worldManager.getTouchRelationship(_this.componentOwner, object);
-                if (!touchRelationship.didCollide) {
-                    _this.landed = false;
-                    console.log("in air");
-                    if (objectIndex >= 0) {
-                        _this.touchingObjects.splice(objectIndex, 1);
-                    }
+        //TODO: think about what will happen with multiple touching relationships (i.e. address what to return and how to deal with it appropriately)
+        this.updateTouches = function (worldManager) {
+            _this.touchingState = _this.getFreshTouchingState();
+            var touchingIndexRemovalQueue = [];
+            _this.touchingObjects.forEach(function (object, index) {
+                var collision = worldManager.getCollisionVectors(_this.componentOwner.getBoxCoords(), object.getBoxCoords());
+                var touch = worldManager.getTouchRelationship(_this.componentOwner, object);
+                if (!touch.didCollide) { //rename didCollide to something more general
+                    touchingIndexRemovalQueue.push(index);
                     return;
                 }
-                if (collisioning.bottom == 0 && touchRelationship.vectors.bottom != 0) {
-                    _this.landed = true;
-                    console.log("landed");
-                    return;
-                }
-                // let collisioning: CollisionVectors = worldManager.getCollisionVectors(this.componentOwner.getBoxCoords(), object.getBoxCoords())
-                // let touching: CollisionVectors = worldManager.getCollisionVectors(this.componentOwner.getBoxCoords(1,1), object.getBoxCoords())
-                // //HOL UP -- maybe i can just do a did collide check. 
-                // if (collisioning.bottom == 0 && touching.bottom != 0) {
-                //     this.landed = true
-                // } else {
-                //     this.landed = false
-                // }
-                // console.log(collisioning.bottom)
-                // console.log(touching.bottom)
+                _this.setTouchingState(collision, touch.vectors);
             });
-            return;
+            touchingIndexRemovalQueue.forEach(function (objectToRemoveIndex) {
+                _this.touchingObjects.splice(objectToRemoveIndex, 1);
+                //probably should remove it in reverse order to account for changing index?
+            });
         };
-        // private getTouchingRelationship = (object: GameObject) => {
-        //     this.componentOwner.getBoxCoords(1, 1)
-        //     //worldManager.getBoxCoords
-        //     //touching
-        //     //touching angle
-        // }
-        this.updateMovement = function () {
-            if (Math.abs(_this.componentOwner.velocityX) > 0) {
-                _this.incrementXPos(_this.componentOwner.velocityX);
+        this.setTouchingState = function (collision, touch) {
+            if (collision.bottom == 0 && touch.bottom != 0) {
+                _this.touchingState.bottom = true;
             }
-            if (Math.abs(_this.componentOwner.velocityY) > 0) {
-                _this.incrementYPos(_this.componentOwner.velocityY);
+            if (collision.top == 0 && touch.top != 0) {
+                _this.touchingState.top = true;
+            }
+            if (collision.left == 0 && touch.left != 0) {
+                _this.touchingState.left = true;
+            }
+            if (collision.right == 0 && touch.right != 0) {
+                _this.touchingState.right = true;
+            }
+        };
+        /**
+         * Prevent velocity change if grinding against another object
+         */
+        this.resolveTouches = function () {
+            if (_this.touchingState.bottom == true && _this.componentOwner.velocityY > 0) {
+                _this.componentOwner.velocityY = 0;
+            }
+            if (_this.touchingState.top == true && _this.componentOwner.velocityY < 0) {
+                _this.componentOwner.velocityY = 0;
+            }
+            if (_this.touchingState.right == true && _this.componentOwner.velocityX > 0) {
+                _this.componentOwner.velocityX = 0;
+            }
+            if (_this.touchingState.left == true && _this.componentOwner.velocityX < 0) {
+                _this.componentOwner.velocityX = 0;
             }
         };
         this.resolveCollisions = function (collisions, prevCollisions) {
-            console.log(collisions.didCollide);
             if (!collisions.didCollide) {
                 return;
             }
             if (collisions.vectors.bottom != 0 && prevCollisions.vectors.bottom == 0) {
                 _this.incrementYPos(_this.componentOwner.velocityY - collisions.vectors.bottom);
                 _this.componentOwner.velocityY = 0;
-                _this.landed = true;
             }
             if (collisions.vectors.top != 0 && prevCollisions.vectors.top == 0) {
                 _this.incrementYPos(_this.componentOwner.velocityY - collisions.vectors.top);
@@ -112,106 +139,16 @@ var PhysicsComponent = /** @class */ (function () {
                 _this.incrementXPos(_this.componentOwner.velocityX - collisions.vectors.right);
                 _this.componentOwner.velocityX = 0;
             }
-            // collisionAngles.forEach(angle => {
-            // })
-        };
-        /** Very verbose */
-        /*
-        private resolveCollision = (collisionVectors: CollisionVectors): void => {
-            
-            if (((Math.abs(collisionVectors.top) > 0) && (Math.abs(collisionVectors.bottom) > 0)) ||
-                    ((Math.abs(collisionVectors.left) > 0) && (Math.abs(collisionVectors.right) ) > 0)) {
-    
-                if ((Math.abs(collisionVectors.top) > 0) && (Math.abs(collisionVectors.bottom) > 0)) {
-                    // in between top and bottom > kill velocity x
-                    this.incrementXPos(this.max(collisionVectors.left, collisionVectors.right) * -1)
-                    this.componentOwner.velocityX = 0
-                    
-                }
-    
-                if ((Math.abs(collisionVectors.left) > 0) && (Math.abs(collisionVectors.right) ) > 0) {
-                    // in between left and right > kill velocity y
-                    this.incrementYPos(((this.max(collisionVectors.top, collisionVectors.bottom) - this.componentOwner.velocityY) * -1))
-                    console.log(collisionVectors.bottom)
-                    this.componentOwner.velocityY = 0
-                    console.log("bop")cv
-                }
-    
-            } else if (((Math.abs(collisionVectors.left) > 0) || (Math.abs(collisionVectors.right) > 0))
-                    && ((Math.abs(collisionVectors.top) > 0) || (Math.abs(collisionVectors.bottom) > 0))) {
-                
-                if ((Math.abs(collisionVectors.left) > 0) && (Math.abs(collisionVectors.bottom) > 0)) {
-                    // bottom left of subject is hitting top right
-                    if (Math.abs(collisionVectors.bottom) < Math.abs(collisionVectors.left)) {
-                        this.incrementYPos(-collisionVectors.bottom)
-                        this.componentOwner.velocityY = 0
-                    } else {
-                        this.incrementXPos(-collisionVectors.left)
-                        this.componentOwner.velocityX = 0
-                    }
-                }
-    
-                if ((Math.abs(collisionVectors.right) > 0) && (Math.abs(collisionVectors.bottom) > 0)) {
-                    // bottom right of subject is hitting top right
-                    if (Math.abs(collisionVectors.bottom) < Math.abs(collisionVectors.right)) {
-                        this.incrementYPos(-collisionVectors.bottom)
-                        this.componentOwner.velocityY = 0
-                    } else {
-                        this.incrementXPos(-collisionVectors.right)
-                        this.componentOwner.velocityX = 0
-                    }
-                }
-    
-                if ((Math.abs(collisionVectors.left) > 0) && (Math.abs(collisionVectors.top) > 0)) {
-                    // top left of subject is hitting top right
-                    if (Math.abs(collisionVectors.top) < Math.abs(collisionVectors.left)) {
-                        this.incrementYPos(-collisionVectors.top)
-                        this.componentOwner.velocityY = 0
-                    } else {
-                        this.incrementXPos(-collisionVectors.left)
-                        this.componentOwner.velocityX = 0
-                    }
-                }
-    
-                if ((Math.abs(collisionVectors.right) > 0) && (Math.abs(collisionVectors.top) > 0)) {
-                    // top right of subject is hitting top right
-                    if (Math.abs(collisionVectors.top) < Math.abs(collisionVectors.right)) {
-                        this.incrementYPos(-collisionVectors.top)
-                        this.componentOwner.velocityY = 0
-                    } else {
-                        this.incrementXPos(-collisionVectors.right)
-                        this.componentOwner.velocityX = 0
-                    }
-                }
-           // }
-            } else {
-                console.log("in air - no touching")
-            }
-        }
-    
-        */
-        this.hasLanded = function (collisionVectors) {
-            //collisionVectors.
-        };
-        this.setPrevPosition = function () {
-            _this.componentOwner.prevPosition = _this.componentOwner.position;
         };
         this.applyFriction = function () {
             _this.componentOwner.velocityX = _this.componentOwner.velocityX * 0.9;
         };
         this.applyGravity = function () {
-            _this.componentOwner.velocityY += 0.1;
-            //this.componentOwner.velocityY = this.componentOwner.velocityY * 0.9 // Using friction instead of gravity to test collision
+            _this.componentOwner.velocityY += 0.2;
+            //this.componentOwner.velocityY = this.componentOwner.velocityY * 0.9 // Use friction instead of gravity to test collision
         };
-        this.stopGravity = function () {
-        };
-        this.max = function (first, second) {
-            if (Math.abs(first) > Math.abs(second)) {
-                return first;
-            }
-            else {
-                return second;
-            }
+        this.isTouching = function (direction) {
+            return _this.touchingState[direction];
         };
         this.componentOwner = componentOwner;
     }

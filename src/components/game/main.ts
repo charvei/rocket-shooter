@@ -14,6 +14,9 @@ let canvas: {
     }
 }
 
+const width: number = 800
+const height: number = 480
+
 const main = (): void => {
     loadStuff()
     doStuff()

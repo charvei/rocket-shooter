@@ -8,6 +8,8 @@ var worldManager;
 var renderingManager;
 var controllerManager;
 var canvas;
+var width = 800;
+var height = 480;
 var main = function () {
     loadStuff();
     doStuff();

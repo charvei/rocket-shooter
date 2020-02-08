@@ -47,8 +47,10 @@ var GameObjectManager = /** @class */ (function () {
         this.objectStore = new Map();
         var testPlatform = new Platform_1["default"]("test", "1", 100, 100, { x: 300, y: 150 });
         var testPlatform1 = new Platform_1["default"]("test1", "12", 100, 100, { x: 450, y: 350 });
+        var base = new Platform_1["default"]("base", "base", 20, 800, { x: 0, y: 460 });
         this.addGameObject(testPlatform);
         this.addGameObject(testPlatform1);
+        this.addGameObject(base);
     }
     return GameObjectManager;
 }());

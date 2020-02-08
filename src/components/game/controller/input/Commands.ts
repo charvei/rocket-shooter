@@ -11,10 +11,10 @@ class Commands {
     static makeMoveUnitCommand = (character: Character, direction: String): 
             (delta: number) => void => {
         return (delta: number) => {
-            if (direction == "Up") {
+            /*if (direction == "Up") {
                 character.incrementYPos(-.5 * delta)
-            } if (direction == "Down") {
-                //character.incrementYPos(.5 * delta)
+            }*/ 
+            if (direction == "Down") {
                 character.input.down(delta)
             } if (direction == "Left") {
                 character.input.moveLeft(delta)
@@ -27,6 +27,12 @@ class Commands {
     static makeJumpCommand = (character: Character): (delta: number) => void => {
         return (delta: number) => {
             character.input.jump(delta)
+        }
+    }
+
+    static makeJetPackCommand = (character: Character): (delta: number) => void => {
+        return (delta: number) => {
+            character.input.jetPack(delta)
         }
     }
 }
