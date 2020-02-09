@@ -1,9 +1,6 @@
 <template>
     <div class="app-header">
         <img class="header-logo" alt="Site logo" src="../assets/logo.png">
-        <h1>
-            Site
-        </h1>
     </div>
 </template>
 

@@ -2,7 +2,9 @@ import WorldManager from './world/WorldManager'
 import RenderingManager from './view/RenderingManager.js'
 import ControllerManager from './controller/ControllerManager.js'
 
-let context: CanvasRenderingContext2D
+let worldContext: CanvasRenderingContext2D
+let foregroundContext: CanvasRenderingContext2D
+
 let worldManager: WorldManager
 let renderingManager: RenderingManager
 let controllerManager: ControllerManager
@@ -23,8 +25,11 @@ const main = (): void => {
 }
 
 const loadStuff = (): void => {
-    loadCanvas()
+    loadForegroundCanvas()
+    loadWorldCanvas()
+    
     loadWorld()
+
     loadRendering()
     loadController()
 }
@@ -33,7 +38,7 @@ const doStuff = (): void => {
     controllerManager.getLoop().start(0)    // could potentially load the code inline here
 }
 
-const loadCanvas = (): void => {
+const loadWorldCanvas = (): void => {
     let tempCanvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('game-canvas')
     canvas = { 
         element: tempCanvas,
@@ -42,15 +47,27 @@ const loadCanvas = (): void => {
             width: tempCanvas.width
         }
     }
-    context = getContext(canvas.element)
+    worldContext = getContext(canvas.element)
+}
+
+const loadForegroundCanvas = (): void => {
+    let tempCanvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('foreground-canvas')
+    canvas = {
+        element: tempCanvas,
+        props: {
+            height: tempCanvas.height,
+            width: tempCanvas.width
+        }
+    }
+    foregroundContext = getContext(canvas.element)
 }
 
 const loadWorld = (): void => {
-    worldManager = new WorldManager(context)
+    worldManager = new WorldManager(worldContext)
 }
 
 const loadRendering = (): void => {
-    renderingManager = new RenderingManager(context, canvas.props)
+    renderingManager = new RenderingManager(worldContext, foregroundContext, canvas.props)
 }
 
 const loadController = (): void => {

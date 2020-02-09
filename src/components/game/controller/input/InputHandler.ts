@@ -36,28 +36,18 @@ class InputHandler {
     public savePreviousKeyState = (): void => {
         this.previousKeysState = this.keys
     }
-
-    /**
-     * Set up keydown listeners to detect when keys are pressed down and lifted up
-     */
-    // private setupKeyDownListeners = (): void => {
-    //     window.onkeyup = (e: KeyboardEvent) => {
-    //         this.keys[e.key] = false            
-    //     }
-
-    //     window.onkeydown = (e: KeyboardEvent): void => {
-    //         this.keys[e.key] = true
-    //     }
-    // }
     
     /**
      * Set up keydown listeners to detect when keys are pressed down and lifted up
      */
     private setupKeyDownListeners = (): void => {
-        this.keys["w"] = {
-            heldDown: false,
-            firstPress: false
-        }
+        let keysUsed: string[] = ["w", "a", "s", "d"] 
+        keysUsed.forEach((key) => {
+            this.keys[key] = {
+                heldDown: false,
+                firstPress: false
+            }
+        }) 
 
         window.onkeyup = (e: KeyboardEvent) => {
             this.keys[e.key] = {
@@ -100,14 +90,6 @@ class InputHandler {
      */
     private getKeyPressState = (key: string): KeyPressEvent => {
         return this.keys[key] ? this.keys[key] : {firstPress: false, heldDown: false}
-    //     let res = {
-    //         heldDown: this.keys[key] ? true : false,
-    //         firstPress: this.keys[key] && !this.previousKeysState[key] ? true : false
-    //     }
-    //     if (key == "w"){
-    //     console.log("prevKeyPress: " + this.previousKeysState["w"] + " || thisKeyPress: " + this.keys["w"])
-    // }
-    //     return res
     }
 }
 
