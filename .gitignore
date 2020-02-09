@@ -2,6 +2,9 @@
 node_modules
 /dist
 
+# Built .js game files
+#src/components/game/*.js
+
 # local env files
 .env.local
 .env.*.local
