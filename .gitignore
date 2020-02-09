@@ -3,7 +3,7 @@ node_modules
 /dist
 
 # Built .js game files
-#src/components/game/*.js
+src/components/game/*.js
 
 # local env files
 .env.local
