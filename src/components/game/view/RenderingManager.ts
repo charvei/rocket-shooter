@@ -12,6 +12,8 @@ class RenderingManager {
         this.renderer = new Renderer(worldContext, foregroundContext, canvasProps)
     }
 
+    //renderForeground(effect)
+
     getRenderer = () => {
         return this.renderer
     }

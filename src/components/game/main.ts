@@ -63,7 +63,7 @@ const loadForegroundCanvas = (): void => {
 }
 
 const loadWorld = (): void => {
-    worldManager = new WorldManager(worldContext)
+    worldManager = new WorldManager(worldContext, foregroundContext, canvas.props)
 }
 
 const loadRendering = (): void => {

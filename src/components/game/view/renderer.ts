@@ -1,7 +1,15 @@
 import Character from '../world/Character.js' //not sure if i should be importing character? i would like it to be even more decoupled right?
 import GameObject from '../world/objects/GameObject.js'
+import RainForeground from '../world/foreground/RainForeground.js'
 
-//Should change this into a RenderingManager class?
+/** WILL NEED TO GIVE COLOUR AND OPACITY AT SOME POINT */
+type Renderable = {
+    xPos: number,
+    yPos: number,
+    width: number,
+    height: number
+}
+
 class Renderer {
     worldContext: CanvasRenderingContext2D
     foregroundContext: CanvasRenderingContext2D
@@ -16,25 +24,25 @@ class Renderer {
         this.canvasProps = canvasProps
     }
 
-    drawForeground = () => {
-        this.foregroundContext.clearRect(0, 0, this.canvasProps.width, this.canvasProps.height)
-        this.foregroundContext.fillStyle = "rgba(255, 255, 255, 0.5)"
-        this.foregroundContext.fillRect(0, 0, this.canvasProps.width, this.canvasProps.height)
-    }
-
     // Maybe when this gets more complicated this can be made more intelligent?
-    drawWorld = (characterList: Character[], objectList: GameObject[]) => {
+    drawWorld = (characterList: Character[], objectList: GameObject[], foregroundRenderables: Renderable[]) => {
         this.worldContext.clearRect(0, 0, this.canvasProps.width, this.canvasProps.height)
 
         //background
         this.worldContext.fillStyle = "#000000" 
         this.worldContext.fillRect(0, 0, this.canvasProps.width, this.canvasProps.height)
         
+        //foreground
+        this.drawForeground(foregroundRenderables)
+
+
         //objects
         this.drawObjects(objectList)
         
         //characters
         this.drawCharacters(characterList)
+
+
     }
 
     testDraw = () => {
@@ -55,6 +63,17 @@ class Renderer {
             this.worldContext.fillStyle = "#ffffff"
             this.worldContext.fillRect(object.getPosition().x, object.getPosition().y, object.getWidth(), object.getHeight())
         })
+    }
+
+    drawForeground = (renderables: Renderable[]) => {
+        renderables.forEach(renderable => {
+            this.worldContext.fillStyle = "rgba(255, 255, 255, 0.5)"
+            this.worldContext.fillRect(renderable.xPos, renderable.yPos, renderable.width, renderable.height)
+        })
+
+        // this.foregroundContext.clearRect(0, 0, this.canvasProps.width, this.canvasProps.height)
+        // this.foregroundContext.fillStyle = "rgba(255, 255, 255, 0.5)"
+        // this.foregroundContext.fillRect(0, 0, this.canvasProps.width, this.canvasProps.height)
     }
 
 }

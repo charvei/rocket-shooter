@@ -7,7 +7,8 @@
     "build": "npm run tsc && npm run justbuild",
     "justbuild": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "tsc": "tsc src/components/game/main"
+    "tsc": "tsc src/components/game/main",
+    "build-push": "npm run build && git push"
   },
   "dependencies": {
     "core-js": "^3.4.3",

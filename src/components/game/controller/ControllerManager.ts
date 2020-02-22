@@ -27,6 +27,8 @@ class ControllerManager {
         this.inputHandler.handleInput(delta)
         
         this.worldManager.updateWorld(delta)
+
+        this.worldManager.updateForeground(delta)
         
         this.inputHandler.savePreviousKeyState()
     }
@@ -34,9 +36,12 @@ class ControllerManager {
     draw = (): void => {
         this.renderingManager.getRenderer().drawWorld(
             this.worldManager.getCharacterManager().getCharacterStoreAsArray(),
-            this.worldManager.getGameObjectManager().getObjectStoreAsArray()
+            this.worldManager.getGameObjectManager().getObjectStoreAsArray(),
+            this.worldManager.getForegroundManager().getActiveForeground().getRenderables()
         )
-        this.renderingManager.getRenderer().drawForeground()
+        // this.renderingManager.getRenderer().drawForeground(
+            
+        // )
     }
 
     startLooping = (): void => {

@@ -3,6 +3,7 @@ import Colours from './colours.js'
 import GameObjectManager from './GameObjectManager.js'
 import Character from './Character.js'
 import GameObject from './objects/GameObject'
+import ForegroundManager from './foreground/ForegroundManager.js'
 
 type BoxCoords = {
     top: number,
@@ -23,24 +24,21 @@ type CollisionResult = {
     vectors: CollisionVectors
 }
 
+
 /**
  * Store world elements / managers
  */
 class WorldManager {
     characterManager: CharacterManager
     gameObjectManager: GameObjectManager
-    colours: Colours
+    foregroundManager: ForegroundManager
     context: CanvasRenderingContext2D
 
-    constructor(context: CanvasRenderingContext2D) {
+    constructor(context: CanvasRenderingContext2D, foregroundContext: CanvasRenderingContext2D, canvasProps: {height: number, width: number}) {
         this.characterManager = new CharacterManager()
         this.gameObjectManager = new GameObjectManager()
-        this.colours = new Colours(context)
+        this.foregroundManager = new ForegroundManager(foregroundContext, canvasProps)
         this.context = context  
-    }
-
-    getColours = () => {
-        return this.colours
     }
 
     getCharacterManager = () => {
@@ -51,11 +49,19 @@ class WorldManager {
         return this.gameObjectManager
     }
 
+    getForegroundManager = () => {
+        return this.foregroundManager
+    }
+
     updateWorld = (delta: number) => {
         this.getCharacterManager().updateCharacters(delta, this)
         // If we have multiple types of characters then we can create different managers for them and put them under characterManager
         // e.g. PlayerCharacter, Enemies, 
         // Potentially (and very possibly the correct choice) create a higher level class called entities, then fit Characters under that even, then we can put in 'Boundaries', 'missiles', etc under entities in the world too.  
+    }
+
+    updateForeground = (delta: number) => {
+        this.foregroundManager.updateForeground(delta)
     }
 
     getTouchRelationship = (thisObject: GameObject, otherObject: GameObject): CollisionResult => {
