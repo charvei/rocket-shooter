@@ -3,7 +3,9 @@ type RainParticle = {
     height: number,
     xPos: number,
     yPos: number,
-    speed: number,
+    xDirection: number,
+    xSpeed: number,
+    ySpeed: number,
     opacity: number
 }
 
@@ -18,9 +20,10 @@ class RainForeground {
     context: CanvasRenderingContext2D
     //opacity: number = 0.5
     rainDensity: number = 0.20
-    maxParticles: number = 200
+    maxParticles: number = 500
 
     startingYPos: number = -5
+    maxXSpeed: number = 1
 
     foregroundContext: CanvasRenderingContext2D
     canvasProps: {height: number, width: number}
@@ -52,7 +55,9 @@ class RainForeground {
                 height: Math.random() * 2,
                 xPos: Math.random() * this.canvasProps.width,
                 yPos: this.startingYPos,
-                speed: 0.2 + Math.random() * 1.5,
+                xDirection: 0.1,
+                xSpeed: 0,
+                ySpeed: 0.2 + Math.random() * 1.5,
                 opacity: 0.5
             }
             this.rainParticles.push(particle)
@@ -63,13 +68,20 @@ class RainForeground {
         if (this.rainParticles.length < this.maxParticles) {
             this.createNewRainParticles()
         }
-        // Generate new particles (if enough are available)
         
-        // OR recycle old particles (put them back to top of screen)
-        
-        // Increment particles down according to speed
         this.rainParticles.forEach((particle) => {
-            particle.yPos += particle.speed
+            particle.yPos += particle.ySpeed;
+
+            // how frequent direction changes are
+            if (Math.random() < 0.95) {
+                particle.xDirection = particle.xDirection * -1
+            }
+            if (!((particle.xSpeed) > 1)) {
+                let windVariability = Math.random() * 0.075 //higher == more random 
+                particle.xSpeed += particle.xDirection * windVariability
+            }
+
+            particle.xPos += particle.xSpeed
             
             // return from whence you came
             if (particle.yPos > this.canvasProps.height) {
@@ -77,7 +89,6 @@ class RainForeground {
                 particle.xPos = Math.random() * this.canvasProps.width           
             }
         })
-        // 
     }
 }
 
