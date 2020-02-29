@@ -1,29 +1,14 @@
-import CharacterManager from './CharacterManager.js'
-import Colours from './colours.js'
-import GameObjectManager from './GameObjectManager.js'
-import Character from './Character.js'
+import CharacterManager from './objects/character/CharacterManager'
+import GameObjectManager from './objects/GameObjectManager.js'
+import Character from './objects/character/Character'
 import GameObject from './objects/GameObject'
 import ForegroundManager from './foreground/ForegroundManager.js'
 
-type BoxCoords = {
-    top: number,
-    bottom: number,
-    left: number,
-    right: number
-}
-
-type CollisionVectors = {
-    top: number,
-    bottom: number,
-    left: number,
-    right: number
-}
-
-type CollisionResult = {
-    didCollide: boolean,
-    vectors: CollisionVectors
-}
-
+import {
+    BoxCoords,
+    CollisionVectors,
+    CollisionResult
+} from "../Types"
 
 /**
  * Store world elements / managers

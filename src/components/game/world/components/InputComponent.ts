@@ -1,4 +1,4 @@
-import Character from '../Character'
+import Character from '../objects/character/Character'
 
 /**
  * Input component. Stuff that inputs (player / AI) can use.

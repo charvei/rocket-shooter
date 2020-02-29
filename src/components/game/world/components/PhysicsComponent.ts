@@ -1,25 +1,12 @@
-import Character from '../Character'
+import Character from '../objects/character/Character'
 import WorldManager from '../WorldManager'
 import GameObject from '../objects/GameObject'
 
-type CollisionVectors = {
-    top: number,
-    bottom: number,
-    left: number,
-    right: number
-}
-
-type CollisionResult = {
-    didCollide: boolean,
-    vectors: CollisionVectors
-}
-
-type TouchingState = {
-    top: boolean,
-    bottom: boolean,
-    left: boolean,
-    right: boolean
-}
+import {
+    CollisionVectors,
+    CollisionResult,
+    TouchingState
+} from "../../Types"
 
 /**
  * Physics component

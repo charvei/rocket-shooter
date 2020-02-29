@@ -1,20 +1,7 @@
-type RainParticle = {
-    width: number,
-    height: number,
-    xPos: number,
-    yPos: number,
-    xDirection: number,
-    xSpeed: number,
-    ySpeed: number,
-    opacity: number
-}
-
-type Renderable = {
-    xPos: number,
-    yPos: number,
-    width: number,
-    height: number
-}
+import {
+    Particle,
+    Renderable
+} from "../../Types"
 
 class RainForeground {
     context: CanvasRenderingContext2D
@@ -28,7 +15,7 @@ class RainForeground {
     foregroundContext: CanvasRenderingContext2D
     canvasProps: {height: number, width: number}
 
-    rainParticles: RainParticle[] = []
+    rainParticles: Particle[] = []
 
     constructor(foregroundContext: CanvasRenderingContext2D, canvasProps: {height: number, width: number} ) {
         this.foregroundContext = foregroundContext
@@ -41,7 +28,8 @@ class RainForeground {
                 xPos: particle.xPos,
                 yPos: particle.yPos,
                 width: particle.width,
-                height: particle.height
+                height: particle.height,
+                colour: particle.colour
             }
         })
     } 
@@ -50,7 +38,8 @@ class RainForeground {
         for (let i: number = 0; i < 2; i++) {
             // Create 2 particles per row
             // randomize these properties to a certain extent later
-            let particle: RainParticle = {
+            let particle: Particle = {
+                colour: "rgba(255, 255, 255, 0.5)",
                 width: Math.random() * 2,
                 height: Math.random() * 2,
                 xPos: Math.random() * this.canvasProps.width,

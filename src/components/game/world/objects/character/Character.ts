@@ -1,7 +1,7 @@
-import PhysicsComponent from './components/PhysicsComponent.js'
-import InputComponent from './components/InputComponent.js'
-import WorldManager from './WorldManager.js'
-import GameObject from './objects/GameObject.js'
+import PhysicsComponent from '../../components/PhysicsComponent.js'
+import InputComponent from '../../components/InputComponent.js'
+import WorldManager from '../../WorldManager.js'
+import GameObject from '../GameObject.js'
 
 /**
  * Character or unit that exists in the game. This should probably go through some inheritance type things at some point
@@ -20,6 +20,7 @@ class Character extends GameObject {
     //pixel dimensions
     height: number
     width: number
+    colour: string
     
     //position in world
     position: {
@@ -33,8 +34,15 @@ class Character extends GameObject {
         y: number
     }
     
-    constructor(name: string, code: string, height: number, width: number, position: {x: number, y: number}) {
-        super(name, code, height, width, position)
+    constructor(name: string, code: string, height: number, width: number, position: {x: number, y: number}, colour) {
+        super({
+            name: name,
+            code: code,
+            height: height,
+            width: width,
+            position: position,
+            colour: colour
+        })
         // this.name = name
         // this.code = code
         // this.height = height

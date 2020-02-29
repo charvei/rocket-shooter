@@ -1,6 +1,7 @@
-import GameObject from "./objects/GameObject"
-import Platform from "./objects/Platform"
-import WorldManager from "../world/WorldManager"
+import GameObject from "./GameObject"
+import Platform from "./Platform"
+import WorldManager from "../WorldManager"
+import { Renderable } from "../../Types"
 
 /**
  * Store characters and manages access to and manipulation of character resources
@@ -10,12 +11,33 @@ class GameObjectManager {
     
     constructor() {
         this.objectStore = new Map<string, GameObject>()
-
-        let testPlatform = new Platform("test", "1", 100, 100, { x: 300, y: 150  })
-        let testPlatform1 = new Platform("test1", "12", 100, 100, { x: 450, y: 350  })
-        let base = new Platform("base", "base", 20, 800, { x: 0, y: 460 })
-        this.addGameObject(testPlatform)
+        let testPlatform1 = new Platform({
+            name: "test",
+            code: "1",
+            height: 100,
+            width: 100,
+            colour: "rgba(255, 255, 255, 1)",
+            position: {x: 300, y: 150},
+            
+        })
+        let testPlatform2 = new Platform({
+            name: "test1",
+            code: "12",
+            height: 100,
+            width: 100,
+            colour: "rgba(255, 255, 255, 1)",
+            position: { x: 450, y: 350  }
+        })
+        let base = new Platform({
+            name: "base",
+            code: "base",
+            height: 20,
+            width: 800,
+            colour: "rgba(255, 255, 255, 1)",
+            position: { x: 0, y: 460 }
+        })
         this.addGameObject(testPlatform1)
+        this.addGameObject(testPlatform2)
         this.addGameObject(base)
     }
 
@@ -33,13 +55,6 @@ class GameObjectManager {
         // do error handling here
     }
 
-    // createAndAddGameObjectToStore = (objectName: string, height: number, width: number, position: { x: number, y: number }) => {
-    //     this.objectStore.set(
-    //         objectName, 
-    //         new GameObject(objectName, "x", height, width, position)
-    //     )
-    // }
-
     removeObjectFromStore = (objectName: string) => {
         this.objectStore.delete(objectName)
     }
@@ -54,6 +69,12 @@ class GameObjectManager {
     getObjectStoreAsArray = () => {
         let objectList: GameObject[] = Array.from(this.objectStore.values())
         return objectList
+    }
+
+    getObjectRenderables = (): Renderable[] => {
+        return Array.from(this.objectStore.values()).map((object) => {
+            return object.getRenderable()
+        })
     }
 
     //TEMPORARY: FOR TESTING LOOP.

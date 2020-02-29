@@ -1,13 +1,6 @@
-import Character from "../../world/Character"
+import Character from "../../world/objects/character/Character"
 
 class Commands {
-    
-    // static makeMoveUnitCommand = (character: Character) => {
-    //     return () => {
-    //         character.incrementXPos(10)
-    //     }
-    // }
-
     static makeMoveUnitCommand = (character: Character, direction: String): 
             (delta: number) => void => {
         return (delta: number) => {

@@ -36,12 +36,11 @@ class ControllerManager {
     draw = (): void => {
         this.renderingManager.getRenderer().drawWorld(
             this.worldManager.getCharacterManager().getCharacterStoreAsArray(),
-            this.worldManager.getGameObjectManager().getObjectStoreAsArray(),
+            this.worldManager.getGameObjectManager().getObjectRenderables(),
             this.worldManager.getForegroundManager().getActiveForeground().getRenderables()
         )
-        // this.renderingManager.getRenderer().drawForeground(
-            
-        // )
+
+        this.renderingManager.getRenderer().drawRenderables
     }
 
     startLooping = (): void => {

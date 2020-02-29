@@ -1,14 +1,8 @@
-import Character from '../world/Character.js' //not sure if i should be importing character? i would like it to be even more decoupled right?
+import Character from '../world/objects/character/Character' //not sure if i should be importing character? i would like it to be even more decoupled right?
 import GameObject from '../world/objects/GameObject.js'
 import RainForeground from '../world/foreground/RainForeground.js'
 
-/** WILL NEED TO GIVE COLOUR AND OPACITY AT SOME POINT */
-type Renderable = {
-    xPos: number,
-    yPos: number,
-    width: number,
-    height: number
-}
+import { Renderable } from "../Types"
 
 class Renderer {
     worldContext: CanvasRenderingContext2D
@@ -25,7 +19,7 @@ class Renderer {
     }
 
     // Maybe when this gets more complicated this can be made more intelligent?
-    drawWorld = (characterList: Character[], objectList: GameObject[], foregroundRenderables: Renderable[]) => {
+    drawWorld = (characterList: Character[], objecRenderables: Renderable[], foregroundRenderables: Renderable[]) => {
         this.worldContext.clearRect(0, 0, this.canvasProps.width, this.canvasProps.height)
 
         //background
@@ -35,9 +29,9 @@ class Renderer {
         //foreground
         this.drawForeground(foregroundRenderables)
 
-
         //objects
-        this.drawObjects(objectList)
+        //this.drawObjects(objectList)
+        this.drawRenderables(objecRenderables)
         
         //characters
         this.drawCharacters(characterList)
@@ -58,10 +52,17 @@ class Renderer {
         })
     }
 
-    drawObjects = (objectList: GameObject[]) => {
-        objectList.forEach(object => {
-            this.worldContext.fillStyle = "#ffffff"
-            this.worldContext.fillRect(object.getPosition().x, object.getPosition().y, object.getWidth(), object.getHeight())
+    // drawObjects = (objectList: GameObject[]) => {
+    //     objectList.forEach(object => {
+    //         this.worldContext.fillStyle = "#ffffff"
+    //         this.worldContext.fillRect(object.getPosition().x, object.getPosition().y, object.getWidth(), object.getHeight())
+    //     })
+    // }
+
+    drawRenderables = (renderables: Renderable[]) => {
+        renderables.forEach(renderable => {
+            this.worldContext.fillStyle = renderable.colour
+            this.worldContext.fillRect(renderable.xPos, renderable.yPos, renderable.width, renderable.height)
         })
     }
 

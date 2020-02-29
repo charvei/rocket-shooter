@@ -1,10 +1,7 @@
 import Commands from "./Commands"
-import CharacterManager from "../../world/CharacterManager"
+import CharacterManager from "../../world/objects/character/CharacterManager"
 
-type KeyPressEvent = {
-    heldDown: boolean,
-    firstPress: boolean
-}
+import { KeyPressEvent } from "../../Types"
 
 /**
  * Input handler

@@ -1,5 +1,5 @@
 import Character from "./Character"
-import WorldManager from "./WorldManager"
+import WorldManager from "../../WorldManager"
 
 /**
  * Store characters and manage access and manipulation to character resources
@@ -39,7 +39,15 @@ class CharacterManager {
     addCharacterToStore = (characterName: string, height: number, width: number, position: { x: number, y: number }) => {
         this.characterStore.set(
             characterName, 
-            new Character(characterName, "x", height, width, position)
+            new Character(characterName, "x", height, width, position, "rgba(255, 255, 255, 0)")
+            // new Character({
+            //     name: characterName,
+            //     code: "x",
+            //     height: height,
+            //     width: width,
+            //     position: position,
+            //     colour: ""
+            // })
         )
     }
 
