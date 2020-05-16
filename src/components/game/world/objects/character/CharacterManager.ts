@@ -1,15 +1,19 @@
 import Character from "./Character"
 import WorldManager from "../../WorldManager"
+import GameObjectManager from "../GameObjectManager"
+import GameObject from "../GameObject"
 
 /**
  * Store characters and manage access and manipulation to character resources
  */
 class CharacterManager {
     private characterStore: Map<string, Character>
+    gameObjectManager: GameObjectManager
     character: Character
     
-    constructor() {
+    constructor(gameObjectManager: GameObjectManager) {
         this.characterStore = new Map<string, Character>()
+        this.gameObjectManager = gameObjectManager
 
         //TESTING RENDERING:
         let characterPosition = {
@@ -49,6 +53,11 @@ class CharacterManager {
             //     colour: ""
             // })
         )
+    }
+
+    //NOT SURE ABOUT THIS AT ALL. SO I WANT TO ADD THE RETICULE AS A COMPONENT OF THE PLAYER CHARACTER, MAKES SENSE TO PUT IN THE CHARACTER CLASS BUT HOW DO I ALSO GET THAT IN THE GAMEOBJECT OR WHATEVER STORE FOR IT TO RENDER
+    addObjectToObjectStore = (object: GameObject) => {
+        this.gameObjectManager.addGameObject(object)
     }
 
     removeCharacterFromStore = (characterName: string) => {

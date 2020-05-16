@@ -60,6 +60,10 @@ class InputComponent {
         this.componentOwner.velocityY = 0
     }
 
+    setFocusAngle = (focusAngle: number): void => {
+        this.componentOwner.focusAngle
+    }
+
 }
 
 export default InputComponent

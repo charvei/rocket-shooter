@@ -2,6 +2,7 @@ import PhysicsComponent from '../../components/PhysicsComponent.js'
 import InputComponent from '../../components/InputComponent.js'
 import WorldManager from '../../WorldManager.js'
 import GameObject from '../GameObject.js'
+import Reticule from './Reticule.js'
 
 /**
  * Character or unit that exists in the game. This should probably go through some inheritance type things at some point
@@ -9,10 +10,14 @@ import GameObject from '../GameObject.js'
 class Character extends GameObject {
     // components
     physics: PhysicsComponent
-    input: InputComponent    
+    input: InputComponent
+
+    reticule: Reticule
     
     velocityX: number
     velocityY: number
+
+    focusAngle: number
 
     name: string
     code: string
@@ -34,7 +39,7 @@ class Character extends GameObject {
         y: number
     }
     
-    constructor(name: string, code: string, height: number, width: number, position: {x: number, y: number}, colour) {
+    constructor(name: string, code: string, height: number, width: number, position: {x: number, y: number}, colour: string) {
         super({
             name: name,
             code: code,
@@ -52,6 +57,9 @@ class Character extends GameObject {
         this.physics = new PhysicsComponent(this)
         this.velocityX = 0
         this.velocityY = 0
+
+        this.focusAngle = 1
+        this.reticule = new Reticule(5, 5, {x: 5, y: 5}, "ffffff")
 
         this.input = new InputComponent(this)
     }

@@ -20,8 +20,9 @@ class WorldManager {
     context: CanvasRenderingContext2D
 
     constructor(context: CanvasRenderingContext2D, foregroundContext: CanvasRenderingContext2D, canvasProps: {height: number, width: number}) {
-        this.characterManager = new CharacterManager()
         this.gameObjectManager = new GameObjectManager()
+        this.characterManager = new CharacterManager(this.gameObjectManager)
+        
         this.foregroundManager = new ForegroundManager(foregroundContext, canvasProps)
         this.context = context  
     }

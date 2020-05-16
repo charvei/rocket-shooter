@@ -15,7 +15,7 @@ class ControllerManager {
     constructor(worldManager: WorldManager, renderingManager: RenderingManager) {
         this.worldManager = worldManager
         this.renderingManager = renderingManager
-        this.inputHandler = new InputHandler(this.worldManager.getCharacterManager())
+        this.inputHandler = new InputHandler(this.worldManager.getCharacterManager(), this.worldManager.foregroundManager.getForegroundContext())
         this.loop = new Loop(this.update, this.draw)
     }
 
@@ -31,6 +31,10 @@ class ControllerManager {
         this.worldManager.updateForeground(delta)
         
         this.inputHandler.savePreviousKeyState()
+        
+        this.inputHandler.setPlayerCharacterFocusAngle()
+
+        //this.inputHandler.calculateAngleFromPlayerCharacter()
     }
 
     draw = (): void => {

@@ -1,5 +1,6 @@
 import Commands from "./Commands"
 import CharacterManager from "../../world/objects/character/CharacterManager"
+import Character from '../../world/objects/character/Character'
 
 import { KeyPressEvent } from "../../Types"
 
@@ -10,24 +11,36 @@ class InputHandler {
     keys: object = {}   // record of keyboard keys and their corresponding state of pressed down or up
     previousKeysState: object = {} // 
 
+    mouseRelativeToPlayerPosition: object = {}  // describes where user's mouse in relation to their character
+    mouseCanvasPos: {x: number, y: number} = {
+        x: 0,
+        y: 0
+    }
+
     characterManagerRef: CharacterManager
+    foregroundContext: CanvasRenderingContext2D
     
+    playerCharacter: Character
+
     jump: (delta: number) => void
     jetPack: (delta: number) => void
     moveDown: (delta: number) => void
     moveLeft: (delta: number) => void
     moveRight: (delta: number) => void
     
-    constructor(characterManager: CharacterManager) {
-        this.setupKeyDownListeners()
-
+    constructor(characterManager: CharacterManager, foregroundContext: CanvasRenderingContext2D) {
+        this.foregroundContext = foregroundContext
         this.characterManagerRef = characterManager
-        this.moveRight = Commands.makeMoveUnitCommand(this.characterManagerRef.getCharacterByName("Adam"), "Right")
-        this.moveLeft = Commands.makeMoveUnitCommand(this.characterManagerRef.getCharacterByName("Adam"), "Left")
-        
-        this.jump = Commands.makeJumpCommand(this.characterManagerRef.getCharacterByName("Adam"))
-        this.jetPack = Commands.makeJetPackCommand(this.characterManagerRef.getCharacterByName("Adam"))
-        this.moveDown =  Commands.makeMoveUnitCommand(this.characterManagerRef.getCharacterByName("Adam"), "Down")
+        this.playerCharacter = this.characterManagerRef.getCharacterByName("Adam")
+
+        this.setupKeyDownListeners()
+        this.setMousePositionListener()
+
+        this.moveRight = Commands.makeMoveUnitCommand(this.playerCharacter, "Right")
+        this.moveLeft = Commands.makeMoveUnitCommand(this.playerCharacter, "Left")
+        this.jump = Commands.makeJumpCommand(this.playerCharacter)
+        this.jetPack = Commands.makeJetPackCommand(this.playerCharacter)
+        this.moveDown =  Commands.makeMoveUnitCommand(this.playerCharacter, "Down")
     }
 
     public savePreviousKeyState = (): void => {
@@ -65,6 +78,47 @@ class InputHandler {
     }
 
     /**
+     * MOUSE STUFF
+     */
+    setMousePositionListener = () => {
+        let event: Event
+        this.foregroundContext.canvas.addEventListener('mousemove', event => {
+            let boundingRect = this.foregroundContext.canvas.getBoundingClientRect()
+            // console.log("hello.")
+            this.mouseCanvasPos = {// return {
+                x: event.clientX - boundingRect.left,
+                y: event.clientY - boundingRect.top
+            }
+        })
+    }
+
+    setPlayerCharacterFocusAngle = (): void => {
+        // get character position... we want it to be the player's character hey
+        // draw line from character and mouse
+        let characterMidPoint = {
+            x: this.playerCharacter.position.x + this.playerCharacter.width/2,
+            y: this.playerCharacter.position.y + this.playerCharacter.height/2
+        }
+
+        let angle = Math.atan2(this.mouseCanvasPos.y - characterMidPoint.y, this.mouseCanvasPos.x - characterMidPoint.x)
+
+        this.playerCharacter.input.setFocusAngle(angle)
+
+        //console.log("angle: " + res)
+
+        //console.log("Drawing crosshair at: {x: " + (this.playerCharacter.position.x + 10 * Math.cos(res)) + ", y: " + (this.playerCharacter.position.y + 10 * Math.sin(res)))
+
+        
+        //x1 + r * Math.cos(theta), y1 + r * Math.sin(theta)
+    }
+
+
+    /**
+     * END OF MOUSE STUFF
+     */
+
+
+    /**
      * Runs once a loop, detects user's raw input and handles it
      */
     handleInput = (delta: number): void => {
@@ -80,6 +134,7 @@ class InputHandler {
         } if (this.getKeyPressState('d').heldDown) {
             this.moveRight(delta)
         }
+        this.setPlayerCharacterFocusAngle()
     }
 
     /**
