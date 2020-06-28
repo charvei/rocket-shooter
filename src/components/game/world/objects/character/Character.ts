@@ -1,5 +1,6 @@
 import WorldManager from '../../WorldManager.js'
 import GameObject from '../GameObject.js'
+import Entity from '../base/Entity'
 import Reticule from './Reticule.js'
 
 import PhysicsComponent from '../../components/PhysicsComponent.js'
@@ -9,7 +10,7 @@ import GunComponent from '../../components/GunComponent.js'
 /**
  * Character or unit that exists in the game. This should probably go through some inheritance type things at some point
  */
-class Character extends GameObject {
+class Character extends Entity {
     // components
     physics: PhysicsComponent
     input: InputComponent

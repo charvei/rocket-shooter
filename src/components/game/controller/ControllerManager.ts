@@ -40,7 +40,7 @@ class ControllerManager {
     draw = (): void => {
         this.renderingManager.getRenderer().drawWorld(
             this.worldManager.getCharacterManager().getCharacterStoreAsArray(),
-            this.worldManager.getGameObjectManager().getObjectRenderables(),
+            this.worldManager.getGameObjectManager().getEntityRenderables(),
             this.worldManager.getForegroundManager().getActiveForeground().getRenderables()
         )
 

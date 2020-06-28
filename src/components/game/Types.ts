@@ -14,6 +14,15 @@ export type ObjectParams = {
     position: {x: number, y: number}
 }
 
+export type EntityParams = {
+    name: string, 
+    code: string, 
+    height: number, 
+    width: number,
+    colour: string,
+    position: {x: number, y: number}
+}
+
 export type CollisionVectors = {
     top: number,
     bottom: number,

@@ -1,4 +1,5 @@
 import Character from '../world/objects/character/Character' //not sure if i should be importing character? i would like it to be even more decoupled right?
+import Entity from '../world/objects/base/Entity'
 import GameObject from '../world/objects/GameObject.js'
 import RainForeground from '../world/foreground/RainForeground.js'
 
@@ -45,7 +46,7 @@ class Renderer {
     }
 
     // So at some point may want to consider having multiple canvas or something right? buffer screens and stuff
-    drawCharacters = (characterList: Character[]) => {
+    drawCharacters = (entityList: Character[]) => {
         characterList.forEach(character => {
             this.worldContext.fillStyle = "#0000ff"
             this.worldContext.fillRect(character.getPosition().x, character.getPosition().y, character.getWidth(), character.getHeight())

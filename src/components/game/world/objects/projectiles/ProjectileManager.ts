@@ -4,9 +4,9 @@ import GameObjectManager from "../GameObjectManager"
 import GameObject from "../GameObject"
 
 /**
- * Store characters and manage access and manipulation to character resources
+ * Store Projectiles and manage access and manipulation to Projectile resources
  */
-class CharacterManager {
+class ProjectileManager {
     private projectileStore: Map<string, Projectile>
     projectile: Projectile
     
@@ -18,57 +18,55 @@ class CharacterManager {
     //Remember we can create a destructor
     //We can also do other lifecycle functions
 
-    private addProjectile = (project: Projectile) => { 
+    private addProjectile = (projectile: Projectile) => { 
         this.projectileStore.set(projectile.getName(), projectile)
     }
 
-    // make a class that has ALL REFERENCES to all objects than rather having to use in class constructor a param for colour, and grid and shit.
-    getCharacter = (projectileName: string) => {
+    getProjectile = (projectileName: string) => {
         return this.projectileStore.get(projectileName)
     }
 
-    private removeCharacter = (characterName: string) => {
-        this.removeCharacterFromStore(characterName)
-        // do error handling here
+    private removeProjectile = (projectileName: string) => {
+        this.removeProjectileFromStore(projectileName)
     }
 
-    addCharacterToStore = (projectileName: string) => {
+    addProjectileToStore = (projectileName: string) => {
         this.projectileStore.set(
             projectileName, 
             new Projectile()
         )
     }
 
-    //NOT SURE ABOUT THIS AT ALL. SO I WANT TO ADD THE RETICULE AS A COMPONENT OF THE PLAYER CHARACTER, MAKES SENSE TO PUT IN THE CHARACTER CLASS BUT HOW DO I ALSO GET THAT IN THE GAMEOBJECT OR WHATEVER STORE FOR IT TO RENDER
+    //NOT SURE ABOUT THIS AT ALL. SO I WANT TO ADD THE RETICULE AS A COMPONENT OF THE PLAYER Projectile, MAKES SENSE TO PUT IN THE Projectile CLASS BUT HOW DO I ALSO GET THAT IN THE GAMEOBJECT OR WHATEVER STORE FOR IT TO RENDER
     // addObjectToObjectStore = (object: GameObject) => {
     //     this.gameObjectManager.addGameObject(object)
     // }
 
-    removeCharacterFromStore = (characterName: string) => {
-        this.characterStore.delete(characterName)
+    removeProjectileFromStore = (projectileName: string) => {
+        this.projectileStore.delete(projectileName)
     }
 
-    getCharacterByName = (name: string) => {
-        return this.characterStore.get(name)
+    getProjectileByName = (name: string) => {
+        return this.projectileStore.get(name)
     }
 
-    // Set of information about how to render characters // maybe this is just characterStore?
-    // getCharacterRenderSet = () => {
+    // Set of information about how to render Projectiles // maybe this is just ProjectileStore?
+    // getProjectileRenderSet = () => {
     // }
-    getCharacterStoreAsArray = () => {
-        let characterList: Character[] = Array.from(this.characterStore.values())
-        return characterList
+    getProjectileStoreAsArray = () => {
+        let projectileList: Projectile[] = Array.from(this.projectileStore.values())
+        return projectileList
     }
 
     //TEMPORARY: FOR TESTING LOOP.
-    //THIS MIGHT FIT UNDER A BROADER UPDATE OR TICK() FUNCTION FOR A CHARACTER. I.E. WHERE IT CHECKS IF ITS IN SOMETHINGS WAY, IF IT NEEDS TO MOVE POS ETC?
-    updateCharacters = (delta: number, worldManager: WorldManager) => {
-        this.getCharacterStoreAsArray().forEach((character: Character) => {
-            character.update(worldManager)
+    //THIS MIGHT FIT UNDER A BROADER UPDATE OR TICK() FUNCTION FOR A Projectile. I.E. WHERE IT CHECKS IF ITS IN SOMETHINGS WAY, IF IT NEEDS TO MOVE POS ETC?
+    updateProjectiles = (delta: number, worldManager: WorldManager) => {
+        this.getProjectileStoreAsArray().forEach((projectile: Projectile) => {
+            //projectile.update(worldManager)
         })
     }
 
 
 }
 
-export default CharacterManager
+export default ProjectileManager

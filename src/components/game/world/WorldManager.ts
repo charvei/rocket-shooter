@@ -40,10 +40,12 @@ class WorldManager {
     }
 
     updateWorld = (delta: number) => {
-        this.getCharacterManager().updateCharacters(delta, this)
+        this.getCharacterManager().tick(delta, this)
         // If we have multiple types of characters then we can create different managers for them and put them under characterManager
         // e.g. PlayerCharacter, Enemies, 
         // Potentially (and very possibly the correct choice) create a higher level class called entities, then fit Characters under that even, then we can put in 'Boundaries', 'missiles', etc under entities in the world too.  
+
+        //this.getCharacterManager().
     }
 
     updateForeground = (delta: number) => {
@@ -77,7 +79,7 @@ class WorldManager {
     getCollisions = (character: Character): CollisionResult[] => {
         let collisionResults: CollisionResult[] = []
 
-        this.gameObjectManager.getObjectStoreAsArray().forEach((object) => {
+        this.gameObjectManager.getEntityList().forEach((object) => {
             let characterBox: BoxCoords = character.getBoxCoords(character.velocityY, character.velocityY, character.velocityX, character.velocityX)
             let objectBox: BoxCoords = object.getBoxCoords()
 
