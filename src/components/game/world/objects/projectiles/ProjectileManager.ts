@@ -1,4 +1,4 @@
-import Character from "./Character"
+import Projectile from "./Projectile"
 import WorldManager from "../../WorldManager"
 import GameObjectManager from "../GameObjectManager"
 import GameObject from "../GameObject"
@@ -7,30 +7,24 @@ import GameObject from "../GameObject"
  * Store characters and manage access and manipulation to character resources
  */
 class CharacterManager {
-    private characterStore: Map<string, Character>
-    character: Character
+    private projectileStore: Map<string, Projectile>
+    projectile: Projectile
     
     constructor() {
-        this.characterStore = new Map<string, Character>()
+        this.projectileStore = new Map<string, Projectile>()
 
-        //TESTING RENDERING:
-        let characterPosition = {
-            x: 320,
-            y: 50
-        }
-        this.addCharacterToStore("Adam", 20, 20, characterPosition)
     }
 
     //Remember we can create a destructor
     //We can also do other lifecycle functions
 
-    private addCharacter = (character: Character) => { 
-        this.characterStore.set(character.getName(), character)
+    private addProjectile = (project: Projectile) => { 
+        this.projectileStore.set(projectile.getName(), projectile)
     }
 
     // make a class that has ALL REFERENCES to all objects than rather having to use in class constructor a param for colour, and grid and shit.
-    getCharacter = (characterName: string) => {
-        return this.characterStore.get(characterName)
+    getCharacter = (projectileName: string) => {
+        return this.projectileStore.get(projectileName)
     }
 
     private removeCharacter = (characterName: string) => {
@@ -38,10 +32,10 @@ class CharacterManager {
         // do error handling here
     }
 
-    addCharacterToStore = (characterName: string, height: number, width: number, position: { x: number, y: number }) => {
-        this.characterStore.set(
-            characterName, 
-            new Character(characterName, "x", height, width, position, "rgba(255, 255, 255, 0)")
+    addCharacterToStore = (projectileName: string) => {
+        this.projectileStore.set(
+            projectileName, 
+            new Projectile()
         )
     }
 

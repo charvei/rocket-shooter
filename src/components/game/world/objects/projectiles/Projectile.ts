@@ -11,6 +11,8 @@ class Projectile implements IsRenderable {
         x: number,
         y: number
     }
+
+    velocity: number = 0.5
     
     constructor() {
 
@@ -27,3 +29,6 @@ class Projectile implements IsRenderable {
         return renderable
     }
 }
+
+
+export default Projectile

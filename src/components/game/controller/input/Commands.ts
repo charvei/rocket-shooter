@@ -28,6 +28,12 @@ class Commands {
             character.input.jetPack(delta)
         }
     }
+
+    static makeProjectileCommand = (character: Character): (delta: number) => void => {
+        return (delta: number) => {
+            character.input.makeProjectile(delta)
+        }
+    }
 }
 
 export default Commands

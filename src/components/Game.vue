@@ -2,8 +2,8 @@
     <div class="game-screen">
         <div>WASD to move</div>
         <div id="fps-display"></div>
-        <canvas id="game-canvas" width="800" height="480" tabindex='1'/>
-        <canvas id="foreground-canvas" width="800" height="480" z-index='2'/>
+        <canvas id="game-canvas" width="1200" height="720" tabindex='1'/>
+        <canvas id="foreground-canvas" width="1200" height="720" z-index='2'/>
     </div>
 </template>
 

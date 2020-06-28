@@ -11,15 +11,42 @@ class GameObjectManager {
     
     constructor() {
         this.objectStore = new Map<string, GameObject>()
-        let testPlatform1 = new Platform({
-            name: "test",
-            code: "1",
-            height: 100,
-            width: 100,
+        let top = new Platform({
+            name: "top",
+            code: "top",
+            height: 20,
+            width: 1200,
             colour: "rgba(255, 255, 255, 1)",
-            position: {x: 300, y: 150},
+            position: {x: 0, y: 0},
             
         })
+        let left = new Platform({
+            name: "left",
+            code: "left",
+            height: 720,
+            width: 20,
+            colour: "rgba(255, 255, 255, 1)",
+            position: {x: 0, y: 0},
+            
+        })
+        let bottom = new Platform({
+            name: "bottom",
+            code: "bottom",
+            height: 20,
+            width: 1200,
+            colour: "rgba(255, 255, 255, 1)",
+            position: { x: 0, y: 700 }
+        })
+        let right = new Platform({
+            name: "right",
+            code: "right",
+            height: 720,
+            width: 20,
+            colour: "rgba(255, 255, 255, 1)",
+            position: {x: 1180, y: 0},
+            
+        })
+
         let testPlatform2 = new Platform({
             name: "test1",
             code: "12",
@@ -28,17 +55,11 @@ class GameObjectManager {
             colour: "rgba(255, 255, 255, 1)",
             position: { x: 450, y: 350  }
         })
-        let base = new Platform({
-            name: "base",
-            code: "base",
-            height: 20,
-            width: 800,
-            colour: "rgba(255, 255, 255, 1)",
-            position: { x: 0, y: 460 }
-        })
-        this.addGameObject(testPlatform1)
+        this.addGameObject(top)
+        this.addGameObject(bottom)
+        this.addGameObject(left)
+        this.addGameObject(right)
         this.addGameObject(testPlatform2)
-        this.addGameObject(base)
     }
 
     addGameObject = (object: GameObject) => { 

@@ -61,7 +61,11 @@ class InputComponent {
     }
 
     setFocusAngle = (focusAngle: number): void => {
-        this.componentOwner.focusAngle
+        this.componentOwner.focusAngle = focusAngle
+    }
+
+    makeProjectile = (delta: number): void => {
+
     }
 
 }

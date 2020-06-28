@@ -49,6 +49,8 @@ class Renderer {
         characterList.forEach(character => {
             this.worldContext.fillStyle = "#0000ff"
             this.worldContext.fillRect(character.getPosition().x, character.getPosition().y, character.getWidth(), character.getHeight())
+
+            this.worldContext.fillRect(character.reticule.getPosition().x, character.reticule.getPosition().y, character.reticule.getWidth(), character.reticule.getHeight())
         })
     }
 

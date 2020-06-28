@@ -77,9 +77,6 @@ class InputHandler {
         }
     }
 
-    /**
-     * MOUSE STUFF
-     */
     setMousePositionListener = () => {
         let event: Event
         this.foregroundContext.canvas.addEventListener('mousemove', event => {
@@ -92,37 +89,10 @@ class InputHandler {
         })
     }
 
-    setPlayerCharacterFocusAngle = (): void => {
-        // get character position... we want it to be the player's character hey
-        // draw line from character and mouse
-        let characterMidPoint = {
-            x: this.playerCharacter.position.x + this.playerCharacter.width/2,
-            y: this.playerCharacter.position.y + this.playerCharacter.height/2
-        }
-
-        let angle = Math.atan2(this.mouseCanvasPos.y - characterMidPoint.y, this.mouseCanvasPos.x - characterMidPoint.x)
-
-        this.playerCharacter.input.setFocusAngle(angle)
-
-        //console.log("angle: " + res)
-
-        //console.log("Drawing crosshair at: {x: " + (this.playerCharacter.position.x + 10 * Math.cos(res)) + ", y: " + (this.playerCharacter.position.y + 10 * Math.sin(res)))
-
-        
-        //x1 + r * Math.cos(theta), y1 + r * Math.sin(theta)
-    }
-
-
-    /**
-     * END OF MOUSE STUFF
-     */
-
-
     /**
      * Runs once a loop, detects user's raw input and handles it
      */
     handleInput = (delta: number): void => {
-        console.log("handle input w key: " + this.keys["w"])
         if (this.getKeyPressState('w').firstPress) {
             this.jump(delta)
         } if (this.getKeyPressState('w').heldDown) {
@@ -135,6 +105,22 @@ class InputHandler {
             this.moveRight(delta)
         }
         this.setPlayerCharacterFocusAngle()
+    }
+
+    /**
+     * Set the character's focus angle based on relative position of character and player's mouse
+     */
+    setPlayerCharacterFocusAngle = (): void => {
+        // get character position... we want it to be the player's character hey
+        // draw line from character and mouse
+        let characterMidPoint = {
+            x: this.playerCharacter.position.x + this.playerCharacter.width/2,
+            y: this.playerCharacter.position.y + this.playerCharacter.height/2
+        }
+
+        let angle = Math.atan2(this.mouseCanvasPos.y - characterMidPoint.y, this.mouseCanvasPos.x - characterMidPoint.x)
+
+        this.playerCharacter.input.setFocusAngle(angle)
     }
 
     /**
