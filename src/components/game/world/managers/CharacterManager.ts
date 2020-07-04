@@ -11,10 +11,7 @@ class CharacterManager extends BaseEntityManager {
     constructor() {
         super()
 
-
-        this.addEntity(this.genericCharacterFactory())
-        //this.addCharacterToStore("Adam", 20, 20, characterPosition)
-        
+        this.addEntity(this.genericCharacterFactory()) 
     }
 
     getCharacterList = (): Character[] => {
@@ -32,8 +29,6 @@ class CharacterManager extends BaseEntityManager {
             characterRenderables.push(character.getRenderable())
             characterRenderables.push(character.reticule.getRenderable())
         })
-        console.log("Renderables charater: " + characterRenderables)
-        console.log(characterRenderables[0].colour)
         return characterRenderables
     }
 

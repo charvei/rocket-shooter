@@ -27,6 +27,8 @@ class InputHandler {
     moveDown: (delta: number) => void
     moveLeft: (delta: number) => void
     moveRight: (delta: number) => void
+
+    shoot: (delta: number) => void
     
     constructor(characterManager: CharacterManager, foregroundContext: CanvasRenderingContext2D) {
         this.foregroundContext = foregroundContext
@@ -42,7 +44,10 @@ class InputHandler {
         this.moveLeft = Commands.makeMoveUnitCommand(this.playerCharacter, "Left")
         this.jump = Commands.makeJumpCommand(this.playerCharacter)
         this.jetPack = Commands.makeJetPackCommand(this.playerCharacter)
-        this.moveDown =  Commands.makeMoveUnitCommand(this.playerCharacter, "Down")
+        this.moveDown = Commands.makeMoveUnitCommand(this.playerCharacter, "Down")
+
+        // shooting
+        this.shoot = Commands.makeShootCommand(this.playerCharacter)
     }
 
     public savePreviousKeyState = (): void => {
@@ -53,7 +58,7 @@ class InputHandler {
      * Set up keydown listeners to detect when keys are pressed down and lifted up
      */
     private setupKeyDownListeners = (): void => {
-        let keysUsed: string[] = ["w", "a", "s", "d"] 
+        let keysUsed: string[] = ["w", "a", "s", "d", " "] 
         keysUsed.forEach((key) => {
             this.keys[key] = {
                 heldDown: false,
@@ -105,6 +110,8 @@ class InputHandler {
             this.moveDown(delta)
         } if (this.getKeyPressState('d').heldDown) {
             this.moveRight(delta)
+        } if (this.getKeyPressState(' ').heldDown) {
+            this.shoot(delta)
         }
         this.setPlayerCharacterFocusAngle()
     }

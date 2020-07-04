@@ -42,7 +42,8 @@ class ControllerManager {
             //this.worldManager.getCharacterManager().getCharacterList(),
             this.worldManager.getCharacterManager().getCharacterRenderables(),
             this.worldManager.getPlatformManager().getEntityRenderables(),
-            this.worldManager.getForegroundManager().getActiveForeground().getRenderables()
+            this.worldManager.getForegroundManager().getActiveForeground().getRenderables(),
+            this.worldManager.getProjectileManager().getEntityRenderables()
 
             //Probably this is an indicater that says world manager should collate all this?
         )

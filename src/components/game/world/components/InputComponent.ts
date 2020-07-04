@@ -65,7 +65,7 @@ class InputComponent {
     }
 
     makeProjectile = (delta: number): void => {
-        
+        this.componentOwner.gun.fireProjectile()
     }
 
 }

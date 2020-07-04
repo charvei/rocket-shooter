@@ -3,6 +3,7 @@ import PlatformManager from './managers/PlatformManager.js'
 import Character from './objects/character/Character'
 import Entity from './objects/base/Entity'
 import ForegroundManager from './foreground/ForegroundManager.js'
+import ProjectileManager from './managers/ProjectileManager'
 
 import {
     BoxCoords,
@@ -17,11 +18,13 @@ class WorldManager {
     characterManager: CharacterManager
     platformManager: PlatformManager
     foregroundManager: ForegroundManager
+    projectileManager: ProjectileManager
     context: CanvasRenderingContext2D
 
     constructor(context: CanvasRenderingContext2D, foregroundContext: CanvasRenderingContext2D, canvasProps: {height: number, width: number}) {
         this.platformManager = new PlatformManager()
         this.characterManager = new CharacterManager()
+        this.projectileManager = new ProjectileManager()
         
         this.foregroundManager = new ForegroundManager(foregroundContext, canvasProps)
         this.context = context  
@@ -39,8 +42,17 @@ class WorldManager {
         return this.foregroundManager
     }
 
+    getProjectileManager = () => {
+        return this.projectileManager
+    }
+
+
+    /* A potential idea may be to on-board tickable managers somewhere in worldmanager,
+    then since they all implement tickable or whatever just iterate through an array of them
+    their .tick function */
     updateWorld = (delta: number) => {
         this.getCharacterManager().tick(delta, this)
+        this.getProjectileManager().tick(delta, this)
         // If we have multiple types of characters then we can create different managers for them and put them under characterManager
         // e.g. PlayerCharacter, Enemies, 
         // Potentially (and very possibly the correct choice) create a higher level class called entities, then fit Characters under that even, then we can put in 'Boundaries', 'missiles', etc under entities in the world too.  
@@ -76,7 +88,7 @@ class WorldManager {
     }
 
     // not accounting for multiple collisions at once currently
-    getCollisions = (character: Character): CollisionResult[] => {
+    getCollisions = (character: Entity): CollisionResult[] => {
         let collisionResults: CollisionResult[] = []
 
         this.platformManager.getEntityList().forEach((entity) => {
@@ -96,7 +108,6 @@ class WorldManager {
             
             if (this.checkCollision(characterBox, entityBox)) {
                 collision.didCollide = true
-                
                 //call function in entity's physics that updates array storing all entitys that that entity is touching.
                 character.physics.addTouchingEntity(entity) // what if it touches but never collides... hmmm maybe separate this to a different function call from character / gameentity
                 console.log("ADDED: " + entity.name)
@@ -152,7 +163,6 @@ class WorldManager {
 
 /**
  * TODO:
- *  - Consider inheritance of GameObjects & Entities
  *  - Better jump. Want character to jump once and maybe a little higher if jump button held
  */
 

@@ -11,14 +11,11 @@ import GunComponent from '../../components/GunComponent.js'
  */
 class Character extends Entity {
     // components
-    physics: PhysicsComponent
-    input: InputComponent
-    gun: GunComponent
+    physics: PhysicsComponent = new PhysicsComponent(this)
+    input: InputComponent = new InputComponent(this)
+    gun: GunComponent = new GunComponent(this)
 
     reticule: Reticule
-    
-    velocityX: number
-    velocityY: number
 
     focusAngle: number
     
@@ -31,21 +28,9 @@ class Character extends Entity {
             position: position,
             colour: colour
         })
-        // this.name = name
-        // this.code = code
-        // this.height = height
-        // this.width = width
-        // this.position = position
-
-        this.physics = new PhysicsComponent(this)
-        this.velocityX = 0
-        this.velocityY = 0
 
         this.focusAngle = 1
-        this.reticule = new Reticule(5, 5, {x: 5, y: 5}, "ffffff")
-
-        this.input = new InputComponent(this)
-        this.gun = new GunComponent(this)
+        this.reticule = new Reticule(5, 5, {x: 5, y: 5}, "ffffff")      //reticule probably actually is more fitting as a COMPONENT 
     }
 
     update = (worldManager: WorldManager): void => {
@@ -66,18 +51,7 @@ class Character extends Entity {
         //console.log("Drawing crosshair at: {x: " + (this.playerCharacter.position.x + 10 * Math.cos(res)) + ", y: " + (this.playerCharacter.position.y + 10 * Math.sin(res)))
         //x1 + r * Math.cos(theta), y1 + r * Math.sin(theta)
     }
-
-    /*REMOVE THIS WHEN GRAVITY / JUMPING IS FULLY IMPLEMENTED*/
-    incrementYPos = (increment: number) => {
-        let newPosition = {
-            position: {
-                x: this.getPosition().x,
-                y: this.getPosition().y + increment
-            }
-        }
-        this.setPosition(newPosition)
-    }
-    
+   
 }
 
 export default Character

@@ -33,7 +33,7 @@ class PlatformManager extends BaseEntityManager {
     }
 
     tick = (delta: number): void => {
-        //tick game objects
+        //tick platforms
     }
 
 }

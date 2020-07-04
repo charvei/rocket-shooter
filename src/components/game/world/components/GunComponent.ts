@@ -5,6 +5,7 @@ import WorldManager from '../WorldManager'
  * Gun component
  */
 class GunComponent {
+    willFireOnUpdate: boolean = false
 
     constructor(componentOwner: Character) {
         //this.componentOwner = componentOwner
@@ -14,13 +15,17 @@ class GunComponent {
      * Runs once per tick
      */
     update = (worldManager: WorldManager): void => {
+        if (this.willFireOnUpdate) {
+            worldManager.getProjectileManager().addProjectile()
 
+            this.willFireOnUpdate = false
+        }
         //worldManager.getProjectileManager().makeProjectile
 
     }
 
-    fireProjectile = (worldManager: WorldManager): void => {
-        //worldManager.getProjectileManager().newProjectile()
+    fireProjectile = (): void => {
+        this.willFireOnUpdate = true
     }
 
 }

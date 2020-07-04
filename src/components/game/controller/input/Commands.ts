@@ -3,10 +3,7 @@ import Character from "../../world/objects/character/Character"
 class Commands {
     static makeMoveUnitCommand = (character: Character, direction: String): 
             (delta: number) => void => {
-        return (delta: number) => {
-            /*if (direction == "Up") {
-                character.incrementYPos(-.5 * delta)
-            }*/ 
+        return (delta: number): void => {
             if (direction == "Down") {
                 character.input.down(delta)
             } if (direction == "Left") {
@@ -18,19 +15,19 @@ class Commands {
     }
 
     static makeJumpCommand = (character: Character): (delta: number) => void => {
-        return (delta: number) => {
+        return (delta: number): void => {
             character.input.jump(delta)
         }
     }
 
     static makeJetPackCommand = (character: Character): (delta: number) => void => {
-        return (delta: number) => {
+        return (delta: number): void => {
             character.input.jetPack(delta)
         }
     }
 
-    static makeProjectileCommand = (character: Character): (delta: number) => void => {
-        return (delta: number) => {
+    static makeShootCommand = (character: Character): (delta: number) => void => {
+        return (delta: number): void => {
             character.input.makeProjectile(delta)
         }
     }

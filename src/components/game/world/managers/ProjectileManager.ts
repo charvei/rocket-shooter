@@ -1,62 +1,50 @@
 import Projectile from "../objects/projectiles/Projectile"
 import WorldManager from "../WorldManager"
+import BaseEntityManager from "./BaseEntityManager"
 
 /**
  * Store Projectiles and manage access and manipulation to Projectile resources
  */
-class ProjectileManager {
-    private projectileStore: Map<string, Projectile>
-    
+class ProjectileManager extends BaseEntityManager {
+
     constructor() {
-        this.projectileStore = new Map<string, Projectile>()
-
+        super()
     }
 
-    //Remember we can create a destructor
-    //We can also do other lifecycle functions
-
-    private addProjectile = (projectile: Projectile) => { 
-        //this.projectileStore.set(projectile.getName(), projectile)
+    generateProjectile = (): Projectile => {
+        return new Projectile(25, 25, {x: 60, y: 60}, "#ff54f")
     }
 
-    getProjectile = (projectileName: string) => {
-        return this.projectileStore.get(projectileName)
+    getProjectileList = (): Projectile[] => {
+        return this.getEntityList() as Projectile[]
     }
 
-    private removeProjectile = (projectileName: string) => {
-        this.removeProjectileFromStore(projectileName)
+    addProjectile = (): void => {
+        this.addEntity(this.generateProjectile())
     }
 
-    addProjectileToStore = (projectileName: string) => {
-        // this.projectileStore.set(
-        //     projectileName, 
-        //     new Projectile(5, 5, {x: 50, y: 50}, "#ff33ff")
-        // )
+    tick = (delta: number, worldManager: WorldManager): void => {
+        this.updateProjectiles(delta, worldManager)
     }
 
-    removeProjectileFromStore = (projectileName: string) => {
-        this.projectileStore.delete(projectileName)
+    updateProjectiles = (delta: number, worldManager: WorldManager) => {
+        this.getProjectileList().forEach((projectile: Projectile): void => {
+            projectile.update(worldManager)
+        })
     }
 
-    getProjectileByName = (name: string) => {
-        return this.projectileStore.get(name)
-    }
 
-    // Set of information about how to render Projectiles // maybe this is just ProjectileStore?
-    // getProjectileRenderSet = () => {
-    // }
-    getProjectileStoreAsArray = () => {
-        let projectileList: Projectile[] = Array.from(this.projectileStore.values())
-        return projectileList
-    }
+
+
+
 
     //TEMPORARY: FOR TESTING LOOP.
     //THIS MIGHT FIT UNDER A BROADER UPDATE OR TICK() FUNCTION FOR A Projectile. I.E. WHERE IT CHECKS IF ITS IN SOMETHINGS WAY, IF IT NEEDS TO MOVE POS ETC?
-    updateProjectiles = (delta: number, worldManager: WorldManager) => {
-        this.getProjectileStoreAsArray().forEach((projectile: Projectile) => {
-            //projectile.update(worldManager)
-        })
-    }
+    // updateProjectiles = (delta: number, worldManager: WorldManager) => {
+    //     this.getProjectileStoreAsArray().forEach((projectile: Projectile) => {
+    //         //projectile.update(worldManager)
+    //     })
+    // }
 
 
 }

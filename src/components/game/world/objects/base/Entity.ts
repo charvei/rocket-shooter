@@ -18,6 +18,9 @@ abstract class Entity implements IsRenderable {
     height: number
     width: number
     colour: string
+
+    velocityX: number = 0
+    velocityY: number = 0
     
     //position in world
     position: {

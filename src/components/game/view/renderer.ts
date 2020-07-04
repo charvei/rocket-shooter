@@ -16,7 +16,7 @@ class Renderer {
     }
 
     // Maybe when this gets more complicated this can be made more intelligent?
-    drawWorld = (characterRenderables: Renderable[], objectRenderables: Renderable[], foregroundRenderables: Renderable[]) => {
+    drawWorld = (characterRenderables: Renderable[], objectRenderables: Renderable[], foregroundRenderables: Renderable[], projectileRenderables: Renderable[]) => {
         this.worldContext.clearRect(0, 0, this.canvasProps.width, this.canvasProps.height)
 
         //background
@@ -27,12 +27,13 @@ class Renderer {
         this.drawForeground(foregroundRenderables)
 
         //objects
-        //this.drawObjects(objectList)
         this.drawRenderables(objectRenderables)
         
         //characters
-        //this.drawCharacters(characterList)
         this.drawRenderables(characterRenderables)
+
+        //projectiles
+        this.drawRenderables(projectileRenderables)
 
     }
 

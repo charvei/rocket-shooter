@@ -12,7 +12,7 @@ import {
  * Physics component
  */
 class PhysicsComponent {
-    componentOwner: Character
+    componentOwner: Entity
     touchingState: TouchingState = {
         top: false,
         bottom: false,
@@ -24,7 +24,7 @@ class PhysicsComponent {
 
     touchingObjects: Entity[] = []
 
-    constructor(componentOwner: Character) {
+    constructor(componentOwner: Entity) {
         this.componentOwner = componentOwner
     }
     
