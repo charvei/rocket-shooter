@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+      "target": "es5",
+      "module": "commonjs",
+      "declaration": true,
+      "outDir": "./src/components/game-dist",
+      "strict": true
+    },
+    "include": ["src/components/game"],
+    "exclude": ["node_modules", "**/__tests__/*"]
+  }
+  

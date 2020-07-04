@@ -75,11 +75,12 @@ const loadController = (): void => {
 }
 
 const getContext = (canvas: HTMLCanvasElement): CanvasRenderingContext2D => {
-    if (canvas.getContext) {
+    let context: CanvasRenderingContext2D | null = canvas.getContext('2d')
+    if (context != null) {
         console.log("Successfully got context")
-        return canvas.getContext('2d')
+        return context
     } else {
-        console.log("Failed to get context")
+        throw Error("Couldn't retrieve context for canvas: " + canvas)
     }
 }
 

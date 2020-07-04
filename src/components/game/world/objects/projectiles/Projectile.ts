@@ -1,33 +1,21 @@
 import IsRenderable from '../../IsRenderable'
 import { Renderable } from '../../../Types'
+import Entity from '../base/Entity'
 
-class Projectile implements IsRenderable {
-    height: number
-    width: number
-    colour: string
-    
-    //position in world
-    position: {
-        x: number,
-        y: number
-    }
-
+class Projectile extends Entity {
     velocity: number = 0.5
     
-    constructor() {
-
+    constructor(height: number, width: number, position: {x: number, y: number}, colour: string) {
+        super({
+            name: "projectileA",
+            code: "projectileA",
+            height: height,
+            width: width,
+            position: position,
+            colour: colour
+        })
     }
 
-    getRenderable() {
-        let renderable: Renderable = {
-            xPos: this.position.x,
-            yPos: this.position.y,
-            height: this.height,
-            width: this.width,
-            colour: this.colour
-        }
-        return renderable
-    }
 }
 
 

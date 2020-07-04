@@ -2,7 +2,6 @@ import Renderer from './renderer.js'
 
 class RenderingManager {
     renderer: Renderer
-    context: CanvasRenderingContext2D
 
     constructor(worldContext: CanvasRenderingContext2D, foregroundContext: CanvasRenderingContext2D, canvasProps: {height: number, width: number} ) {
         //load grid and colours

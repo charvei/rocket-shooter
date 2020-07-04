@@ -1,5 +1,5 @@
 import Commands from "./Commands"
-import CharacterManager from "../../world/objects/character/CharacterManager"
+import CharacterManager from "../../world/managers/CharacterManager"
 import Character from '../../world/objects/character/Character'
 
 import { KeyPressEvent } from "../../Types"
@@ -8,8 +8,8 @@ import { KeyPressEvent } from "../../Types"
  * Input handler
  */
 class InputHandler {
-    keys: object = {}   // record of keyboard keys and their corresponding state of pressed down or up
-    previousKeysState: object = {} // 
+    keys: { [key: string]: KeyPressEvent } = {} // record of keyboard keys and their corresponding state of pressed down or up
+    previousKeysState: { [key: string]: KeyPressEvent } = {} 
 
     mouseRelativeToPlayerPosition: object = {}  // describes where user's mouse in relation to their character
     mouseCanvasPos: {x: number, y: number} = {
@@ -31,7 +31,9 @@ class InputHandler {
     constructor(characterManager: CharacterManager, foregroundContext: CanvasRenderingContext2D) {
         this.foregroundContext = foregroundContext
         this.characterManagerRef = characterManager
-        this.playerCharacter = this.characterManagerRef.getCharacterByName("Adam")
+        
+        //this.playerCharacter = this.characterManagerRef.getCharacterByName("Adam")
+        this.playerCharacter = this.characterManagerRef.getEntityList().find((character => character.name == "Adam")) as Character
 
         this.setupKeyDownListeners()
         this.setMousePositionListener()

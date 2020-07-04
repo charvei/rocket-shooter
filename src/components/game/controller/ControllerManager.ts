@@ -39,12 +39,15 @@ class ControllerManager {
 
     draw = (): void => {
         this.renderingManager.getRenderer().drawWorld(
-            this.worldManager.getCharacterManager().getCharacterStoreAsArray(),
+            //this.worldManager.getCharacterManager().getCharacterList(),
+            this.worldManager.getCharacterManager().getCharacterRenderables(),
             this.worldManager.getGameObjectManager().getEntityRenderables(),
             this.worldManager.getForegroundManager().getActiveForeground().getRenderables()
+
+            //Probably this is an indicater that says world manager should collate all this?
         )
 
-        this.renderingManager.getRenderer().drawRenderables
+        //this.renderingManager.getRenderer().drawRenderables
     }
 
     startLooping = (): void => {

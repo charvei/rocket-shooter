@@ -1,6 +1,6 @@
-import BaseEntityManager from "./base/BaseEntityManager"
-import GameObject from "./GameObject"
-import Platform from "./Platform"
+import BaseEntityManager from "./BaseEntityManager"
+import GameObject from "../objects/GameObject"
+import Platform from "../objects/Platform"
 import WorldManager from "../WorldManager"
 import { Renderable } from "../../Types"
 
@@ -8,7 +8,6 @@ import { Renderable } from "../../Types"
  * Store characters and manages access to and manipulation of character resources
  */
 class GameObjectManager extends BaseEntityManager {
-    private objectStore: Map<string, GameObject>
     
     constructor() {
         super()

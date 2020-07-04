@@ -1,5 +1,5 @@
-import CharacterManager from './objects/character/CharacterManager'
-import GameObjectManager from './objects/GameObjectManager.js'
+import CharacterManager from './managers/CharacterManager'
+import GameObjectManager from './managers/GameObjectManager.js'
 import Character from './objects/character/Character'
 import GameObject from './objects/GameObject'
 import ForegroundManager from './foreground/ForegroundManager.js'

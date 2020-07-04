@@ -22,26 +22,6 @@ class Character extends Entity {
     velocityY: number
 
     focusAngle: number
-
-    name: string
-    code: string
-
-    //pixel dimensions
-    height: number
-    width: number
-    colour: string
-    
-    //position in world
-    position: {
-        x: number,
-        y: number
-    }
-
-    // position of sides of box
-    prevPosition: {
-        x: number,
-        y: number
-    }
     
     constructor(name: string, code: string, height: number, width: number, position: {x: number, y: number}, colour: string) {
         super({

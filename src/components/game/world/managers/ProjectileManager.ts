@@ -1,14 +1,13 @@
-import Projectile from "./Projectile"
-import WorldManager from "../../WorldManager"
-import GameObjectManager from "../GameObjectManager"
-import GameObject from "../GameObject"
+import Projectile from "../objects/projectiles/Projectile"
+import WorldManager from "../WorldManager"
+import GameObjectManager from "./GameObjectManager"
+import GameObject from "../objects/GameObject"
 
 /**
  * Store Projectiles and manage access and manipulation to Projectile resources
  */
 class ProjectileManager {
     private projectileStore: Map<string, Projectile>
-    projectile: Projectile
     
     constructor() {
         this.projectileStore = new Map<string, Projectile>()
@@ -19,7 +18,7 @@ class ProjectileManager {
     //We can also do other lifecycle functions
 
     private addProjectile = (projectile: Projectile) => { 
-        this.projectileStore.set(projectile.getName(), projectile)
+        //this.projectileStore.set(projectile.getName(), projectile)
     }
 
     getProjectile = (projectileName: string) => {
@@ -33,7 +32,7 @@ class ProjectileManager {
     addProjectileToStore = (projectileName: string) => {
         this.projectileStore.set(
             projectileName, 
-            new Projectile()
+            new Projectile(5, 5, {x: 50, y: 50}, "#ff33ff")
         )
     }
 

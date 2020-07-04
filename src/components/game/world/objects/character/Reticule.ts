@@ -1,15 +1,6 @@
-import GameObject from '../GameObject.js'
+import Entity from '../base/Entity'
 
-class Reticule extends GameObject {
-    height: number
-    width: number
-    colour: string
-    
-    position: {
-        x: number,
-        y: number
-    }
-
+class Reticule extends Entity {
     constructor(height: number, width: number, position: {x: number, y: number}, colour: string) {
         super({
             name: "reticule",

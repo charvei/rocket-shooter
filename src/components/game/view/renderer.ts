@@ -1,7 +1,7 @@
 import Character from '../world/objects/character/Character' //not sure if i should be importing character? i would like it to be even more decoupled right?
 import Entity from '../world/objects/base/Entity'
 import GameObject from '../world/objects/GameObject.js'
-import RainForeground from '../world/foreground/RainForeground.js'
+import SnowForeground from '../world/foreground/SnowForeground.js'
 
 import { Renderable } from "../Types"
 
@@ -20,7 +20,7 @@ class Renderer {
     }
 
     // Maybe when this gets more complicated this can be made more intelligent?
-    drawWorld = (characterList: Character[], objectRenderables: Renderable[], foregroundRenderables: Renderable[]) => {
+    drawWorld = (characterRenderables: Renderable[], objectRenderables: Renderable[], foregroundRenderables: Renderable[]) => {
         this.worldContext.clearRect(0, 0, this.canvasProps.width, this.canvasProps.height)
 
         //background
@@ -35,8 +35,8 @@ class Renderer {
         this.drawRenderables(objectRenderables)
         
         //characters
-        this.drawCharacters(characterList)
-
+        //this.drawCharacters(characterList)
+        this.drawRenderables(characterRenderables)
 
     }
 
@@ -46,7 +46,7 @@ class Renderer {
     }
 
     // So at some point may want to consider having multiple canvas or something right? buffer screens and stuff
-    drawCharacters = (entityList: Character[]) => {
+    drawCharacters = (characterList: Character[]) => {
         characterList.forEach(character => {
             this.worldContext.fillStyle = "#0000ff"
             this.worldContext.fillRect(character.getPosition().x, character.getPosition().y, character.getWidth(), character.getHeight())

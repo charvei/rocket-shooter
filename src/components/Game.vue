@@ -8,7 +8,7 @@
 </template>
 
 <script>
-    import { main } from './game/main.js'
+    import { main } from './game-dist/main.js'
 
     export default {
         name: 'Game',

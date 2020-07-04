@@ -55,11 +55,15 @@ export type Renderable = {
     colour: string
 }
 
+// export type TouchingState = {
+//     top: boolean,
+//     bottom: boolean,
+//     left: boolean,
+//     right: boolean
+// }
+
 export type TouchingState = {
-    top: boolean,
-    bottom: boolean,
-    left: boolean,
-    right: boolean
+    [key: string]: boolean
 }
 
 /** CONTROLLER TYPES */

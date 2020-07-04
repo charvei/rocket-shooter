@@ -19,7 +19,7 @@ class Loop {
     lastFpsUpdate: number = 0
     fpsDecayWeight: number = 0.25
 
-    fpsDisplay: HTMLElement = document.getElementById("fps-display")
+    fpsDisplay: HTMLElement | null = document.getElementById("fps-display")
 
     constructor(update: (delta: number) => void, draw: () => void) {
         this.update = update
@@ -52,7 +52,10 @@ class Loop {
         }
 
         this.draw()
-        this.fpsDisplay.textContent = Math.round(this.fps) + ' FPS'
+
+        if (this.fpsDisplay) {
+            this.fpsDisplay.textContent = Math.round(this.fps) + ' FPS'
+        }
 
         window.requestAnimationFrame(this.start)
     }

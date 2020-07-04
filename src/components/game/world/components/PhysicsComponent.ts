@@ -13,16 +13,13 @@ import {
  */
 class PhysicsComponent {
     componentOwner: Character
-    xCollisionDistance: number
-    yCollisionDistance: number
-    previousXCollisionDistance: number
-    previousYCollisionDistance: number
     touchingState: TouchingState = {
         top: false,
         bottom: false,
         left: false,
         right: false
     }
+
     previousCollisions: CollisionResult[] = []
 
     touchingObjects: GameObject[] = []

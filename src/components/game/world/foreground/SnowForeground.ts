@@ -3,10 +3,12 @@ import {
     Renderable
 } from "../../Types"
 
-class RainForeground {
-    context: CanvasRenderingContext2D
+/**
+ * Implementation of a foreground. I have not made a base foreground yet, so this should be extracted at some point.
+ */
+class SnowForeground {
     //opacity: number = 0.5
-    rainDensity: number = 0.20
+    particleDensity: number = 0.20
     maxParticles: number = 500
 
     startingYPos: number = -5
@@ -15,7 +17,7 @@ class RainForeground {
     foregroundContext: CanvasRenderingContext2D
     canvasProps: {height: number, width: number}
 
-    rainParticles: Particle[] = []
+    particles: Particle[] = []
 
     constructor(foregroundContext: CanvasRenderingContext2D, canvasProps: {height: number, width: number} ) {
         this.foregroundContext = foregroundContext
@@ -23,7 +25,7 @@ class RainForeground {
     }
 
     getRenderables = (): Renderable[] => {
-        return this.rainParticles.map((particle) => {
+        return this.particles.map((particle) => {
             return {
                 xPos: particle.xPos,
                 yPos: particle.yPos,
@@ -34,7 +36,7 @@ class RainForeground {
         })
     } 
 
-    createNewRainParticles = () => {
+    createNewParticles = () => {
         for (let i: number = 0; i < 2; i++) {
             // Create 2 particles per row
             // randomize these properties to a certain extent later
@@ -49,16 +51,16 @@ class RainForeground {
                 ySpeed: 0.2 + Math.random() * 1.5,
                 opacity: 0.5
             }
-            this.rainParticles.push(particle)
+            this.particles.push(particle)
         }
     }
 
     update = (delta: number) => {
-        if (this.rainParticles.length < this.maxParticles) {
-            this.createNewRainParticles()
+        if (this.particles.length < this.maxParticles) {
+            this.createNewParticles()
         }
         
-        this.rainParticles.forEach((particle) => {
+        this.particles.forEach((particle) => {
             particle.yPos += particle.ySpeed;
 
             // how frequent direction changes are
@@ -81,4 +83,4 @@ class RainForeground {
     }
 }
 
-export default RainForeground
+export default SnowForeground

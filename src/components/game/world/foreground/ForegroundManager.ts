@@ -1,25 +1,26 @@
-import RainForeground from "./RainForeground"
+import SnowForeground from "./SnowForeground"
 
 class ForegroundManager {
-    private activeForeground: RainForeground
+    private activeForeground: SnowForeground
     private foregroundContext: CanvasRenderingContext2D
-    private canvasProps: {height: number, width: number}
+    //private canvasProps: {height: number, width: number}
 
     constructor(foregroundContext: CanvasRenderingContext2D, canvasProps: {height: number, width: number}) {
         this.foregroundContext = foregroundContext
-        this.setForeground(foregroundContext, canvasProps)
+        this.activeForeground = new SnowForeground(foregroundContext, canvasProps)
+        //this.setForeground(foregroundContext, canvasProps)
     }
 
     public getForegroundContext = (): CanvasRenderingContext2D => {
         return this.foregroundContext
     }
 
-    public getActiveForeground = (): RainForeground => {
+    public getActiveForeground = (): SnowForeground => {
         return this.activeForeground
     }
 
     public setForeground = (foregroundContext: CanvasRenderingContext2D, canvasProps: {height: number, width: number}): void => {
-        this.activeForeground = new RainForeground(foregroundContext, canvasProps)
+        this.activeForeground = new SnowForeground(foregroundContext, canvasProps)
     }
 
     public updateForeground = (delta: number): void => {
