@@ -1,8 +1,4 @@
 import Character from '../world/objects/character/Character' //not sure if i should be importing character? i would like it to be even more decoupled right?
-import Entity from '../world/objects/base/Entity'
-import GameObject from '../world/objects/GameObject.js'
-import SnowForeground from '../world/foreground/SnowForeground.js'
-
 import { Renderable } from "../Types"
 
 class Renderer {
@@ -54,13 +50,6 @@ class Renderer {
             this.worldContext.fillRect(character.reticule.getPosition().x, character.reticule.getPosition().y, character.reticule.getWidth(), character.reticule.getHeight())
         })
     }
-
-    // drawObjects = (objectList: GameObject[]) => {
-    //     objectList.forEach(object => {
-    //         this.worldContext.fillStyle = "#ffffff"
-    //         this.worldContext.fillRect(object.getPosition().x, object.getPosition().y, object.getWidth(), object.getHeight())
-    //     })
-    // }
 
     drawRenderables = (renderables: Renderable[]) => {
         renderables.forEach(renderable => {

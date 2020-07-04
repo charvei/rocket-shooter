@@ -1,7 +1,5 @@
 import Character from '../objects/character/Character'
 import WorldManager from '../WorldManager'
-import GameObject from '../objects/GameObject'
-
 
 /**
  * Gun component

@@ -1,8 +1,6 @@
 import Character from "../objects/character/Character"
 import WorldManager from "../WorldManager"
 import BaseEntityManager from "../managers/BaseEntityManager"
-// import GameObjectManager from "../managers/GameObjectManager"
-// import GameObject from "../GameObject"
 import { Tickable } from "../../Interfaces"
 import { Renderable } from "../../Types"
 

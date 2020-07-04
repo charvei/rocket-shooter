@@ -1,0 +1,4 @@
+todo
+
+> make abstract base class for object managers
+> make abstract base class for objects

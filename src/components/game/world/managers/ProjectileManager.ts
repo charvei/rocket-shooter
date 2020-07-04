@@ -1,7 +1,5 @@
 import Projectile from "../objects/projectiles/Projectile"
 import WorldManager from "../WorldManager"
-import GameObjectManager from "./GameObjectManager"
-import GameObject from "../objects/GameObject"
 
 /**
  * Store Projectiles and manage access and manipulation to Projectile resources
@@ -30,16 +28,11 @@ class ProjectileManager {
     }
 
     addProjectileToStore = (projectileName: string) => {
-        this.projectileStore.set(
-            projectileName, 
-            new Projectile(5, 5, {x: 50, y: 50}, "#ff33ff")
-        )
+        // this.projectileStore.set(
+        //     projectileName, 
+        //     new Projectile(5, 5, {x: 50, y: 50}, "#ff33ff")
+        // )
     }
-
-    //NOT SURE ABOUT THIS AT ALL. SO I WANT TO ADD THE RETICULE AS A COMPONENT OF THE PLAYER Projectile, MAKES SENSE TO PUT IN THE Projectile CLASS BUT HOW DO I ALSO GET THAT IN THE GAMEOBJECT OR WHATEVER STORE FOR IT TO RENDER
-    // addObjectToObjectStore = (object: GameObject) => {
-    //     this.gameObjectManager.addGameObject(object)
-    // }
 
     removeProjectileFromStore = (projectileName: string) => {
         this.projectileStore.delete(projectileName)

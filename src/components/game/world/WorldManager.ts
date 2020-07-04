@@ -1,7 +1,7 @@
 import CharacterManager from './managers/CharacterManager'
-import GameObjectManager from './managers/GameObjectManager.js'
+import PlatformManager from './managers/PlatformManager.js'
 import Character from './objects/character/Character'
-import GameObject from './objects/GameObject'
+import Entity from './objects/base/Entity'
 import ForegroundManager from './foreground/ForegroundManager.js'
 
 import {
@@ -15,12 +15,12 @@ import {
  */
 class WorldManager {
     characterManager: CharacterManager
-    gameObjectManager: GameObjectManager
+    platformManager: PlatformManager
     foregroundManager: ForegroundManager
     context: CanvasRenderingContext2D
 
     constructor(context: CanvasRenderingContext2D, foregroundContext: CanvasRenderingContext2D, canvasProps: {height: number, width: number}) {
-        this.gameObjectManager = new GameObjectManager()
+        this.platformManager = new PlatformManager()
         this.characterManager = new CharacterManager()
         
         this.foregroundManager = new ForegroundManager(foregroundContext, canvasProps)
@@ -31,8 +31,8 @@ class WorldManager {
         return this.characterManager
     }
 
-    getGameObjectManager = () => {
-        return this.gameObjectManager
+    getPlatformManager = () => {
+        return this.platformManager
     }
 
     getForegroundManager = () => {
@@ -52,7 +52,7 @@ class WorldManager {
         this.foregroundManager.updateForeground(delta)
     }
 
-    getTouchRelationship = (thisObject: GameObject, otherObject: GameObject): CollisionResult => {
+    getTouchRelationship = (thisEntity: Entity, otherEntity: Entity): CollisionResult => {
         let touchResult: CollisionResult = {
             didCollide: false,
             vectors: {
@@ -63,8 +63,8 @@ class WorldManager {
             }
         }
 
-        let thisBox: BoxCoords = thisObject.getBoxCoords(-1, 1, -1, 1)
-        let otherBox: BoxCoords = otherObject.getBoxCoords()
+        let thisBox: BoxCoords = thisEntity.getBoxCoords(-1, 1, -1, 1)
+        let otherBox: BoxCoords = otherEntity.getBoxCoords()
 
         touchResult.vectors = this.getCollisionVectors(thisBox, otherBox)
         
@@ -79,9 +79,9 @@ class WorldManager {
     getCollisions = (character: Character): CollisionResult[] => {
         let collisionResults: CollisionResult[] = []
 
-        this.gameObjectManager.getEntityList().forEach((object) => {
+        this.platformManager.getEntityList().forEach((entity) => {
             let characterBox: BoxCoords = character.getBoxCoords(character.velocityY, character.velocityY, character.velocityX, character.velocityX)
-            let objectBox: BoxCoords = object.getBoxCoords()
+            let entityBox: BoxCoords = entity.getBoxCoords()
 
             let collision: CollisionResult = {
                 didCollide: false,
@@ -92,14 +92,14 @@ class WorldManager {
                     right: 0
                 }
             }
-            collision.vectors = this.getCollisionVectors(characterBox, objectBox)
+            collision.vectors = this.getCollisionVectors(characterBox, entityBox)
             
-            if (this.checkCollision(characterBox, objectBox)) {
+            if (this.checkCollision(characterBox, entityBox)) {
                 collision.didCollide = true
                 
-                //call function in object's physics that updates array storing all objects that that object is touching.
-                character.physics.addTouchingObject(object) // what if it touches but never collides... hmmm maybe separate this to a different function call from character / gameobject
-                console.log("ADDED: " + object.name)
+                //call function in entity's physics that updates array storing all entitys that that entity is touching.
+                character.physics.addTouchingEntity(entity) // what if it touches but never collides... hmmm maybe separate this to a different function call from character / gameentity
+                console.log("ADDED: " + entity.name)
             }
 
             collisionResults.push(collision)

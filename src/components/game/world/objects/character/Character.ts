@@ -1,5 +1,4 @@
 import WorldManager from '../../WorldManager.js'
-import GameObject from '../GameObject.js'
 import Entity from '../base/Entity'
 import Reticule from './Reticule.js'
 

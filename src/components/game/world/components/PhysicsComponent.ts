@@ -1,6 +1,6 @@
 import Character from '../objects/character/Character'
 import WorldManager from '../WorldManager'
-import GameObject from '../objects/GameObject'
+import Entity from '../objects/base/Entity'
 
 import {
     CollisionVectors,
@@ -22,7 +22,7 @@ class PhysicsComponent {
 
     previousCollisions: CollisionResult[] = []
 
-    touchingObjects: GameObject[] = []
+    touchingObjects: Entity[] = []
 
     constructor(componentOwner: Character) {
         this.componentOwner = componentOwner
@@ -91,9 +91,9 @@ class PhysicsComponent {
         this.componentOwner.setPosition(newPosition)
     }
 
-    addTouchingObject = (object: GameObject) => {
-        if (!this.touchingObjects.includes(object)) {
-            this.touchingObjects.push(object)
+    addTouchingEntity = (entity: Entity) => {
+        if (!this.touchingObjects.includes(entity)) {
+            this.touchingObjects.push(entity)
         }
     }
     
@@ -102,9 +102,9 @@ class PhysicsComponent {
         this.touchingState = this.getFreshTouchingState()
         let touchingIndexRemovalQueue: number[] = []
 
-        this.touchingObjects.forEach((object: GameObject, index: number) => {
-            let collision: CollisionVectors = worldManager.getCollisionVectors(this.componentOwner.getBoxCoords(), object.getBoxCoords())
-            let touch: CollisionResult = worldManager.getTouchRelationship(this.componentOwner, object)
+        this.touchingObjects.forEach((entity: Entity, index: number) => {
+            let collision: CollisionVectors = worldManager.getCollisionVectors(this.componentOwner.getBoxCoords(), entity.getBoxCoords())
+            let touch: CollisionResult = worldManager.getTouchRelationship(this.componentOwner, entity)
 
             if (!touch.didCollide) { //rename didCollide to something more general
                 touchingIndexRemovalQueue.push(index)
