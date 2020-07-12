@@ -1,18 +1,21 @@
 import Character from '../objects/character/Character'
 import WorldManager from '../WorldManager'
 import Entity from '../objects/base/Entity'
+import Projectile from '../objects/projectiles/Projectile'
 
 import {
     CollisionVectors,
     CollisionResult,
-    TouchingState
+    TouchingState,
+    PhysicsEntity
 } from "../../Types"
 
 /**
  * Physics component
  */
 class PhysicsComponent {
-    componentOwner: Entity
+    //componentOwner: Character | Projectile  // Basically any component that implements HasPhysics. The issue using this is as I add more entities with HasPhysics, this would grow to include more |'s of the different types. Ideally I could somehow have the type be 'Entity that implements HasPhysics' but I'm not sure if that is possible yet. Alternatively I can just have a Type that keeps track of all these classes but feels annoying to have to manage all that manually.
+    componentOwner: PhysicsEntity
     touchingState: TouchingState = {
         top: false,
         bottom: false,
@@ -20,11 +23,13 @@ class PhysicsComponent {
         right: false
     }
 
+    firstUpdate: boolean = true
+
     previousCollisions: CollisionResult[] = []
 
     touchingObjects: Entity[] = []
 
-    constructor(componentOwner: Entity) {
+    constructor(componentOwner: PhysicsEntity) {
         this.componentOwner = componentOwner
     }
     
@@ -32,6 +37,10 @@ class PhysicsComponent {
      * Runs once per tick
      */
     update = (worldManager: WorldManager): void => {
+        if (this.firstUpdate) {
+            this.previousCollisions = this.previousCollisions = worldManager.getCollisions(this.componentOwner)
+            this.firstUpdate = false
+        }
         this.applyFriction()
         this.applyGravity()
 

@@ -2,6 +2,10 @@ import Projectile from "../objects/projectiles/Projectile"
 import WorldManager from "../WorldManager"
 import BaseEntityManager from "./BaseEntityManager"
 
+import {
+    Position
+} from "../../Types"
+
 /**
  * Store Projectiles and manage access and manipulation to Projectile resources
  */
@@ -11,16 +15,22 @@ class ProjectileManager extends BaseEntityManager {
         super()
     }
 
-    generateProjectile = (): Projectile => {
-        return new Projectile(25, 25, {x: 60, y: 60}, "#ff54f")
+    generateProjectile = (position: Position, angle: number, velocity: number): Projectile => {
+        console.log("projectile angle: " + Math.sin(angle))
+        //cos: -1 = left, 1 = right
+        //sin: -1 = top, 1 = bottom
+        let velocityX = velocity * Math.cos(angle)
+        let velocityY = velocity * Math.sin(angle)
+
+        return new Projectile(5, 5, {x: position.x, y: position.y}, "#ff54f", velocityX, velocityY)
     }
 
     getProjectileList = (): Projectile[] => {
         return this.getEntityList() as Projectile[]
     }
 
-    addProjectile = (): void => {
-        this.addEntity(this.generateProjectile())
+    addProjectile = (location: Position, angle: number, velocity: number): void => {
+        this.addEntity(this.generateProjectile(location, angle, velocity))
     }
 
     tick = (delta: number, worldManager: WorldManager): void => {

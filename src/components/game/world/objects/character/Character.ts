@@ -6,12 +6,17 @@ import PhysicsComponent from '../../components/PhysicsComponent.js'
 import InputComponent from '../../components/InputComponent.js'
 import GunComponent from '../../components/GunComponent.js'
 
+import { HasPhysics } from '../../../Interfaces'
+
 /**
  * Character or unit that exists in the game. This should probably go through some inheritance type things at some point
  */
-class Character extends Entity {
+class Character extends Entity implements HasPhysics {
     // components
+    velocityX: number = 0
+    velocityY: number = 0
     physics: PhysicsComponent = new PhysicsComponent(this)
+
     input: InputComponent = new InputComponent(this)
     gun: GunComponent = new GunComponent(this)
 
@@ -43,8 +48,6 @@ class Character extends Entity {
     }
 
     setReticule = () => {
-        console.log("x pos: " + this.reticule.position.x)
-        console.log("focus angle: " + this.focusAngle)
         this.reticule.position.x = this.position.x + (this.width/2) - this.reticule.width/2 + 25 * Math.cos(this.focusAngle)
         this.reticule.position.y = this.position.y + (this.height/2) - this.reticule.height/2 + 25 * Math.sin(this.focusAngle) 
         

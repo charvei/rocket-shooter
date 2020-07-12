@@ -1,15 +1,17 @@
-import IsRenderable from '../../IsRenderable'
-import { Renderable } from '../../../Types'
 import Entity from '../base/Entity'
 import PhysicsComponent from '../../components/PhysicsComponent'
 import WorldManager from '../../WorldManager'
 
-class Projectile extends Entity {
+import { HasPhysics } from '../../../Interfaces'
+
+class Projectile extends Entity implements HasPhysics {
     physics: PhysicsComponent = new PhysicsComponent(this)
 
-    velocityX: number = 10
+    velocityX: number
+    velocityY: number
 
-    constructor(height: number, width: number, position: {x: number, y: number}, colour: string) {
+    constructor(height: number, width: number, position: {x: number, y: number}, colour: string, 
+            velocityX: number, velocityY: number) {
         super({
             name: "projectileA",
             code: "projectileA",
@@ -18,6 +20,9 @@ class Projectile extends Entity {
             position: position,
             colour: colour
         })
+        this.velocityX = velocityX
+        this.velocityY = velocityY
+
     }
 
     update = (worldManager: WorldManager): void => {

@@ -8,8 +8,10 @@ import ProjectileManager from './managers/ProjectileManager'
 import {
     BoxCoords,
     CollisionVectors,
-    CollisionResult
+    CollisionResult,
+    PhysicsEntity
 } from "../Types"
+import Projectile from './objects/projectiles/Projectile'
 
 /**
  * Store world elements / managers
@@ -88,7 +90,7 @@ class WorldManager {
     }
 
     // not accounting for multiple collisions at once currently
-    getCollisions = (character: Entity): CollisionResult[] => {
+    getCollisions = (character: PhysicsEntity): CollisionResult[] => {
         let collisionResults: CollisionResult[] = []
 
         this.platformManager.getEntityList().forEach((entity) => {
@@ -109,8 +111,11 @@ class WorldManager {
             if (this.checkCollision(characterBox, entityBox)) {
                 collision.didCollide = true
                 //call function in entity's physics that updates array storing all entitys that that entity is touching.
-                character.physics.addTouchingEntity(entity) // what if it touches but never collides... hmmm maybe separate this to a different function call from character / gameentity
-                console.log("ADDED: " + entity.name)
+                if (character['physics']) {
+                    character.physics.addTouchingEntity(entity) // what if it touches but never collides... hmmm maybe separate this to a different function call from character / gameentity
+                    console.log("ADDED: " + entity.name)
+                }
+
             }
 
             collisionResults.push(collision)

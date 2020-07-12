@@ -1,10 +1,15 @@
 import WorldManager from "../../WorldManager"
-import IsRenderable from "../../IsRenderable"
+import { IsRenderable } from "../../../Interfaces"
 import { 
     BoxCoords, 
     EntityParams,
-    Renderable
+    Renderable,
+    Position
 } from "../../../Types"
+
+import {
+    HasPhysics
+} from "../../../Interfaces"
 
 
 /**
@@ -18,15 +23,9 @@ abstract class Entity implements IsRenderable {
     height: number
     width: number
     colour: string
-
-    velocityX: number = 0
-    velocityY: number = 0
     
     //position in world
-    position: {
-        x: number,
-        y: number
-    }
+    position: Position
     
     constructor(params: EntityParams) {
         this.name = params.name
@@ -59,24 +58,24 @@ abstract class Entity implements IsRenderable {
             colour: this.colour
         }
     }
-    
-    getName = () => {
+
+    getName = (): string => {
         return this.name
     }
     
-    getCode = () => {
+    getCode = (): string => {
         return this.code
     }
 
-    getHeight = () => {
+    getHeight = (): number => {
         return this.height
     }
 
-    getWidth = () => {
+    getWidth = (): number => {
         return this.width
     }
 
-    getPosition = () => {
+    getPosition = (): Position => {
         return this.position
     }
 

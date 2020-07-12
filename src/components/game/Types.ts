@@ -1,3 +1,6 @@
+import Character from './world/objects/character/Character'
+import Projectile from './world/objects/projectiles/Projectile'
+
 export type BoxCoords = {
     top: number,
     bottom: number,
@@ -47,6 +50,7 @@ export type Particle = {
     opacity: number
 }
 
+/** Renderables */
 export type Renderable = {
     xPos: number,
     yPos: number,
@@ -55,12 +59,12 @@ export type Renderable = {
     colour: string
 }
 
-// export type TouchingState = {
-//     top: boolean,
-//     bottom: boolean,
-//     left: boolean,
-//     right: boolean
-// }
+export type GetRenderableFunc = (() => Renderable)
+
+export type Position = {
+    x: number,
+    y: number
+}
 
 export type TouchingState = {
     [key: string]: boolean
@@ -75,3 +79,6 @@ export type KeyPressEvent = {
     heldDown: boolean,
     firstPress: boolean
 }
+
+/** Unions */
+export type PhysicsEntity = Character | Projectile
