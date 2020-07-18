@@ -1,14 +1,12 @@
 import Entity from '../base/Entity'
-import PhysicsComponent from '../../components/PhysicsComponent'
+//import NewPhysicsComponent from '../../components/physics/NewPhysicsComponent'
+import NewPhysicsComponent from '../../components/physics/NewPhysicsComponent'
 import WorldManager from '../../WorldManager'
 
-import { HasPhysics } from '../../../Interfaces'
+import { HasPhysics2 } from '../../../Interfaces'
 
-class Projectile extends Entity implements HasPhysics {
-    physics: PhysicsComponent = new PhysicsComponent(this)
-
-    velocityX: number
-    velocityY: number
+class Projectile extends Entity implements HasPhysics2 {
+    physics: NewPhysicsComponent = new NewPhysicsComponent(this)    // we've lost functinoality to initiate projectile with a given velocity
 
     constructor(height: number, width: number, position: {x: number, y: number}, colour: string, 
             velocityX: number, velocityY: number) {
@@ -20,9 +18,6 @@ class Projectile extends Entity implements HasPhysics {
             position: position,
             colour: colour
         })
-        this.velocityX = velocityX
-        this.velocityY = velocityY
-
     }
 
     update = (worldManager: WorldManager): void => {

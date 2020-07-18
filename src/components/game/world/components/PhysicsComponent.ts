@@ -38,23 +38,31 @@ class PhysicsComponent {
      */
     update = (worldManager: WorldManager): void => {
         if (this.firstUpdate) {
-            this.previousCollisions = this.previousCollisions = worldManager.getCollisions(this.componentOwner)
+            this.previousCollisions = this.previousCollisions = worldManager.worldPhysics.getCollisions(this.componentOwner)
             this.firstUpdate = false
         }
-        this.applyFriction()
+        
+        if (this.touchingObjects.length < 1) {
+            this.applyWindResistance()
+        } else {
+            this.applyFriction()
+        }
+        
+        //this.applyFriction() // TODO: add a wind resistance and use that when the entity is in the air
+        
         this.applyGravity()
 
         this.updateTouches(worldManager)
         this.resolveTouches()
 
-        let collisions: CollisionResult[] = worldManager.getCollisions(this.componentOwner)
+        let collisions: CollisionResult[] = worldManager.worldPhysics.getCollisions(this.componentOwner)
 
         collisions.forEach((collision, index) => {
             this.resolveCollisions(collision, this.previousCollisions[index])   // may create issues if these indices get out of sync
         })
 
-        this.updateTouches(worldManager)
-        this.resolveTouches()
+        // this.updateTouches(worldManager)
+        // this.resolveTouches()
         
         this.updateMovement()
 
@@ -72,11 +80,11 @@ class PhysicsComponent {
     }
 
     private updateMovement = () => {
-        if (Math.abs(this.componentOwner.velocityX) > 0) {
-            this.incrementXPos(this.componentOwner.velocityX)
+        if (Math.abs(this.componentOwner.physics.velocityX) > 0) {
+            this.incrementXPos(this.componentOwner.physics.velocityX)
         }
-        if (Math.abs(this.componentOwner.velocityY) > 0) {
-            this.incrementYPos(this.componentOwner.velocityY)
+        if (Math.abs(this.componentOwner.physics.velocityY) > 0) {
+            this.incrementYPos(this.componentOwner.physics.velocityY)
         }
     }
 
@@ -112,8 +120,8 @@ class PhysicsComponent {
         let touchingIndexRemovalQueue: number[] = []
 
         this.touchingObjects.forEach((entity: Entity, index: number) => {
-            let collision: CollisionVectors = worldManager.getCollisionVectors(this.componentOwner.getBoxCoords(), entity.getBoxCoords())
-            let touch: CollisionResult = worldManager.getTouchRelationship(this.componentOwner, entity)
+            let collision: CollisionVectors = worldManager.worldPhysics.getCollisionVectors(this.componentOwner.getBoxCoords(), entity.getBoxCoords())
+            let touch: CollisionResult = worldManager.worldPhysics.getTouchRelationship(this.componentOwner, entity)
 
             if (!touch.didCollide) { //rename didCollide to something more general
                 touchingIndexRemovalQueue.push(index)
@@ -148,17 +156,17 @@ class PhysicsComponent {
      * Prevent velocity change if grinding against another object
      */
     private resolveTouches = (): void => {
-        if (this.touchingState.bottom == true && this.componentOwner.velocityY > 0) {
-            this.componentOwner.velocityY = 0
+        if (this.touchingState.bottom == true && this.componentOwner.physics.velocityY > 0) {
+            this.componentOwner.physics.velocityY = 0
         }
-        if (this.touchingState.top == true && this.componentOwner.velocityY < 0) {
-            this.componentOwner.velocityY = 0
+        if (this.touchingState.top == true && this.componentOwner.physics.velocityY < 0) {
+            this.componentOwner.physics.velocityY = 0
         }
-        if (this.touchingState.right == true && this.componentOwner.velocityX > 0) {
-            this.componentOwner.velocityX = 0
+        if (this.touchingState.right == true && this.componentOwner.physics.velocityX > 0) {
+            this.componentOwner.physics.velocityX = 0
         }
-        if (this.touchingState.left == true && this.componentOwner.velocityX < 0) {
-            this.componentOwner.velocityX = 0
+        if (this.touchingState.left == true && this.componentOwner.physics.velocityX < 0) {
+            this.componentOwner.physics.velocityX = 0
         }
     }
 
@@ -168,31 +176,35 @@ class PhysicsComponent {
         }
 
         if (collisions.vectors.bottom != 0 && prevCollisions.vectors.bottom == 0) {
-            this.incrementYPos(this.componentOwner.velocityY - collisions.vectors.bottom)
-            this.componentOwner.velocityY = 0
+            this.incrementYPos(this.componentOwner.physics.velocityY - collisions.vectors.bottom)
+            this.componentOwner.physics.velocityY = 0
         }
         if (collisions.vectors.top != 0 && prevCollisions.vectors.top == 0) {
-            this.incrementYPos(this.componentOwner.velocityY - collisions.vectors.top)
-            this.componentOwner.velocityY = 0
+            this.incrementYPos(this.componentOwner.physics.velocityY - collisions.vectors.top)
+            this.componentOwner.physics.velocityY = 0
         }
         if (collisions.vectors.left != 0 && prevCollisions.vectors.left == 0) {
-            this.incrementXPos(this.componentOwner.velocityX - collisions.vectors.left)
-            this.componentOwner.velocityX = 0
+            this.incrementXPos(this.componentOwner.physics.velocityX - collisions.vectors.left)
+            this.componentOwner.physics.velocityX = 0
         }
         if (collisions.vectors.right != 0 && prevCollisions.vectors.right == 0) {
-            this.incrementXPos(this.componentOwner.velocityX - collisions.vectors.right)
-            this.componentOwner.velocityX = 0
+            this.incrementXPos(this.componentOwner.physics.velocityX - collisions.vectors.right)
+            this.componentOwner.physics.velocityX = 0
         }
 
     }
 
     private applyFriction = (): void => {
-        this.componentOwner.velocityX = this.componentOwner.velocityX * 0.9
+        this.componentOwner.physics.velocityX = this.componentOwner.physics.velocityX * 0.9
+    }
+
+    private applyWindResistance = (): void => {
+        this.componentOwner.physics.velocityX = this.componentOwner.physics.velocityX * 1
     }
 
     private applyGravity = (): void => {
-        this.componentOwner.velocityY += 0.2
-        //this.componentOwner.velocityY = this.componentOwner.velocityY * 0.9 // Use friction instead of gravity to test collision
+        this.componentOwner.physics.velocityY += 0.2
+        //this.componentOwner.physics.velocityY = this.componentOwner.physics.velocityY * 0.9 // Use friction instead of gravity to test collision
     }
 
     public isTouching = (direction: string): boolean => {

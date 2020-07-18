@@ -3,6 +3,7 @@ import {
     Renderable,
     GetRenderableFunc 
 } from "./Types";
+import NewPhysicsComponent from './world/components/Physics/NewPhysicsComponent';
 
 export interface Tickable {
     tick(delta: number, ...args: any[]): void
@@ -28,4 +29,8 @@ export interface HasPhysics {
     velocityY: number
 
     physics: PhysicsComponent
+}
+
+export interface HasPhysics2 {
+    physics: NewPhysicsComponent
 }
