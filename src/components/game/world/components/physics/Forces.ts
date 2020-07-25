@@ -1,5 +1,9 @@
 import PhysicsComponent from './NewPhysicsComponent'
 
+import {
+    PositionState
+} from "../../../Types"
+
 /**
  * Contains logic for enacting forces for PhysicsComponent
  */
@@ -11,11 +15,18 @@ class Forces {
     }
 
     applyForces = (): void => {
-        this.applyGravity()
-        this.applyWindResistance()
-        //if (true) {    // if owner.state == touching bottom
+        if (this.ownerPhysicsComponent.positionState == PositionState.Landed) {
+            //Check if what it is resting on is still there
+            //apply friction
             this.applyFriction()
-       // }
+            this.applyWindResistance()   
+        }
+
+        if (this.ownerPhysicsComponent.positionState == PositionState.Flying) {
+            this.applyWindResistance()
+        }
+
+        this.applyGravity()
     }
 
     applyGravity = (): void => {

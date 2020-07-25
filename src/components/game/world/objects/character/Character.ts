@@ -38,7 +38,7 @@ class Character extends Entity implements HasPhysics2 {
         })
 
         this.focusAngle = 1
-        this.reticule = new Reticule(5, 5, {x: 5, y: 5}, "ffffff")      //reticule probably actually is more fitting as a COMPONENT 
+        this.reticule = new Reticule(5, 5, {x: 50, y: 50}, "ffffff")      //reticule probably actually is more fitting as a COMPONENT 
     }
 
     update = (worldManager: WorldManager): void => {

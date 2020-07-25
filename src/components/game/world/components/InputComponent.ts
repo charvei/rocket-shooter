@@ -1,7 +1,13 @@
 import Character from '../objects/character/Character'
 
+import {
+    PositionState
+} from "../../Types"
+
 /**
  * Input component. Stuff that inputs (player / AI) can use.
+ * 
+ * This is _hard coupled_ with an entity having a PHYSICS component
  * 
  * Affects character's x & y velocity and probably more things later on.
  * 
@@ -31,18 +37,13 @@ class InputComponent {
     }
 
     jump = (delta: number): void => {
-        // if (this.componentOwner.physics.isTouching("bottom")) {
-        //     this.componentOwner.velocityY -= 0.12 * delta
-        // }
-        // console.log("my isTouching(bot) result:" + this.componentOwner.physics.isTouching("bottom"))
-
+        if (this.componentOwner.physics.positionState == PositionState.Landed) {
+            this.componentOwner.physics.velocityY -= 0.12 * delta
+        }
     }
 
     jetPack = (delta: number): void => {
-        // if (!this.componentOwner.physics.isTouching("bottom")) {
-        //     console.log(delta)
-        //     this.componentOwner.velocityY -= 0.018 * delta
-        // }
+        this.componentOwner.physics.velocityY -= 0.018 * delta
     }
 
     down = (delta: number): void => {

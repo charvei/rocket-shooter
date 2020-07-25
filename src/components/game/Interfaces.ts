@@ -3,7 +3,7 @@ import {
     Renderable,
     GetRenderableFunc 
 } from "./Types";
-import NewPhysicsComponent from './world/components/Physics/NewPhysicsComponent';
+import NewPhysicsComponent from './world/components/physics/NewPhysicsComponent';
 
 export interface Tickable {
     tick(delta: number, ...args: any[]): void

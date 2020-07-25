@@ -8,6 +8,25 @@ export type BoxCoords = {
     right: number
 }
 
+export type BoxSides = {
+    top: number,
+    bottom: number,
+    left: number,
+    right: number
+}
+
+export type Corner = {
+    x: number,
+    y: number
+}
+
+export type BoxCorners = {
+    topLeft: Corner,
+    topRight: Corner,
+    bottomLeft: Corner,
+    bottomRight: Corner
+}
+
 export type ObjectParams = {
     name: string, 
     code: string, 
@@ -82,3 +101,12 @@ export type KeyPressEvent = {
 
 /** Unions */
 export type PhysicsEntity = Character | Projectile
+
+
+/** Enums */
+export enum PositionState {
+    Flying,
+    Touching,
+    Colliding,
+    Landed
+}

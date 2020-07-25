@@ -1,4 +1,6 @@
 todo
 
-> make abstract base class for object managers
-> make abstract base class for objects
+I currently have a bug where if the player tries to go left or right while their 'head' is above the ledge it will automatically lift the character on top of the platform. 
+
+- fix the bug
+- but it would actually be kind of cool to have a button that performs this function and implement it as a kind of edge climbing feature :).

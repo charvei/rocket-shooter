@@ -4,7 +4,10 @@ import {
     BoxCoords, 
     EntityParams,
     Renderable,
-    Position
+    Position,
+    Corner,
+    BoxCorners,
+    BoxSides
 } from "../../../Types"
 
 import {
@@ -46,6 +49,62 @@ abstract class Entity implements IsRenderable {
             bottom: this.getPosition().y + this.getHeight() + bottomAdjustment, 
             left: this.getPosition().x + leftAdjustment,
             right: this.getPosition().x + this.getWidth() + rightAdjustment
+        }
+    }
+
+    getBoxSides = (): BoxSides => {
+        return {
+            top: this.getPosition().y,
+            bottom: this.getPosition().y + this.getHeight(), 
+            left: this.getPosition().x,
+            right: this.getPosition().x + this.getWidth()
+        }
+    }
+
+    /** REFACTOR: SHOULD ENTITY HAVE A 'BOX' OR BODY COMPONENT WHICH HOLDS THESE? */
+    // getCorners = (): BoxCorners => {
+    //     let boxSides: BoxSides = this.getBoxSides()
+    //     return {
+    //         topLeft: {
+    //             x: this.getPosition().x,
+    //             y: this.getPosition().y
+    //         },
+    //         topRight: {
+    //             x: this.getPosition().x + this.getWidth(),
+    //             y: this.getPosition().y
+    //         },
+    //         bottomLeft: {
+    //             x: this.getPosition().x,
+    //             y: this.getPosition().y + this.getHeight()
+    //         },
+    //         bottomRight: {
+    //             x: this.getPosition().x + this.getWidth(),
+    //             y: this.getPosition().y + this.getHeight()
+    //         }
+    //     }
+    // }
+
+    getCorners = (sides?: BoxSides): BoxCorners => {
+        if (sides == null) {
+            sides = this.getBoxSides()
+        }
+        return {
+            topLeft: {
+                x: sides.left,
+                y: sides.top
+            },
+            topRight: {
+                x: sides.right,
+                y: sides.top
+            },
+            bottomLeft: {
+                x: sides.left,
+                y: sides.bottom
+            },
+            bottomRight: {
+                x: sides.right,
+                y: sides.bottom
+            }
         }
     }
 

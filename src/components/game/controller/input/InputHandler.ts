@@ -75,12 +75,10 @@ class InputHandler {
 
         window.onkeydown = (e: KeyboardEvent): void => {
             let firstPress: boolean = !this.keys[e.key].heldDown
-            console.log("keys before stuff happens in onkeydown: " + this.keys[e.key].heldDown)
             this.keys[e.key] = {
                 heldDown: true,
                 firstPress: firstPress
             }
-            console.log(this.keys[e.key].firstPress)
         }
     }
 
@@ -88,7 +86,6 @@ class InputHandler {
         let event: Event
         this.foregroundContext.canvas.addEventListener('mousemove', event => {
             let boundingRect = this.foregroundContext.canvas.getBoundingClientRect()
-            // console.log("hello.")
             this.mouseCanvasPos = {// return {
                 x: event.clientX - boundingRect.left,
                 y: event.clientY - boundingRect.top

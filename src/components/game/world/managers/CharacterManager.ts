@@ -19,7 +19,7 @@ class CharacterManager extends BaseEntityManager {
     }
 
     genericCharacterFactory = (): Character => {
-        return new Character("Adam", "Adam", 20, 20, {x: 320, y: 50}, "#0000ff")
+        return new Character("Adam", "Adam", 20, 20, {x: 320, y: 150}, "#0000ff")
     }
     
     getCharacterRenderables = (): Renderable[] => {

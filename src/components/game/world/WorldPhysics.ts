@@ -32,48 +32,30 @@ class WorldPhysics {
 
         touchResult.vectors = this.getCollisionVectors(thisBox, otherBox)
         
-        if (this.checkCollision(thisBox, otherBox)) {
+        if (this.isCollision(thisBox, otherBox)) {
             touchResult.didCollide = true
         }
 
         return touchResult
     }
 
-    // not accounting for multiple collisions at once currently
-    getCollisions = (character: PhysicsEntity): CollisionResult[] => {
-        let collisionResults: CollisionResult[] = []
+    getCollisions = (characterTrajectory: BoxCoords): CollisionVectors[] => {
+        let collisions: CollisionVectors[] = []
 
-        this.platformManager.getEntityList().forEach((entity) => {  //ONLY LOOKING FOR COLLISIONS WITH PLATFORMS!
-            let characterBox: BoxCoords = character.getBoxCoords(character.physics.velocityY, character.physics.velocityY, character.physics.velocityX, character.physics.velocityX)
+        this.platformManager.getEntityList().forEach((entity: Entity) => {
+            // entityBox i.e. the OTHER entity, the platform
             let entityBox: BoxCoords = entity.getBoxCoords()
 
-            let collision: CollisionResult = {
-                didCollide: false,
-                vectors: {
-                    top: 0,
-                    bottom: 0,
-                    left: 0,
-                    right: 0
-                }
+            if (this.isCollision(characterTrajectory, entityBox)) {
+                collisions.push(this.getCollisionVectors(characterTrajectory, entityBox))
             }
-            collision.vectors = this.getCollisionVectors(characterBox, entityBox)
-            
-            if (this.checkCollision(characterBox, entityBox)) {
-                collision.didCollide = true
-                //call function in entity's physics that updates array storing all entitys that that entity is touching.
-                if (character['physics']) {
-                    //character.physics.addTouchingEntity(entity) // what if it touches but never collides... hmmm maybe separate this to a different function call from character / gameentity
-                    //console.log("ADDED: " + entity.name)
-                }
-
-            }
-
-            collisionResults.push(collision)
         })
-        return collisionResults
+
+        return collisions
     }
 
-    private checkCollision = (subjectBox: BoxCoords, otherBox: BoxCoords): boolean => {
+
+    isCollision = (subjectBox: BoxCoords, otherBox: BoxCoords): boolean => {
         if (subjectBox.bottom <= otherBox.top) {
             return false
         }
@@ -86,7 +68,6 @@ class WorldPhysics {
         if (subjectBox.left >= otherBox.right) {
             return false
         }
-
         return true
     }
 
