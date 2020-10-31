@@ -3,11 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "npm run tsc && npm run justbuild",
-    "justbuild": "vue-cli-service build",
+    "serve": "vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint",
+    "build": "vue-cli-service build --skip-plugins @vue/cli-plugin-eslint",
     "lint": "vue-cli-service lint",
-    "tsc": "tsc src/components/game/main",
     "push-web": "npm run build && git add . && git commit && git push"
   },
   "dependencies": {
@@ -26,6 +24,7 @@
   "eslintConfig": {
     "root": true,
     "env": {
+      "browser": true,
       "node": true
     },
     "extends": [
@@ -37,7 +36,8 @@
       "no-unused-vars": "off"
     },
     "parserOptions": {
-      "parser": "babel-eslint"
+      "parser": "babel-eslint",
+      "ecmaVersion": 6
     }
   },
   "browserslist": [

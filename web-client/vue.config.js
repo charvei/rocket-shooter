@@ -1,4 +1,4 @@
 module.exports = {
-    publicPath: "/rocket-shooter/web",
+    publicPath: "/rocket-shooter/",
     outputDir: "docs"
 }
