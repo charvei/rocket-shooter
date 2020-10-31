@@ -1,12 +1,15 @@
 {
-  "name": "rocket-shooter-repo",
+  "name": "rocket-shooter-game",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "cd web-client && npm run serve",
-    "build": "tsc && cd web-client && npm run justbuild",
-    "lint": "cd web-client && vue-cli-service lint",
-    "push-web": "npm run build && git add . && git commit && git push"
+  },
+  "dependencies": {
+    "core-js": "^3.6.5"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^5.16.0"
   },
   "eslintConfig": {
     "root": true,
@@ -14,7 +17,6 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/essential",
       "eslint:recommended"
     ],
     "rules": {
@@ -24,5 +26,9 @@
     "parserOptions": {
       "parser": "babel-eslint"
     }
-  }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ]
 }

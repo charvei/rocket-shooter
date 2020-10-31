@@ -1,0 +1,50 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+IDEAS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+I currently have a bug where if the player tries to go left or right while their 'head' is above the ledge it will automatically lift the character on top of the platform. 
+- fix the bug
+- but it would actually be kind of cool to have a button that performs this function and implement it as a kind of edge climbing feature :).
+
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+BUGS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+===============
+- Trajectory box calculations are buggy at high velocities (because they are not real trajectorys). if a small box is moving at a high X and Y velocity, then the size gets stretched on both axes. This causes hit registers when there shouldn't be 
+    - Solution: use actual trajectories
+
+
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TODO
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+================
+1.PHYSICS REFACTOR
+----------------
+- do the rest of the corner hit resolutions
+- what happens when something flys right through another (no top / bottom collision registers (and is collisions.left && collisions.right != 0 (i guess))?
+    - perhaps a solution and maybe it can benefit other stuff is to return the position of the object that was hit as part of the collision event (in fact i think this will be absolutely necessary for later when i'm adding other things to collision registers (which don't really exist yet anyway) like an enemy taking damage from a collision ?)
+- clean up and finalise refactor of physics (e.g. rename newphysicscomp to physicscomp)
+
+================
+2.ENEMY CHARACTER
+----------------
+- create a new character
+- test out creating a control set for them on the other side of the keyboard
+- (this will test to see if the input / command creation stuff needs some work)
+
+=================
+3.CHARACTER PROJECTILE INTERACTION
+-----------------
+- allow for projectiles to hurt characters when collide with one another
+
+
+=================
+4.WEB INTEGRATION :O!!!!!!!!
+-----------------
+- figure out server-client, p2p etc arrangement works best for what i want this to be (what do i want this to be?)
+- implement it

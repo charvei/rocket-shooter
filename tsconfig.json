@@ -3,10 +3,10 @@
       "target": "es5",
       "module": "commonjs",
       "declaration": true,
-      "outDir": "./src/components/game-dist",
+      "outDir": "game/dst",
       "strict": true
     },
-    "include": ["src/components/game"],
+    "include": ["game/src"],
     "exclude": ["node_modules", "**/__tests__/*"]
   }
   
