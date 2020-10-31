@@ -6,6 +6,6 @@
     "serve": "cd web-client && npm run serve",
     "build": "tsc && cd web-client && npm run build",
     "lint": "cd web-client && vue-cli-service lint",
-    "publish-web": "cd web-client && npm run build && git add . && git commit && git push"
+    "publish-web": "tsc && cd web-client && npm run build && git add . && git commit && git push"
   }
 }
