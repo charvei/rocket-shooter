@@ -115,3 +115,9 @@ export enum PositionState {
     Colliding,
     Landed
 }
+
+export enum GameState {
+    Menu = "MENU",
+    Game = "GAME",
+    Pause = "PAUSE"
+}

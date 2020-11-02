@@ -1,58 +1,35 @@
 import Loop from './Loop.js'
+
 import InputHandler from './input/InputHandler.js'
 import WorldManager from '../world/WorldManager.js'
 import RenderingManager from '../view/RenderingManager.js'
-
+import CharacterManager from '../world/managers/CharacterManager'
+import { v4 as uuidv4 } from 'uuid'
+import { GameState } from '../Types.js'
+import StateManager from './StateManager.js'
 /**
  * Store controller managers
  */
 class ControllerManager {
-    worldManager: WorldManager
-    renderingManager: RenderingManager
-    inputHandler: InputHandler // this may end up just being a function?
-    loop: Loop
+    stateManager: StateManager 
 
     constructor(worldManager: WorldManager, renderingManager: RenderingManager) {
-        this.worldManager = worldManager
-        this.renderingManager = renderingManager
-        this.inputHandler = new InputHandler(this.worldManager.getCharacterManager(), this.worldManager.foregroundManager.getForegroundContext())
-        this.loop = new Loop(this.update, this.draw)
+        this.stateManager = new StateManager(worldManager, renderingManager)
+        this.stateManager.changeState(GameState.Menu)
+        console.log(this.stateManager.gameState)
+        setTimeout(() => {
+            this.stateManager.changeState(GameState.Game)
+            setTimeout(() => {
+                this.stateManager.changeState(GameState.Pause)
+                setTimeout(() => {
+                    this.stateManager.changeState(GameState.Game)
+                }, 5000)
+            }, 5000)
+        }, 5000)
     }
 
-    getLoop = (): Loop => {
-        return this.loop
-    }
-
-    update = (delta: number): void => {
-        this.inputHandler.handleInput(delta)
+    startMenu = () => {
         
-        this.worldManager.updateWorld(delta)
-
-        this.worldManager.updateForeground(delta)
-        
-        this.inputHandler.savePreviousKeyState()
-        
-        this.inputHandler.setPlayerCharacterFocusAngle()
-
-        //this.inputHandler.calculateAngleFromPlayerCharacter()
-    }
-
-    draw = (): void => {
-        this.renderingManager.getRenderer().drawWorld(
-            //this.worldManager.getCharacterManager().getCharacterList(),
-            this.worldManager.getCharacterManager().getCharacterRenderables(),
-            this.worldManager.getPlatformManager().getEntityRenderables(),
-            this.worldManager.getForegroundManager().getActiveForeground().getRenderables(),
-            this.worldManager.getProjectileManager().getEntityRenderables()
-
-            //Probably this is an indicater that says world manager should collate all this?
-        )
-
-        //this.renderingManager.getRenderer().drawRenderables
-    }
-
-    startLooping = (): void => {
-       window.requestAnimationFrame(this.getLoop().start)
     }
 
 }

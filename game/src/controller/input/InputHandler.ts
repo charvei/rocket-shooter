@@ -6,6 +6,14 @@ import { KeyPressEvent } from "../../Types"
 
 /**
  * Input handler
+ * 
+ * This class is very ambiguous and deserves refactoring. Probably should be called UserInputHandler.
+ * 
+ * Perhaps could separate out the general set up of key presses and stuff from the binding to a character. Have the InputHandler / InputController have a list of ElementInputHandlers (e.g. characterInputHandler, UIInputHandler?) 
+ * 
+ * Core functionality at the moment:
+ *  - Store a specific character's actions (e.g. jump)
+ *  - Associate them with User's keys
  */
 class InputHandler {
     keys: { [key: string]: KeyPressEvent } = {} // record of keyboard keys and their corresponding state of pressed down or up
@@ -20,22 +28,38 @@ class InputHandler {
     characterManagerRef: CharacterManager
     foregroundContext: CanvasRenderingContext2D
     
-    playerCharacter: Character
+    playerCharacter: Character | null = null
 
-    jump: (delta: number) => void
-    jetPack: (delta: number) => void
-    moveDown: (delta: number) => void
-    moveLeft: (delta: number) => void
-    moveRight: (delta: number) => void
+    jump: (delta: number) => void  = () => { return }
+    jetPack: (delta: number) => void = () => { return }
+    moveDown: (delta: number) => void = () => { return }
+    moveLeft: (delta: number) => void = () => { return }
+    moveRight: (delta: number) => void = () => { return }
 
-    shoot: (delta: number) => void
+    shoot: (delta: number) => void = () => { return }
     
     constructor(characterManager: CharacterManager, foregroundContext: CanvasRenderingContext2D) {
         this.foregroundContext = foregroundContext
         this.characterManagerRef = characterManager
         
-        //this.playerCharacter = this.characterManagerRef.getCharacterByName("Adam")
-        this.playerCharacter = this.characterManagerRef.getEntityList().find((character => character.name == "Adam")) as Character
+        // //this.playerCharacter = this.characterManagerRef.getCharacterByName("Adam")
+        // this.playerCharacter = this.characterManagerRef.getEntityList().find(character => character.name == "Adam") as Character
+
+        // this.setupKeyDownListeners()
+        // this.setMousePositionListener()
+
+        // this.moveRight = Commands.makeMoveUnitCommand(this.playerCharacter, "Right")
+        // this.moveLeft = Commands.makeMoveUnitCommand(this.playerCharacter, "Left")
+        // this.jump = Commands.makeJumpCommand(this.playerCharacter)
+        // this.jetPack = Commands.makeJetPackCommand(this.playerCharacter)
+        // this.moveDown = Commands.makeMoveUnitCommand(this.playerCharacter, "Down")
+
+        // // shooting
+        // this.shoot = Commands.makeShootCommand(this.playerCharacter)
+    }
+
+    bindCommandsToCharacter = (characterRef: string) => {
+        this.playerCharacter = this.characterManagerRef.getEntityList().find(character => character.name == characterRef) as Character
 
         this.setupKeyDownListeners()
         this.setMousePositionListener()
@@ -48,6 +72,7 @@ class InputHandler {
 
         // shooting
         this.shoot = Commands.makeShootCommand(this.playerCharacter)
+
     }
 
     public savePreviousKeyState = (): void => {

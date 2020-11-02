@@ -8,7 +8,7 @@ import { Tickable } from "../../Interfaces"
  * Store characters and manages access to and manipulation of character resources
  */
 abstract class BaseEntityManager implements Tickable {
-    private entityList: Entity[]
+    entityList: Entity[]
 
     abstract tick(delta: number, ...args: any[]): void
     

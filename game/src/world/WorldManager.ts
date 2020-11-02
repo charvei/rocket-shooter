@@ -35,10 +35,6 @@ class WorldManager {
         this.context = context  
     }
 
-    getCharacterManager = () => {
-        return this.characterManager
-    }
-
     getPlatformManager = () => {
         return this.platformManager
     }
@@ -56,14 +52,12 @@ class WorldManager {
     then since they all implement tickable or whatever just iterate through an array of them
     their .tick function */
     updateWorld = (delta: number) => {
-        this.getCharacterManager().tick(delta, this)
+        this.characterManager.tick(delta, this)
         this.getProjectileManager().tick(delta, this)
         this.getPlatformManager().tick(delta, this)
         // If we have multiple types of characters then we can create different managers for them and put them under characterManager
         // e.g. PlayerCharacter, Enemies, 
         // Potentially (and very possibly the correct choice) create a higher level class called entities, then fit Characters under that even, then we can put in 'Boundaries', 'missiles', etc under entities in the world too.  
-
-        //this.getCharacterManager().
     }
 
     updateForeground = (delta: number) => {

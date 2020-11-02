@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {},
   "dependencies": {
-    "core-js": "^3.6.5"
+    "@types/uuid": "^8.3.0",
+    "core-js": "^3.6.5",
+    "uuid": "^8.3.1"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
@@ -13,7 +15,9 @@
   "eslintConfig": {
     "root": true,
     "env": {
-      "node": true
+      "node": true,
+      "browser": true,
+      "es6": true
     },
     "extends": [
       "eslint:recommended"
@@ -23,7 +27,8 @@
       "no-unused-vars": "off"
     },
     "parserOptions": {
-      "parser": "babel-eslint"
+      "parser": "babel-eslint",
+      "ecmaVersion": 6
     }
   },
   "browserslist": [

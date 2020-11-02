@@ -11,13 +11,16 @@ class CharacterManager extends BaseEntityManager {
     constructor() {
         super()
 
-        //this.addEntity(this.genericCharacterFactory())
-        this.addEntity(this.characterFactory("Adam", {x: 620, y: 150}, "#0000ff"))
-        this.addEntity(this.characterFactory("Eve", {x: 150, y: 150}, "#ff0000"))
+        // this.addEntity(this.characterFactory("Adam", {x: 620, y: 150}, "#0000ff"))
+        // this.addEntity(this.characterFactory("Eve", {x: 150, y: 150}, "#ff0000"))
     }
 
     getCharacterList = (): Character[] => {
         return this.getEntityList() as Character[]
+    }
+
+    addCharacter = (name: string, position: {x: number, y: number}, colour: string) => {
+        this.addEntity(this.characterFactory(name, position, colour))
     }
 
     characterFactory = (name: string, position: {x: number, y: number}, colour: string): Character => {

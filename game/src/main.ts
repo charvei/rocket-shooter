@@ -35,7 +35,21 @@ const loadStuff = (): void => {
 }
 
 const doStuff = (): void => {
-    controllerManager.getLoop().start(0)    // could potentially load the code inline here
+    //controllerManager.startGame()
+    // controllerManager.loop.start(0)    // could potentially load the code inline here
+    // controllerManager.startMenu()
+    // setTimeout(() => {
+    //     //controllerManager.startGame()
+    //     controllerManager.loop.stop()
+    //     console.log("I'm stopping!")
+    //     controllerManager.startGame()
+    //     // setTimeout(() => {
+    //     //     controllerManager.loop.stop()
+    //     //     controllerManager.startMenu()
+    //     // }, 5000)
+    //     }, 5000)
+    //controllerManager.startGame()
+    //  controllerManager.loop.start(0)
 }
 
 const loadWorldCanvas = (): void => {
