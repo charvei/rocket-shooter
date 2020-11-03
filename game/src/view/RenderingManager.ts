@@ -1,4 +1,4 @@
-import Renderer from './renderer.js'
+import Renderer from './Renderer.js'
 
 class RenderingManager {
     renderer: Renderer

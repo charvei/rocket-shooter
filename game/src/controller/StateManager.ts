@@ -116,14 +116,14 @@ class StateManager {
 
     menuUpdate = (delta: number): void => {
         console.log("1: i'm updating")
-        this.worldManager.updateWorld(delta)
+        //this.worldManager.updateWorld(delta)
         this.worldManager.updateBackground(delta)
     }
 
     menuDraw = (): void => {
-        this.renderingManager.renderer.drawWorld([
-            this.worldManager.platformManager.getEntityRenderables()
-        ])
+        // this.renderingManager.renderer.drawWorld([
+        //     this.worldManager.platformManager.getEntityRenderables()
+        // ])
         this.renderingManager.renderer.drawBackground(
             this.worldManager.backgroundManager.getActiveBackgroundRenderables()
         )

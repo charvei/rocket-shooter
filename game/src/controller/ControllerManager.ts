@@ -29,7 +29,7 @@ class ControllerManager {
                     this.stateManager.changeState(GameState.Game)
                 }, 5000)
             }, 5000)
-        }, 5000)
+        }, 12500)
     }
 
     startMenu = () => {
