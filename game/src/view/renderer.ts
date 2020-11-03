@@ -3,48 +3,46 @@ import { Renderable } from "../Types"
 
 class Renderer {
     worldContext: CanvasRenderingContext2D
-    foregroundContext: CanvasRenderingContext2D
+    backgroundContext: CanvasRenderingContext2D
+    uiContext: CanvasRenderingContext2D
     canvasProps: {
         height:number
         width:number
     }
 
-    constructor(worldContext: CanvasRenderingContext2D, foregroundContext: CanvasRenderingContext2D, canvasProps: {height: number, width: number}) {
+    constructor(worldContext: CanvasRenderingContext2D, backgroundContext: CanvasRenderingContext2D, uiContext: CanvasRenderingContext2D, canvasProps: {height: number, width: number}) {
         this.worldContext = worldContext
-        this.foregroundContext = foregroundContext
+        this.backgroundContext = backgroundContext
+        this.uiContext = uiContext
         this.canvasProps = canvasProps
     }
 
     // Maybe when this gets more complicated this can be made more intelligent?
-    drawWorld = (objectRenderables: Renderable[] = [], foregroundRenderables: Renderable[] = [], projectileRenderables: Renderable[] = [], characterRenderables: Renderable[] = []) => {
+    //drawWorld = (objectRenderables: Renderable[] = [], projectileRenderables: Renderable[] = [], characterRenderables: Renderable[] = []) => {
+    drawWorld = (renderableListList: Renderable[][]) => {
         this.worldContext.clearRect(0, 0, this.canvasProps.width, this.canvasProps.height)
-
-        //background
-        this.worldContext.fillStyle = "#000000" 
-        this.worldContext.fillRect(0, 0, this.canvasProps.width, this.canvasProps.height)
-        
-        //foreground
-        this.drawForeground(foregroundRenderables)
-
-        //objects
-        this.drawRenderables(objectRenderables)
-        
-        //characters
-        this.drawRenderables(characterRenderables)
-
-        //projectiles
-        this.drawRenderables(projectileRenderables)
-
+        renderableListList.forEach(renderableList => {
+            this.drawRenderables(renderableList)
+        })
     }
 
-    // So at some point may want to consider having multiple canvas or something right? buffer screens and stuff
-    drawCharacters = (characterList: Character[]) => {
-        characterList.forEach(character => {
-            this.worldContext.fillStyle = character.colour
-            this.worldContext.fillRect(character.getPosition().x, character.getPosition().y, character.getWidth(), character.getHeight())
+    drawBackground = (renderables: Renderable[]) => {
+        this.backgroundContext.fillStyle = "#000000" 
+        this.backgroundContext.fillRect(0, 0, this.canvasProps.width, this.canvasProps.height)
 
-            this.worldContext.fillStyle = character.reticule.colour
-            this.worldContext.fillRect(character.reticule.getPosition().x, character.reticule.getPosition().y, character.reticule.getWidth(), character.reticule.getHeight())
+        this.drawBackgroundRenderables(renderables)
+    }
+
+    // drawUI = (renderables: Renderable[]) => {
+    //     this.
+    //     // Create a slightly opaque background over everything if i wish
+
+    //     // Draw list of renderables... might need to adapt this for text and junk
+    // }
+    drawUI = (renderables: Renderable[]) => {
+        renderables.forEach(renderable => {
+            this.uiContext.fillStyle = renderable.colour
+            this.uiContext.fillRect(renderable.xPos, renderable.yPos, renderable.width, renderable.height)
         })
     }
 
@@ -55,15 +53,15 @@ class Renderer {
         })
     }
 
-    drawForeground = (renderables: Renderable[]) => {
+    drawBackgroundRenderables = (renderables: Renderable[]) => {
         renderables.forEach(renderable => {
-            this.worldContext.fillStyle = "rgba(255, 255, 255, 0.5)"
-            this.worldContext.fillRect(renderable.xPos, renderable.yPos, renderable.width, renderable.height)
+            this.backgroundContext.fillStyle = "rgba(255, 255, 255, 0.5)"
+            this.backgroundContext.fillRect(renderable.xPos, renderable.yPos, renderable.width, renderable.height)
         })
+    }
 
-        // this.foregroundContext.clearRect(0, 0, this.canvasProps.width, this.canvasProps.height)
-        // this.foregroundContext.fillStyle = "rgba(255, 255, 255, 0.5)"
-        // this.foregroundContext.fillRect(0, 0, this.canvasProps.width, this.canvasProps.height)
+    clearUIContext = (): void => {
+        this.uiContext.clearRect(0, 0, this.canvasProps.width, this.canvasProps.height)
     }
 
 }

@@ -26,7 +26,7 @@ class InputHandler {
     }
 
     characterManagerRef: CharacterManager
-    foregroundContext: CanvasRenderingContext2D
+    mouseListenerContext: CanvasRenderingContext2D
     
     playerCharacter: Character | null = null
 
@@ -38,8 +38,8 @@ class InputHandler {
 
     shoot: (delta: number) => void = () => { return }
     
-    constructor(characterManager: CharacterManager, foregroundContext: CanvasRenderingContext2D) {
-        this.foregroundContext = foregroundContext
+    constructor(characterManager: CharacterManager, mouseListenerContext: CanvasRenderingContext2D) {
+        this.mouseListenerContext = mouseListenerContext
         this.characterManagerRef = characterManager
         
         // //this.playerCharacter = this.characterManagerRef.getCharacterByName("Adam")
@@ -109,8 +109,8 @@ class InputHandler {
 
     setMousePositionListener = () => {
         let event: Event
-        this.foregroundContext.canvas.addEventListener('mousemove', event => {
-            let boundingRect = this.foregroundContext.canvas.getBoundingClientRect()
+        this.mouseListenerContext.canvas.addEventListener('mousemove', event => {
+            let boundingRect = this.mouseListenerContext.canvas.getBoundingClientRect()
             this.mouseCanvasPos = {// return {
                 x: event.clientX - boundingRect.left,
                 y: event.clientY - boundingRect.top

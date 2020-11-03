@@ -2,7 +2,7 @@ import CharacterManager from './managers/CharacterManager'
 import PlatformManager from './managers/PlatformManager.js'
 import Character from './objects/character/Character'
 import Entity from './objects/base/Entity'
-import ForegroundManager from './foreground/ForegroundManager.js'
+import BackgroundManager from './background/BackgroundManager.js'
 import ProjectileManager from './managers/ProjectileManager'
 import WorldPhysics from './WorldPhysics'
 
@@ -20,18 +20,18 @@ import Projectile from './objects/projectiles/Projectile'
 class WorldManager {
     characterManager: CharacterManager
     platformManager: PlatformManager
-    foregroundManager: ForegroundManager
+    backgroundManager: BackgroundManager
     projectileManager: ProjectileManager
     context: CanvasRenderingContext2D
     worldPhysics: WorldPhysics
 
-    constructor(context: CanvasRenderingContext2D, foregroundContext: CanvasRenderingContext2D, canvasProps: {height: number, width: number}) {
+    constructor(context: CanvasRenderingContext2D, backgroundContext: CanvasRenderingContext2D, canvasProps: {height: number, width: number}) {
         this.platformManager = new PlatformManager()
         this.characterManager = new CharacterManager()
         this.projectileManager = new ProjectileManager()
         this.worldPhysics = new WorldPhysics(this.platformManager)
         
-        this.foregroundManager = new ForegroundManager(foregroundContext, canvasProps)
+        this.backgroundManager = new BackgroundManager(backgroundContext, canvasProps)
         this.context = context  
     }
 
@@ -39,8 +39,8 @@ class WorldManager {
         return this.platformManager
     }
 
-    getForegroundManager = () => {
-        return this.foregroundManager
+    getBackgroundManager = () => {
+        return this.backgroundManager
     }
 
     getProjectileManager = () => {
@@ -60,8 +60,8 @@ class WorldManager {
         // Potentially (and very possibly the correct choice) create a higher level class called entities, then fit Characters under that even, then we can put in 'Boundaries', 'missiles', etc under entities in the world too.  
     }
 
-    updateForeground = (delta: number) => {
-        this.foregroundManager.updateForeground(delta)
+    updateBackground = (delta: number) => {
+        this.backgroundManager.updateBackground(delta)
     }
 
 }

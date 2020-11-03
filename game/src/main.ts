@@ -1,13 +1,16 @@
 import WorldManager from './world/WorldManager'
 import RenderingManager from './view/RenderingManager.js'
 import ControllerManager from './controller/ControllerManager.js'
+import UIManager from './view/ui/UIManager'
 
+let uiContext: CanvasRenderingContext2D
 let worldContext: CanvasRenderingContext2D
-let foregroundContext: CanvasRenderingContext2D
+let backgroundContext: CanvasRenderingContext2D
 
 let worldManager: WorldManager
 let renderingManager: RenderingManager
 let controllerManager: ControllerManager
+let uiManager: UIManager
 let canvas: {
     element: HTMLCanvasElement,
     props: {
@@ -25,10 +28,12 @@ const main = (): void => {
 }
 
 const loadStuff = (): void => {
-    loadForegroundCanvas()
+    loadBackgroundCanvas()
     loadWorldCanvas()
+    loadUICanvas()
     
     loadWorld()
+    loadUIManager()
 
     loadRendering()
     loadController()
@@ -52,6 +57,18 @@ const doStuff = (): void => {
     //  controllerManager.loop.start(0)
 }
 
+const loadUICanvas = (): void => {
+    let tempCanvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('ui-canvas')
+    canvas = { 
+        element: tempCanvas,
+        props: {
+            height: tempCanvas.height,
+            width: tempCanvas.width
+        }
+    }
+    uiContext = getContext(canvas.element)
+}
+
 const loadWorldCanvas = (): void => {
     let tempCanvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('game-canvas')
     canvas = { 
@@ -64,8 +81,8 @@ const loadWorldCanvas = (): void => {
     worldContext = getContext(canvas.element)
 }
 
-const loadForegroundCanvas = (): void => {
-    let tempCanvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('foreground-canvas')
+const loadBackgroundCanvas = (): void => {
+    let tempCanvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('background-canvas')
     canvas = {
         element: tempCanvas,
         props: {
@@ -73,19 +90,23 @@ const loadForegroundCanvas = (): void => {
             width: tempCanvas.width
         }
     }
-    foregroundContext = getContext(canvas.element)
+    backgroundContext = getContext(canvas.element)
 }
 
 const loadWorld = (): void => {
-    worldManager = new WorldManager(worldContext, foregroundContext, canvas.props)
+    worldManager = new WorldManager(worldContext, backgroundContext, canvas.props)
 }
 
 const loadRendering = (): void => {
-    renderingManager = new RenderingManager(worldContext, foregroundContext, canvas.props)
+    renderingManager = new RenderingManager(worldContext, backgroundContext, uiContext, canvas.props)
 }
 
 const loadController = (): void => {
-    controllerManager = new ControllerManager(worldManager, renderingManager)
+    controllerManager = new ControllerManager(worldManager, renderingManager, uiManager)
+}
+
+const loadUIManager = (): void => {
+    uiManager = new UIManager(uiContext, canvas.props)
 }
 
 const getContext = (canvas: HTMLCanvasElement): CanvasRenderingContext2D => {

@@ -4,9 +4,9 @@ import {
 } from "../../Types"
 
 /**
- * Implementation of a foreground. I have not made a base foreground yet, so this should be extracted at some point.
+ * Implementation of a background. I have not made a base background yet, so this should be extracted at some point.
  */
-class SnowForeground {
+class SnowBackground {
     //opacity: number = 0.5
     particleDensity: number = 0.20
     maxParticles: number = 500
@@ -14,13 +14,13 @@ class SnowForeground {
     startingYPos: number = -5
     maxXSpeed: number = 1
 
-    foregroundContext: CanvasRenderingContext2D
+    backgroundContext: CanvasRenderingContext2D
     canvasProps: {height: number, width: number}
 
     particles: Particle[] = []
 
-    constructor(foregroundContext: CanvasRenderingContext2D, canvasProps: {height: number, width: number} ) {
-        this.foregroundContext = foregroundContext
+    constructor(backgroundContext: CanvasRenderingContext2D, canvasProps: {height: number, width: number} ) {
+        this.backgroundContext = backgroundContext
         this.canvasProps = canvasProps
     }
 
@@ -36,7 +36,7 @@ class SnowForeground {
         })
     } 
 
-    createNewParticles = () => {
+    createNewParticles = (): void => {
         for (let i: number = 0; i < 2; i++) {
             // Create 2 particles per row
             // randomize these properties to a certain extent later
@@ -55,7 +55,7 @@ class SnowForeground {
         }
     }
 
-    update = (delta: number) => {
+    update = (delta: number): void => {
         if (this.particles.length < this.maxParticles) {
             this.createNewParticles()
         }
@@ -83,4 +83,4 @@ class SnowForeground {
     }
 }
 
-export default SnowForeground
+export default SnowBackground

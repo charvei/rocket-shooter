@@ -7,16 +7,20 @@ import CharacterManager from '../world/managers/CharacterManager'
 import { v4 as uuidv4 } from 'uuid'
 import { GameState } from '../Types.js'
 import StateManager from './StateManager.js'
+import UIManager from '../view/ui/UIManager.js'
 /**
  * Store controller managers
  */
 class ControllerManager {
     stateManager: StateManager 
 
-    constructor(worldManager: WorldManager, renderingManager: RenderingManager) {
-        this.stateManager = new StateManager(worldManager, renderingManager)
+    constructor(worldManager: WorldManager, renderingManager: RenderingManager, uiManager: UIManager) {
+        this.stateManager = new StateManager(worldManager, renderingManager, uiManager)
+        this.stateManager.loop.start(0)
+        //this.stateManager.changeState(GameState.Menu)
+
+        // Testing out switching game states
         this.stateManager.changeState(GameState.Menu)
-        console.log(this.stateManager.gameState)
         setTimeout(() => {
             this.stateManager.changeState(GameState.Game)
             setTimeout(() => {

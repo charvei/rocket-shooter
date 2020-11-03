@@ -4,26 +4,24 @@ import WorldManager from "../world/WorldManager"
 import InputHandler from "./input/InputHandler"
 import Loop from "./Loop"
 import { v4 as uuidv4 } from 'uuid'
+import UIManager from "../view/ui/UIManager"
 
 class StateManager {
     gameState: GameState = GameState.Menu
     worldManager: WorldManager
     renderingManager: RenderingManager
+    uiManager: UIManager
     inputHandler: InputHandler
     loop: Loop = new Loop(() => { return }, () => { return })
     //loop: Loop
 
     userRef: string = uuidv4()
 
-    constructor(worldManager: WorldManager, renderingManager: RenderingManager) {
+    constructor(worldManager: WorldManager, renderingManager: RenderingManager, uiManager: UIManager) {
         this.worldManager = worldManager
         this.renderingManager = renderingManager
-        this.inputHandler = new InputHandler(this.worldManager.characterManager, this.worldManager.foregroundManager.getForegroundContext())
-        //this.loop = this.createMenuLoop()
-        this.loop.start(0)
-        // setTimeout(() => {
-        //     this.startGame()
-        // }, 5000)
+        this.uiManager = uiManager
+        this.inputHandler = new InputHandler(this.worldManager.characterManager, this.uiManager.uiCanvasContext)
     }
 
     throwError = (gameState: GameState, destinationState: GameState) => {
@@ -36,6 +34,7 @@ class StateManager {
                 if (destinationState === GameState.Game) {
                     // Menu -> Game; Start new game
                     this.gameState = destinationState
+                    this.renderingManager.renderer.clearUIContext()
                     this.startGame()
                 }
                 if (destinationState === GameState.Menu) {
@@ -97,17 +96,19 @@ class StateManager {
         console.log("2: i'm updating")
         this.inputHandler.handleInput(delta)
         this.worldManager.updateWorld(delta)
-        this.worldManager.updateForeground(delta)
+        this.worldManager.updateBackground(delta)
         this.inputHandler.savePreviousKeyState()
     }
 
     gameDraw = (): void => {
-        this.renderingManager.getRenderer().drawWorld(
+        this.renderingManager.getRenderer().drawWorld([
             this.worldManager.getPlatformManager().getEntityRenderables(),
-            this.worldManager.getForegroundManager().getActiveForeground().getRenderables(),
             this.worldManager.getProjectileManager().getEntityRenderables(),
             this.worldManager.characterManager.getCharacterRenderables()
             //Probably this is an indicater that says world manager should collate all this?
+        ])
+        this.renderingManager.renderer.drawBackground(
+            this.worldManager.backgroundManager.getActiveBackgroundRenderables()
         )
 
         //this.renderingManager.getRenderer().drawRenderables
@@ -116,24 +117,29 @@ class StateManager {
     menuUpdate = (delta: number): void => {
         console.log("1: i'm updating")
         this.worldManager.updateWorld(delta)
-        this.worldManager.updateForeground(delta)
+        this.worldManager.updateBackground(delta)
     }
 
     menuDraw = (): void => {
-        this.renderingManager.renderer.drawWorld(
-            this.worldManager.platformManager.getEntityRenderables(),
-            this.worldManager.foregroundManager.getActiveForeground().getRenderables()
+        this.renderingManager.renderer.drawWorld([
+            this.worldManager.platformManager.getEntityRenderables()
+        ])
+        this.renderingManager.renderer.drawBackground(
+            this.worldManager.backgroundManager.getActiveBackgroundRenderables()
+        )
+        this.renderingManager.renderer.drawUI(
+            this.uiManager.getUIRenderables()
         )
     }
 
     pauseUpdate = (delta: number): void => {
         console.log("pause: i'm updating")
-        this.worldManager.updateForeground(delta)
+        this.worldManager.updateBackground(delta)
     }
 
     pauseDraw = (): void => {
-        this.renderingManager.renderer.drawWorld(
-            this.worldManager.foregroundManager.getActiveForeground().getRenderables()
+        this.renderingManager.renderer.drawBackground(
+            this.worldManager.backgroundManager.getActiveBackgroundRenderables()
         )
     }
 
