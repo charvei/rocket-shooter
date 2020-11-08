@@ -62,10 +62,12 @@ class MenuInputHandler {
      * Runs once a loop, detects user's raw input and handles it
      */
     handleInput = (): void => {
-        if (this.getKeyPressState('w').heldDown) {
+        if (this.getKeyPressState('s').firstPress) {
             this.moveUp()
-        } if (this.getKeyPressState('s').heldDown) {
+            this.keys['s'] = {firstPress: false, heldDown: true}
+        } if (this.getKeyPressState('w').firstPress) {
             this.moveDown()
+            this.keys['w'] = {firstPress: false, heldDown: true}
         } if (this.getKeyPressState('d').heldDown) {
             // this.select()
         } if (this.getKeyPressState(' ').heldDown) {

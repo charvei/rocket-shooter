@@ -21,24 +21,33 @@ class MenuComponent {
         this.width = width
         this.xPos = xPos
         this.yPos = yPos
-
         this.optionDrawInstructions = this.calculateOptionTextDrawInstructions()
     }
 
     incrementActiveSelection = (): void => {
-        console.log("Up!")
-        console.log(this.activeSelectionIndex)
-        this.activeSelectionIndex = Math.abs((this.activeSelectionIndex + 1) % this.options.length)
+        // console.log("Up!")
+        // this.activeSelectionIndex = (this.activeSelectionIndex + 1)
+        // console.log(this.activeSelectionIndex)
+        this.activeSelectionIndex++
+        if (this.activeSelectionIndex > this.options.length - 1) {
+            this.activeSelectionIndex = 0
+        } 
+
     }
 
     decrementActiveSelection = (): void => {
-        console.log("Down!")
-        console.log(this.activeSelectionIndex)
-        this.activeSelectionIndex = Math.abs((this.activeSelectionIndex - 1) % this.options.length)
+        this.activeSelectionIndex--
+        if (this.activeSelectionIndex < 0) {
+            this.activeSelectionIndex = this.options.length - 1
+        } 
+        
+        // console.log("Down!")
+        // this.activeSelectionIndex = (this.activeSelectionIndex - 1)
+        // console.log(this.activeSelectionIndex)
     }
 
     getActiveSelectionIndex = (): number => {
-        return this.activeSelectionIndex
+        return Math.abs((this.activeSelectionIndex) % this.options.length)
     }
 
     selectActiveSelection = (): void => {
@@ -75,42 +84,6 @@ class MenuComponent {
             
         }
     }
-
-    // For placing Selection Marker -> calculate text bounding box and put it in middle to left.
-
-
-    // incrementMenuSelection = () => {
-    //     this.activeSelection += 1
-    // }
-
-    // decrementMenuSelection = () => {
-    //     this.activeSelection -= 1
-    // }
-
-    // getRenderables = (): Renderable[] => {
-    //     this.drawText()
-    //     // return [
-    //     //     this.createCenterBox(this.canvasProps.height/(1.618*2), (this.canvasProps.height/(1.618*2))*16/9)
-    //     // ]
-    //     return [
-    //         this.createCenterBox(1, 1)
-    //     ]
-    // }
-
-    // createCenterBox = (height: number, width: number): Renderable => {
-    //     return {
-    //         xPos: (this.canvasProps.width / 2) - (width / 2),
-    //         yPos: (this.canvasProps.height / 2)  - (height / 2),
-    //         width: width,
-    //         height: height,
-    //         colour: "#ffffff"
-    //     }
-    // }
-
-    // drawText = () => {
-    //     this.context.font = '48px serif'
-    //     this.context.fillText('Hello World!', this.canvasProps.width / 2, this.canvasProps.height / 2)
-    // }
 }
 
 export default MenuComponent
