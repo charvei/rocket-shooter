@@ -48,7 +48,7 @@ class SnowBackground {
                 yPos: this.startingYPos,
                 xDirection: 0.1,
                 xSpeed: 0,
-                ySpeed: 0.2 + Math.random() * 1.5,
+                ySpeed: 0.2 + Math.random() * 1.25,
                 opacity: 0.5
             }
             this.particles.push(particle)

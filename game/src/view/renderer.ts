@@ -1,5 +1,5 @@
 import Character from '../world/objects/character/Character' //not sure if i should be importing character? i would like it to be even more decoupled right?
-import { Renderable } from "../Types"
+import { Renderable, TextDrawInstruction } from "../Types"
 
 class Renderer {
     worldContext: CanvasRenderingContext2D
@@ -15,6 +15,8 @@ class Renderer {
         this.backgroundContext = backgroundContext
         this.uiContext = uiContext
         this.canvasProps = canvasProps
+
+        this.uiContext.textBaseline = 'middle'
     }
 
     // Maybe when this gets more complicated this can be made more intelligent?
@@ -22,7 +24,7 @@ class Renderer {
     drawWorld = (renderableListList: Renderable[][]) => {
         this.worldContext.clearRect(0, 0, this.canvasProps.width, this.canvasProps.height)
         renderableListList.forEach(renderableList => {
-            this.drawRenderables(renderableList)
+            this.drawRenderables(renderableList, this.worldContext)
         })
     }
 
@@ -30,33 +32,29 @@ class Renderer {
         this.backgroundContext.fillStyle = "#000000" 
         this.backgroundContext.fillRect(0, 0, this.canvasProps.width, this.canvasProps.height)
 
-        this.drawBackgroundRenderables(renderables)
+        this.drawRenderables(renderables, this.backgroundContext)
     }
 
-    // drawUI = (renderables: Renderable[]) => {
-    //     this.
-    //     // Create a slightly opaque background over everything if i wish
-
-    //     // Draw list of renderables... might need to adapt this for text and junk
-    // }
+    // Create a slightly opaque background over everything if i wish
+    // Draw list of renderables... might need to adapt this for text and junk
     drawUI = (renderables: Renderable[]) => {
-        renderables.forEach(renderable => {
-            this.uiContext.fillStyle = renderable.colour
-            this.uiContext.fillRect(renderable.xPos, renderable.yPos, renderable.width, renderable.height)
+        this.uiContext.clearRect(0, 0, this.canvasProps.width, this.canvasProps.height)
+        this.drawRenderables(renderables, this.uiContext)
+    }
+
+    drawText = (textDrawInstructions: TextDrawInstruction[]) => {
+        // Assumption: will always draw text to UI context
+        textDrawInstructions.forEach(instruction => {
+            this.uiContext.fillStyle = instruction.colour
+            this.uiContext.font = instruction.font
+            this.uiContext.fillText(instruction.text, instruction.xPos, instruction.yPos)
         })
     }
 
-    drawRenderables = (renderables: Renderable[]) => {
+    drawRenderables = (renderables: Renderable[], context: CanvasRenderingContext2D) => {
         renderables.forEach(renderable => {
-            this.worldContext.fillStyle = renderable.colour
-            this.worldContext.fillRect(renderable.xPos, renderable.yPos, renderable.width, renderable.height)
-        })
-    }
-
-    drawBackgroundRenderables = (renderables: Renderable[]) => {
-        renderables.forEach(renderable => {
-            this.backgroundContext.fillStyle = "rgba(255, 255, 255, 0.5)"
-            this.backgroundContext.fillRect(renderable.xPos, renderable.yPos, renderable.width, renderable.height)
+            context.fillStyle = renderable.colour
+            context.fillRect(renderable.xPos, renderable.yPos, renderable.width, renderable.height)
         })
     }
 

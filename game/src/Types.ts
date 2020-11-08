@@ -121,3 +121,13 @@ export enum GameState {
     Game = "GAME",
     Pause = "PAUSE"
 }
+
+
+/** Text Rendering */
+export interface TextDrawInstruction {
+    text: string
+    xPos: number
+    yPos: number
+    colour: string  // hex code
+    font: string
+}

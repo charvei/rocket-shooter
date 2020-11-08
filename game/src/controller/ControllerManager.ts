@@ -1,10 +1,5 @@
-import Loop from './Loop.js'
-
-import InputHandler from './input/InputHandler.js'
 import WorldManager from '../world/WorldManager.js'
 import RenderingManager from '../view/RenderingManager.js'
-import CharacterManager from '../world/managers/CharacterManager'
-import { v4 as uuidv4 } from 'uuid'
 import { GameState } from '../Types.js'
 import StateManager from './StateManager.js'
 import UIManager from '../view/ui/UIManager.js'
@@ -29,7 +24,7 @@ class ControllerManager {
                     this.stateManager.changeState(GameState.Game)
                 }, 5000)
             }, 5000)
-        }, 12500)
+        }, 25000)
     }
 
     startMenu = () => {

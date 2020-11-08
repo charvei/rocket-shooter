@@ -1,4 +1,4 @@
-import { Renderable } from "../../Types"
+import { Renderable, TextDrawInstruction } from "../../Types"
 import { throwNotImplementedError } from "../../Errors"
 
 class CanvasScreen {
@@ -11,7 +11,10 @@ class CanvasScreen {
     }
 
     getRenderables = (): Renderable[] => {
-        throwNotImplementedError()
+        return []
+    }
+
+    getTextDrawInstructions = (): TextDrawInstruction[] => {
         return []
     }
 }

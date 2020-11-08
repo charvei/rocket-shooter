@@ -1,16 +1,17 @@
-import { Renderable } from "../../Types"
+import { Renderable, TextDrawInstruction } from "../../Types"
 import CanvasScreen from "./CanvasScreen"
 import MainMenuScreen from "./mainmenu/MainMenuScreen"
-//import UIScreen from "./UIScreen"
+import MenuInputHandler from "../../controller/input/MenuInputHandler"
 
 
 class UIManager {
     private activeUI: CanvasScreen | null = null
     uiCanvasContext: CanvasRenderingContext2D
     private canvasProps: { height: number, width: number }
+    menuInputHandler: MenuInputHandler
     
     // Screens
-    private mainMenuScreen: CanvasScreen
+    private mainMenuScreen: MainMenuScreen
 
     constructor(uiCanvasContext: CanvasRenderingContext2D, canvasProps: { height: number, width: number }) {
         this.uiCanvasContext = uiCanvasContext
@@ -18,6 +19,7 @@ class UIManager {
 
         this.mainMenuScreen = new MainMenuScreen(uiCanvasContext, canvasProps)
         this.setActiveUI(this.mainMenuScreen)
+        this.menuInputHandler = new MenuInputHandler(this.mainMenuScreen)
     }
 
     getActiveUI = (): CanvasScreen | null => {
@@ -33,19 +35,13 @@ class UIManager {
     }
 
     getUIRenderables = (): Renderable[] => {
-        if (this.activeUI) {
-            return this.activeUI.getRenderables()
-        } else {
-            return []
-        }
-        
-        //this.activeUI ? return this.activeUI?.getRenderables() : return null
+        return this.activeUI != null ? this.activeUI.getRenderables() : []
     }
 
-    // getUIRenderables
-    // getUIRenderables = (): Renderable[] | null => {
-    //     //return this.activeUI?.getRenderables()
-    // }
+    getUITextDrawInstructions = (): TextDrawInstruction[] => {
+        return this.activeUI != null ? this.activeUI.getTextDrawInstructions() : []
+    } 
+
 }
 
 export default UIManager

@@ -35,15 +35,13 @@ class StateManager {
                     // Menu -> Game; Start new game
                     this.gameState = destinationState
                     this.renderingManager.renderer.clearUIContext()
-                    this.startGame()
+                    this.gameStart()
                 }
                 if (destinationState === GameState.Menu) {
                     // Menu -> Menu; ???
                     this.gameState = destinationState
-                    this.loop.setInnerFunctions(
-                        this.menuUpdate, 
-                        this.menuDraw
-                    )
+                    this.menuStart()
+
                 }
                 if (destinationState === GameState.Pause) {
                     // Menu -> Pause; Invalid
@@ -84,7 +82,7 @@ class StateManager {
         }
     }
 
-    startGame = (): void => {
+    gameStart = (): void => {
         this.worldManager.characterManager.addCharacter(this.userRef, {x: 620, y: 150}, "#c12395")
         this.inputHandler.bindCommandsToCharacter(this.userRef)
         
@@ -114,21 +112,28 @@ class StateManager {
         //this.renderingManager.getRenderer().drawRenderables
     }
 
+    menuStart = (): void => {
+        this.loop.setInnerFunctions(
+            this.menuUpdate, 
+            this.menuDraw
+        )
+    }
+
     menuUpdate = (delta: number): void => {
         console.log("1: i'm updating")
-        //this.worldManager.updateWorld(delta)
+        this.uiManager.menuInputHandler.handleInput()
         this.worldManager.updateBackground(delta)
     }
 
     menuDraw = (): void => {
-        // this.renderingManager.renderer.drawWorld([
-        //     this.worldManager.platformManager.getEntityRenderables()
-        // ])
         this.renderingManager.renderer.drawBackground(
             this.worldManager.backgroundManager.getActiveBackgroundRenderables()
         )
         this.renderingManager.renderer.drawUI(
             this.uiManager.getUIRenderables()
+        )
+        this.renderingManager.renderer.drawText(
+            this.uiManager.getUITextDrawInstructions()
         )
     }
 

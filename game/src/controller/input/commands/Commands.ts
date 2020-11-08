@@ -1,4 +1,4 @@
-import Character from "../../world/objects/character/Character"
+import Character from "../../../world/objects/character/Character"
 
 class Commands {
     static makeMoveUnitCommand = (character: Character, direction: String): 

@@ -1,4 +1,4 @@
-import Commands from "./Commands"
+import Commands from "./commands/Commands"
 import CharacterManager from "../../world/managers/CharacterManager"
 import Character from '../../world/objects/character/Character'
 
